@@ -1,0 +1,202 @@
+.select-film-wrapper {
+    background: #FF9800;
+    padding: 15px;
+    margin-top: 20px;
+}
+.select-film-wrapper .title {
+    color: #fff;
+    margin-bottom: 20px;
+}
+.select-film-wrapper .select-card {
+    margin-bottom: 12px;
+}
+.select-film-wrapper .select-card .content {
+    background: #fff;
+    /* height: 200px; */
+    border: solid black 1px;
+}
+.select-film-wrapper .select-card .content .title {
+    border-bottom: solid black 1px;
+    padding: 8px;
+    color: #000;
+    margin-bottom: unset;
+}
+.select-film-wrapper .select-card .content .option-items {
+    padding: 12px;
+    height: 300px;
+    overflow-y: auto;
+    margin-top: 12px;
+}
+.select-film-wrapper .select-card .content .option-items .item {
+    border-bottom: solid 2px #FF9800;
+    padding: 8px 8px;
+    cursor: pointer;
+}
+.select-film-wrapper .select-card .content .option-items .time-item {
+    border-radius: 9999px;
+    border: solid 1px #FF9800;
+    padding: 2px 8px;
+    cursor: pointer;
+    width: 64px;
+    text-align: center;
+    height: fit-content;
+}
+.select-film-wrapper .select-card .content .option-items .item:hover {
+    /* background: #FF9800; */
+    color: #FF9800;
+}
+.select-film-wrapper .select-card .content .option-items .item.selected {
+    background: #FF9800;
+    color: #fff;
+}
+#times-combox {
+    flex-direction: row;
+    display: flex;
+    justify-content: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+#times-combox .time-item:hover {
+    color: #FF9800;
+}
+#times-combox .time-item.selected {
+    background: #FF9800;
+    color: #fff;
+}
+a.btn {
+    width: fit-content;
+    text-decoration: none;
+}
+.btn-primary {
+    background: #FF9800 !important;
+    border-color :#FF9800 !important;
+}
+
+.select-position-wrapper {
+    background: #FF9800;
+    padding: 15px;
+}
+.select-position-wrapper .title {
+    color: #fff;
+    margin-bottom: 20px;
+}
+.select-position-wrapper .position-pick {
+    background: #fff;
+    padding: 15px;
+}
+.select-position-wrapper .position-pick .situations {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+    margin-bottom: 45px;
+}
+.select-position-wrapper .position-pick .situations .row-label {
+    border: solid black 1px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.position-info {
+    margin-top: 32px !important;
+}
+.position-info .label {
+    height: 20px;
+    width: 20px;
+    margin-right: 4px;
+}
+.position-info .label.selecting {
+    background: rgb(107, 165, 20);
+    border-radius: 3px;
+}
+.position-info .label.available {
+    background: rgb(147 155 136 / 50%);
+    border-radius: 3px;
+}
+.position-info .label.sell {
+    background: red;
+    border-radius: 3px;
+}
+.position-info .label.unavailable {
+    background: rgb(44, 152, 215);
+    border-radius: 3px;
+}
+.screen {
+    border-bottom: solid rgb(155, 168, 137) 4px;
+}
+.row-positions {
+    gap: 6px;
+}
+.position-item {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.position-item.available {
+    background: rgb(147 155 136 / 50%);
+    color: #000;
+}
+.position-item.available:hover {
+    border:solid rgb(107, 165, 20) 2px;
+}
+.position-item.sell {
+    background: red;
+}
+.position-item.unavailable {
+    background: rgb(44, 152, 215);
+}
+.position-item.selecting {
+    background: rgb(107, 165, 20);
+    color: #fff;
+}
+.number-of-position {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    color: #fff;
+    flex-wrap: wrap;
+}
+.number-of-position select {
+    width: 160px;
+    margin: 0;
+    font-size: 16px;
+}
+.button-back {
+    width: fit-content;
+}
+.btn-primary {
+    background: #FF9800 !important;
+    border-color :#FF9800 !important;
+}
+@media  screen and (max-width: 768px) {
+    .position-item ,
+    .select-position-wrapper .position-pick .situations .row-label {
+        width: 16px;
+        height: 16px;
+        font-size: 12px;
+    }
+    .row-positions {
+        gap: 2px !important;
+    }
+    .select-position-wrapper,
+    .select-position-wrapper .position-pick {
+        padding: 6px;
+    }
+}
+
+
+
+
+
+
+
+
