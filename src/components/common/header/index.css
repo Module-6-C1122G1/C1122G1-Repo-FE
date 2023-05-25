@@ -1,0 +1,7 @@
+.header-wrapper {
+    height: 60px;
+    position: fixed;
+    top: 0;
+    background: yellow;
+    width: 100%;
+}
