@@ -1,0 +1,25 @@
+* {
+    font-family: Roboto;
+}
+
+th, td {
+    font-size: 14px;
+}
+
+table th,
+table td {
+    padding: 10px;
+}
+
+table th {
+    background-color: #f3f3f3;
+}
+
+.inputCss {
+    width: 25%;
+    padding: 8px 8px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
