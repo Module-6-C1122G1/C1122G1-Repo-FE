@@ -6,12 +6,14 @@ import CommonLayout from "./layout/CommonLayout";
 import Login from "./pages/Login";
 import BookingTicket from "./pages/Booking/BookingTicket";
 import {Demo} from "./components/booking-ticket/Demo";
+import List from "./components/customer/List";
 
 function App() {
     return (
         <Routes>
             <Route path='' element={<CommonLayout/>}>
                 <Route path='' element={<Home/>}/>
+                <Route path="/customer" element={<List/>}/>
                 <Route path='/booking-ticket' element={<BookingTicket/>}/>
             </Route>
             <Route path="/login" element={<Login/>}/>
