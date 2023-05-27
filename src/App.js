@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import CommonLayout from "./layout/CommonLayout";
 import Login from "./pages/Login";
 import BookingTicket from "./pages/Booking/BookingTicket";
-import {Demo} from "./components/booking-ticket/Demo";
+import {ConfirmTicket} from "./components/confirm-ticket/ConfirmTicket";
 
 function App() {
     return (
@@ -13,6 +13,7 @@ function App() {
             <Route path='' element={<CommonLayout/>}>
                 <Route path='' element={<Home/>}/>
                 <Route path='/booking-ticket' element={<BookingTicket/>}/>
+                <Route path='/confirm-ticket' element={<ConfirmTicket/>}/>
             </Route>
             <Route path="/login" element={<Login/>}/>
         </Routes>
