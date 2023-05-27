@@ -1,11 +1,21 @@
+import {useEffect, useState} from "react";
+import * as EmployeeService from "../../service/EmployeeService";
+
 export function CreateEmployee(){
+    const [employeeList , setEmployeeList] = useState([])
+    useEffect(() => {
+        const fetchApi = async () => {
+            const result = await EmployeeService.findAll();
+            setEmployeeList(result)
+        }
+    },[])
     return(
         <>
             <div className="row mx-0">
                 <div className="container mx-auto my-5 col-8">
                     <div className="form-employee">
                         <h1 style={{ textAlign: "center", marginBottom: "5%" }}>
-                            Thêm mới nhân viên
+                            THÊM MỚI NHÂN VIÊN
                         </h1>
                         <form action="">
                             <div className="row" style={{ marginBottom: "2%" }}>
@@ -17,9 +27,8 @@ export function CreateEmployee(){
                                 <div className="col-md-3 col-xs-12 col-sm-12 col-lg-3">
                                     <input type="file" style={{ width: "100%" }} />
                                 </div>
-                                <div className="col-md-3 col-xs-12 col-sm-12 col-lg-3">
-                                    <img src="" alt="" style={{ height: "100%", width: "100%" }} />
-                                </div>
+                                <div className="col-md-3 col-xs-12 col-sm-12 col-lg-3">No image</div>
+                                <div id="imageValid" />
                             </div>
                             <div className="row" style={{ marginBottom: "2%" }}>
                                 <div className="col-3" style={{ textAlign: "right" }}>
@@ -42,6 +51,7 @@ export function CreateEmployee(){
                                         id="account"
                                     />
                                 </div>
+                                <div id="accountValid" />
                             </div>
                             <div className="row" style={{ marginBottom: "2%" }}>
                                 <div className="col-3" style={{ textAlign: "right" }}>
@@ -64,6 +74,7 @@ export function CreateEmployee(){
                                         id="password"
                                     />
                                 </div>
+                                <div id="passwordValid" />
                             </div>
                             <div className="row" style={{ marginBottom: "2%" }}>
                                 <div className="col-3" style={{ textAlign: "right" }}>
@@ -102,6 +113,7 @@ export function CreateEmployee(){
                                         id="name"
                                     />
                                 </div>
+                                <div id="nameValid" />
                             </div>
                             <div className="row" style={{ marginBottom: "2%" }}>
                                 <div className="col-3" style={{ textAlign: "right" }}>
@@ -121,6 +133,7 @@ export function CreateEmployee(){
                                         id="dateOfBirth"
                                     />
                                 </div>
+                                <div id="dateOfBirthValid" />
                             </div>
                             <div className="row" style={{ marginBottom: "2%" }}>
                                 <div className="col-3" style={{ textAlign: "right" }}>
@@ -138,6 +151,7 @@ export function CreateEmployee(){
                                         <span style={{ marginRight: "5%" }}>Nữ</span>
                                     </div>
                                 </div>
+                                <div id="genderValid" />
                             </div>
                             <div className="row" style={{ marginBottom: "2%" }}>
                                 <div className="col-3" style={{ textAlign: "right" }}>
@@ -157,6 +171,7 @@ export function CreateEmployee(){
                                         id="email"
                                     />
                                 </div>
+                                <div id="emailValid" />
                             </div>
                             <div className="row" style={{ marginBottom: "2%" }}>
                                 <div className="col-3" style={{ textAlign: "right" }}>
@@ -165,7 +180,7 @@ export function CreateEmployee(){
                                         className="fw-bold"
                                         style={{ marginRight: "2%" }}
                                     >
-                                        CMND <span className="warning">(*)</span>
+                                        CCCD <span className="warning">(*)</span>
                                     </label>
                                 </div>
                                 <div className="col-8">
@@ -176,6 +191,7 @@ export function CreateEmployee(){
                                         id="identityCard"
                                     />
                                 </div>
+                                <div id="identityCardValid" />
                             </div>
                             <div className="row" style={{ marginBottom: "2%" }}>
                                 <div className="col-3" style={{ textAlign: "right" }}>
@@ -195,6 +211,7 @@ export function CreateEmployee(){
                                         id="phoneNumber"
                                     />
                                 </div>
+                                <div id="phoneNumberValid" />
                             </div>
                             <div className="row" style={{ marginBottom: "2%" }}>
                                 <div className="col-3" style={{ textAlign: "right" }}>
@@ -207,12 +224,19 @@ export function CreateEmployee(){
                                     </label>
                                 </div>
                                 <div className="col-8">
-                                    <input
-                                        type="text"
-                                        name="address"
-                                        id="address"
-                                        style={{ width: "100%" }}
-                                    />
+            <textarea
+                name="address"
+                id="address"
+                style={{ width: "100%" }}
+                defaultValue={""}
+            />
+                                </div>
+                                <div id="addressValid" />
+                            </div>
+                            <div className="row" style={{ marginBottom: "2%" }}>
+                                <div className="col-3" style={{ textAlign: "right" }}>
+                                    <span className="warning">(*)</span>
+                                    <span>: Bắt buộc nhập</span>
                                 </div>
                             </div>
                             <div className="row" style={{ marginBottom: "2%" }}>
@@ -225,14 +249,14 @@ export function CreateEmployee(){
                                         className="btn btn-primary"
                                         style={{ background: "#f26b38" }}
                                     >
-                                        Chỉnh sửa
+                                        Thêm mới
                                     </button>
                                     <button
                                         type="reset"
                                         className="btn btn-primary"
                                         style={{ background: "black", color: "white" }}
                                     >
-                                        Huỷ
+                                        Quay lại
                                     </button>
                                 </div>
                             </div>
