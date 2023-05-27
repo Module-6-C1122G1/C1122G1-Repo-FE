@@ -1,7 +1,8 @@
 .select-film-wrapper {
-    background: #FF9800;
+    background: #f26b38;
     padding: 15px;
     margin-top: 20px;
+    border-radius: 8px;
 }
 .select-film-wrapper .title {
     color: #fff;
@@ -14,12 +15,16 @@
     background: #fff;
     /* height: 200px; */
     border: solid black 1px;
+    border-radius: 6px;
+    overflow: hidden;
 }
 .select-film-wrapper .select-card .content .title {
     border-bottom: solid black 1px;
     padding: 8px;
-    color: #000;
+    color: #fff;
     margin-bottom: unset;
+    background: #173e65;
+    
 }
 .select-film-wrapper .select-card .content .option-items {
     padding: 12px;
@@ -28,26 +33,29 @@
     margin-top: 12px;
 }
 .select-film-wrapper .select-card .content .option-items .item {
-    border-bottom: solid 2px #FF9800;
+    border-bottom: solid 2px #f26b38;
     padding: 8px 8px;
     cursor: pointer;
+    margin-bottom: 4px;
 }
 .select-film-wrapper .select-card .content .option-items .time-item {
     border-radius: 9999px;
-    border: solid 1px #FF9800;
+    border: solid 1px #f26b38;
     padding: 2px 8px;
     cursor: pointer;
     width: 64px;
     text-align: center;
     height: fit-content;
+
 }
 .select-film-wrapper .select-card .content .option-items .item:hover {
-    /* background: #FF9800; */
-    color: #FF9800;
+    /* background: #f26b38; */
+    color: #f26b38;
 }
 .select-film-wrapper .select-card .content .option-items .item.selected {
-    background: #FF9800;
+    background: #f26b38;
     color: #fff;
+    border-radius: 6px;
 }
 #times-combox {
     flex-direction: row;
@@ -58,10 +66,10 @@
     gap: 12px;
 }
 #times-combox .time-item:hover {
-    color: #FF9800;
+    color: #f26b38;
 }
 #times-combox .time-item.selected {
-    background: #FF9800;
+    background: #f26b38;
     color: #fff;
 }
 a.btn {
@@ -69,13 +77,15 @@ a.btn {
     text-decoration: none;
 }
 .btn-primary {
-    background: #FF9800 !important;
-    border-color :#FF9800 !important;
+    background: #f26b38 !important;
+    border-color :#f26b38 !important;
 }
 
 .select-position-wrapper {
-    background: #FF9800;
+    background: #f26b38;
     padding: 15px;
+    border-radius: 8px;
+
 }
 .select-position-wrapper .title {
     color: #fff;
@@ -170,12 +180,32 @@ a.btn {
     margin: 0;
     font-size: 16px;
 }
+.number-of-position input {
+    height: 32px;
+    padding: 4px;
+    border: solid #f26b38 1px;
+    border-radius: 6px;
+    width: 100px;
+}
 .button-back {
     width: fit-content;
 }
 .btn-primary {
-    background: #FF9800 !important;
-    border-color :#FF9800 !important;
+    background: #f26b38 !important;
+    border-color :#f26b38 !important;
+}
+
+.film-info {
+    background: #f1f1f1;
+    border-radius: 8px;
+    padding: 12px;
+    color: #000;    
+    border: solid #f26b38 2px;
+}
+.total-price {
+    color: #f26b38;
+    font-weight: 600;
+    font-size: 24px;
 }
 @media  screen and (max-width: 768px) {
     .position-item ,
