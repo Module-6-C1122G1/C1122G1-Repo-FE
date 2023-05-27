@@ -6,7 +6,7 @@ import CommonLayout from "./layout/CommonLayout";
 import Login from "./pages/Login";
 // import BookingTicket from "./pages/Booking/BookingTicket";
 import React from "react";
-import {TickBookingList} from "../src/components/customer/detail-customer/account_managent";
+import {TickBookingList} from "./components/customer/detail-customer/customer_ticket";
 // import {Demo} from "./components/booking-ticket/Demo";
 
 
