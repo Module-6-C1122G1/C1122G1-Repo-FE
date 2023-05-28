@@ -5,7 +5,6 @@ import Home from "./pages/Home";
 import CommonLayout from "./layout/CommonLayout";
 import Login from "./pages/Login";
 import BookingTicket from "./pages/Booking/BookingTicket";
-import {Demo} from "./components/booking-ticket/Demo";
 
 function App() {
     return (

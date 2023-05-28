@@ -185,7 +185,8 @@ a.btn {
     padding: 4px;
     border: solid #f26b38 1px;
     border-radius: 6px;
-    width: 100px;
+    width: 50px;
+    text-align: center;
 }
 .button-back {
     width: fit-content;
@@ -223,7 +224,15 @@ a.btn {
     }
 }
 
-
+.hideNumberArrows::-webkit-inner-spin-button,
+.hideNumberArrows::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    display: none;
+}
+.hideNumberArrows {
+    -moz-appearance: textfield;
+}
 
 
 

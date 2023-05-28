@@ -1,30 +1,36 @@
-import React, { useState} from 'react';
-import './index.css'
+import React, {useState} from 'react';
+import './index.css';
 import SelectPosition from "../../components/booking-ticket/SelectPosition";
 import SelectShowTime from "../../components/booking-ticket/SelectShowTime";
-import { apiBookingTicket } from '../../service/BookingTicketService';
+import {apiBookingTicket} from '../../service/BookingTicketService';
+import Payment from "../../components/booking-ticket/Payment";
+
 const BookingTicket = () => {
     const [data, setData] = useState();
-    const  [step, setStep] = useState(1)
+    const [step, setStep] = useState(1);
+    const [listSelecting, setListSelecting] = useState([]);
 
     const handleDataShowTimeData = (film, showTime) => {
-        setData({film,showTime})
-        setStep(2)
-    }
+        console.log({film, showTime});
+        setData({film, showTime});
+        setStep(2);
+    };
 
     const handleBuyTicket = async (listSeat) => {
+        setListSelecting(listSeat)
+        console.log(data);
         const res = await apiBookingTicket(listSeat);
         if (res.status === 200) {
             setStep(3);
         }
-    }
+    };
 
     return (
         <>
-            {step === 1 && <SelectShowTime onFinish={handleDataShowTimeData} ga='123'/>}
+            {step === 1 && <SelectShowTime onFinish={handleDataShowTimeData}/>}
             {step === 2 && <SelectPosition filmData={data} onFinish={handleBuyTicket} onBack={() => setStep(1)}/>}
-            {step === 3 && <div>Màn hình thanh toán</div>}
+            {step === 3 && <Payment filmData={data} listSelectingData={listSelecting}/>}
         </>
-)
-}
+    );
+};
 export default BookingTicket;

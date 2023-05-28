@@ -8,3 +8,12 @@ export const apiBookingTicket = async (listSeat) => {
         console.log(e);
     }
 };
+
+export const apiResetBookingTicket = async (listSeat) => {
+    try {
+        const result = await axios.put(`http://localhost:8080/seat/resest_status`, listSeat);
+        return result;
+    } catch (e) {
+        console.log(e);
+    }
+};

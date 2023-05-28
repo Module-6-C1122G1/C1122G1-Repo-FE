@@ -14,7 +14,9 @@ const SelectShowTime = (props) => {
 
     const fetchListFilm = async () => {
         const data = await apiGetAllFilms();
+        console.log(data)
         setAllFilms(data);
+        setAllDates([])
     };
 
     const onSelectFilm = (film) => {
@@ -108,7 +110,7 @@ const SelectShowTime = (props) => {
                                             </div>
                                         )
                                         : <div className="no-times">Không có suất chiếu</div>
-                                ) : null
+                                ) : ""
                                 }
                             </div>
                         </div>
