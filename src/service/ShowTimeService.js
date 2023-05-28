@@ -16,3 +16,43 @@ export const apiGetShowTimesByDate = async (filmId,date) => {
         console.log(e);
     }
 };
+
+export const findAllShowTime = async () => {
+    try {
+        const result = await axios.get(`http://localhost:8080/showTime`)
+    }catch (e){
+        console.log(e)
+    }
+}
+
+export const createShowTime = async (showTime) => {
+    try {
+        await axios.post(`http://localhost:8080/showTime`, {...showTime})
+    }catch (e){
+        console.log(e)
+    }
+}
+
+export const findShowTimeById = async (idShowTime) => {
+    try {
+        const result = await axios.get(`http://localhost:8080/showTime/${idShowTime}`)
+        return result.data;
+    }catch (e){
+        console.log(e)
+    }
+}
+export const deleteShowTime = async (idShowTime) => {
+    try {
+        await axios.delete(`http://localhost:8080/showTime/${idShowTime}`)
+    }catch (e){
+        console.log(e)
+    }
+}
+export const updateShowTime = async (showTime) => {
+    try {
+        await axios.put(`http://localhost:8080/showTime/${showTime.idShowTime}`, {...showTime})
+    }catch (e){
+        console.log(e)
+    }
+}
+
