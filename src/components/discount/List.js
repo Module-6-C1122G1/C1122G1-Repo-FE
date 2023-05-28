@@ -1,10 +1,8 @@
-import React, {useState, useEffect} from "react"
-import React, {useEffect, useState} from "react";
+import {useState, useEffect} from "react"
 import {NavLink, useNavigate} from "react-router-dom";
 import * as discountService from "../../service/discount/DiscountService"
 import DiscountModalDelete from "/Delete";
-import {findAll} from "../../Service/customerService";
-import {toast} from "react-toastify";
+import {toast} from "react-toastify"
 import ReactPaginate from "react-paginate";
 
 function DiscountList() {
