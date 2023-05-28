@@ -1,6 +1,14 @@
 import "./index.css";
 
 const Header = () => {
+  window.addEventListener('scroll', function() {
+    var header = document.querySelector('.header');
+    if (window.scrollY > 0) {
+      header.style.backgroundColor = 'hsl(207, 19%, 11%)';
+    } else {
+      header.style.backgroundColor = 'transparent';
+    }
+  });
   return (
     <>
       <header className="header" data-header="">
@@ -33,7 +41,7 @@ const Header = () => {
                 <option value="en">EN</option>
               </select>
             </div> */}
-            <button className="btn btn-primary">Đăng ký</button>
+            <button className="btn btn-primary">Đăng nhập</button>
           </div>
           <button className="menu-open-btn" data-menu-open-btn="">
             <ion-icon name="reorder-two" />

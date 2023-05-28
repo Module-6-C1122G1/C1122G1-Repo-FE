@@ -275,7 +275,7 @@
     gap: 15px;
   }
   
-  .movie-card .badge { color: white; }
+  .movie-card .badge { color: #333; }
   
   .movie-card .duration { margin-left: auto; }
   

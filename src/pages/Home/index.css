@@ -85,7 +85,7 @@
     scroll-behavior: smooth;
   }
   
-  body { background: var(--eerie-black); }
+  body { background: white}
   
   body.active { overflow: hidden; }
   
@@ -114,7 +114,7 @@
   .section-title { text-align: center; }
   
   .badge {
-    color: var(--white);
+    color: #333;
     font-size: var(--fs-12);
     font-weight: var(--fw-700);
     border: 2px solid transparent;
@@ -122,7 +122,7 @@
   }
   
   .badge-fill {
-    color: white;
+    color: #333;
     border-color: #f26b38;
   }
   
@@ -268,7 +268,7 @@
     gap: 15px;
   }
   
-  .movie-card .badge { color: white; }
+  .movie-card .badge { color: #333 }
   
   .movie-card .duration { margin-left: auto; }
   
@@ -421,18 +421,9 @@
     pointer-events: all;
   }
   
-  .hero {
-    background: url("https://allfreevn.com/wp-content/uploads/2023/05/Fast-Furious-10-review.jpg") no-repeat;
-    background-size: cover;
-    background-position: center;
-    min-height: 750px;
-    height: 100vh;
-    max-height: 1000px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding-block: var(--section-padding);
-  }
+ .slick-track{
+  margin: 0;
+ }
   
   .hero-content { margin-top: 60px; }
   

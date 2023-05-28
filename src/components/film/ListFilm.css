@@ -85,7 +85,7 @@
     scroll-behavior: smooth;
   }
   
-  body { background: var(--eerie-black); }
+  body { background: white }
   
   body.active { overflow: hidden; }
   
@@ -114,7 +114,7 @@
   .section-title { text-align: center; }
   
   .badge {
-    color: var(--white);
+    color: #333;
     font-size: var(--fs-12);
     font-weight: var(--fw-700);
     border: 2px solid transparent;
@@ -122,7 +122,7 @@
   }
   
   .badge-fill {
-    color: white;
+    color: #333;
     border-color: #f26b38;
   }
   
@@ -248,7 +248,7 @@
   }
   
   .movie-card .card-title {
-    color: var(--white);
+    color: #333;
     font-size: var(--fs-7);
     transition: var(--transition-1);
   }
@@ -256,7 +256,7 @@
   .movie-card .card-title:is(:hover, :focus) { color: #f26b38; }
   
   .movie-card .title-wrapper time {
-    color: white;
+    color: #333;
     font-size: var(--fs-9);
     font-weight: var(--fw-500);
   }
@@ -268,7 +268,7 @@
     gap: 15px;
   }
   
-  .movie-card .badge { color: white; }
+  .movie-card .badge { color: #333; }
   
   .movie-card .duration { margin-left: auto; }
   
@@ -681,7 +681,7 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: #f26b38;;
+    background: #f26b38;
     color: var(--eerie-black);
     width: 50px;
     height: 50px;
@@ -892,7 +892,7 @@
     }
   
     .lang-wrapper select {
-      color: var(--white);
+      color: #333;
       font-size: var(--fs-9);
       font-weight: var(--fw-700);
     }
