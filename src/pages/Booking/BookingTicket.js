@@ -3,7 +3,7 @@ import './index.css';
 import SelectPosition from "../../components/booking-ticket/SelectPosition";
 import SelectShowTime from "../../components/booking-ticket/SelectShowTime";
 import {apiBookingTicket} from '../../service/BookingTicketService';
-import Payment from "../../components/booking-ticket/Payment";
+import {ConfirmTicket} from "../../components/confirm-ticket/ConfirmTicket";
 
 const BookingTicket = () => {
     const [data, setData] = useState();
@@ -29,7 +29,7 @@ const BookingTicket = () => {
         <>
             {step === 1 && <SelectShowTime onFinish={handleDataShowTimeData}/>}
             {step === 2 && <SelectPosition filmData={data} onFinish={handleBuyTicket} onBack={() => setStep(1)}/>}
-            {step === 3 && <Payment filmData={data} listSelectingData={listSelecting}/>}
+            {step === 3 && <ConfirmTicket filmData={data} listSelectingData={listSelecting}/>}
         </>
     );
 };
