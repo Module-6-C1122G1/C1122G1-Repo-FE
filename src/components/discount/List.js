@@ -4,6 +4,7 @@ import * as discountService from "../../service/discount/DiscountService"
 import DiscountModalDelete from "/Delete";
 import {toast} from "react-toastify"
 import ReactPaginate from "react-paginate";
+import {Formik} from "formik";
 
 function DiscountList() {
     const [discountList, setDiscountList] = useState([]);
@@ -26,7 +27,7 @@ function DiscountList() {
     }
 
     //State: Phục vụ cho việc phân trang (pagination)
-    const [paginationCustomer, setPaginationCustomer] = useState([]);
+    const [paginationDiscount, setPaginationDiscount] = useState([]);
     const PAGE_SIZE = 3;
 
     function handleUpdate(id) {
@@ -64,22 +65,42 @@ function DiscountList() {
                                 </button>
                             </div>
                             <div className="row col-md-8">
+                                <Formik initialValues={{
+                                    name: ""
+                                }}
+                                        onSubmit={(value) => {
+                                            const search = async () => {
+                                                const rs = await discountService.findByName(value.name)
+                                                if (rs == "") {
+                                                    document.getElementById("empty").innerHTML = `Không Tìm Thấy Tên ${value.name}`
+                                                } else {
+                                                    document.getElementById("empty").innerHTML = ``
+                                                }
+                                                setDiscountList(rs)
+                                            }
+                                            search()
+                                        }}
+                                >
                                 <div className="col-md-9">
                                     <input
                                         style={{width: "100%", marginLeft: 90}}
                                         className="form-control float-start"
                                         type="text"
+                                        name={name}
+                                        aria-describedby={helpId}
                                         placeholder="Tìm kiếm khuyến mãi theo tên"
                                     />
                                 </div>
                                 <div className="col-md-3">
                                     <button
+                                        type={onsubmit}
                                         style={{marginLeft: 75}}
                                         className="btn btn-outline-success"
                                     >
                                         <i className="bi bi-search"/>
                                     </button>
                                 </div>
+                                </Formik>
                             </div>
                         </div>
                         <div style={{marginTop: 20}}>
@@ -88,7 +109,7 @@ function DiscountList() {
                                     <div className="d-flex justify-content-center">
                                         <table
                                             className="table table-striped table-hover"
-                                            style={{width: "85%"}}
+                                            style={discountList === '' ? { display: 'none' } : {}}
                                         >
                                             <thead>
                                             <tr>
@@ -173,7 +194,7 @@ function DiscountList() {
                 nextLabel="next >"
                 // onPageChange={handlePageClick}
                 pageRangeDisplayed={1}
-                pageCount={Math.floor(customerList.length / PAGE_SIZE)}
+                pageCount={Math.floor(discountList.length / PAGE_SIZE)}
                 previousLabel="< previous"
                 renderOnZeroPageCount={null}
             />
