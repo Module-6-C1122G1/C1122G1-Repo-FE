@@ -1,10 +1,14 @@
+import axios from "axios"
+
  /**
-     * @param pageable
-     * @param search
-     * @return ResponseEntity<>(tickets, HttpStatus.OK;
      * Phương thức sử dụng để tìm kiếm kết hợp danh sách vé đặt
      * @author DatLVP
      */
-export const findAllTicket = async () => {
-    
+export const findAllTicket = async ({page, name}) => {
+    try {
+        const result = await axios.get(`http://localhost:8080/api/ticket/list?page=${page ? page : 0}&name=${name}`);
+        return result.data;
+    } catch(error) {
+        console.log(error);
+    }
 }
