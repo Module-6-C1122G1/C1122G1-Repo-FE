@@ -17,7 +17,16 @@
     background-size: cover;
     margin-bottom: -3px;
 }
-
+.button-age{
+    display: inline-block;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    padding-bottom: 8px;
+    padding-top: 6px;
+    color: white;
+    background-color: #f26b38;
+}
 .bg-movie {
     background-color: #f26b38;
 }

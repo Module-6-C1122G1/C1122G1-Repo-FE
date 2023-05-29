@@ -34,7 +34,7 @@ export default function(){
       <div className="col-3 mt-2 col-md-6 col-sm-9">
         <div className="detail-feat-img">
           <img
-            src={movieDetail?.img}
+            src={movieDetail?.imgFilm}
             className="loaded img-hover"
             data-was-processed="true"
           />
@@ -71,15 +71,16 @@ export default function(){
         }}
       >
         <div>
-          <h3 className="text-secondary">{movieDetail?.name}</h3>
+          <h3 className="text-secondary">{movieDetail?.nameFilm}</h3>
         </div>
         <hr className="text-movie" />
         <div className="detail-rating">
-          {/* <span><i class=" "></i></span> */}
-          <i className="icon-c16 icon-time-left mt-2" />
+          <span className='button-age'>
+            {movieDetail?.movieLabel}
+          </span>
           <span className="fs-4 ms-4 text-movie">
             <i className="bi bi-clock-history me-2 ms-1" />
-            {movieDetail?.time}
+            {movieDetail?.timeFilm} phút
           </span>
           <div className="mt-2">
             <hr className="text-movie" />
@@ -87,13 +88,13 @@ export default function(){
               <thead>
                 <tr style={{ height: 45 }}>
                   <th className="text-secondary">Thể Loại :</th>
-                  <td>Giả Tưởng, Giật Gân</td>
+                  <td>{movieDetail?.typeFilm.nameTypeFilm}</td>
                 </tr>
               </thead>
               <tbody>
                 <tr style={{ height: 45 }}>
                   <th className="text-secondary">Quốc Gia :</th>
-                  <td>{movieDetail?.country}</td>
+                  <td>{movieDetail?.nation}</td>
                 </tr>
                 <tr style={{ height: 45 }}>
                   <th className="text-secondary">Đạo diễn :</th>
@@ -105,11 +106,11 @@ export default function(){
                 </tr>
                 <tr style={{ height: 45 }}>
                   <th className="text-secondary">Nhà sản xuất :</th>
-                  <td>{movieDetail?.producer}</td>
+                  <td>{movieDetail?.studioFilm}</td>
                 </tr>
                 <tr style={{ height: 46, width: 200 }}>
                   <th className="text-secondary">Ngày khởi chiếu :</th>
-                  <td>{movieDetail?.premiereDate}</td>
+                  <td>{movieDetail?.dateStartFilm}</td>
                 </tr>
                 {/*<tr style={{ height: 45 }}>*/}
                 {/*  <th className="text-secondary">Nhà sản xuất :</th>*/}
@@ -138,7 +139,7 @@ export default function(){
             </div>
             <div>
               <p>
-                {movieDetail?.content}
+                {movieDetail?.describeFilm}
               </p>
             </div>
           </div>
