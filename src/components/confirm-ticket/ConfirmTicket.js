@@ -3,14 +3,15 @@ import Footer from "../common/footer/Footer";
 import Header from "../common/header/Header";
 import React, {useEffect, useState} from "react";
 import {Formik, Form, Field} from "formik";
-import {checkDiscount, findByIdSeat} from "../../service/TicketService";
+import {checkDiscount, findByIdSeat, getCustomer, pay} from "../../service/TicketService";
 
 export function ConfirmTicket(props) {
     const {filmData, listSelectingData} = props;
-    const token = localStorage.getItem("token");
+    const useName = localStorage.getItem("username");
     const [seats, setSeat] = useState([]);
     const [price, setPrice] = useState(0);
     const [discounts, setDiscount] = useState({});
+    const [customer, setCustomer] = useState({});
     useEffect(() => {
         const fetchApi = async () => {
             const listSeat = [];
@@ -24,6 +25,8 @@ export function ConfirmTicket(props) {
                 }
                 listSeat.push(findByIdSeat(seat))
             })
+            const customers = await getCustomer(useName)
+            setCustomer(customers)
             setPrice(prices);
             setSeat(listSeat);
         }
@@ -43,21 +46,27 @@ export function ConfirmTicket(props) {
             <Header/>
             <Formik
                 initialValues={{
-                    idCustomer: 1,
+                    idCustomer: customer.idCustomer,
                     idFilm: filmData.film.idFilm,
                     listSeat: seats,
                     discount: discounts.idDiscount,
                     price: price
                 }}
-                onSubmit={}
+                onSubmit={(values) => {
+                    const save = async () => {
+                        await pay(values)
+                        alert("ok")
+                    }
+                    save();
+                }}
             >
                 <Form>
-                    <Field disable name='idCustomer'/>
-                    <Field disable name='idFilm'/>
-                    <Field disable name='discount'/>
-                    <Field disable name='price'/>
+                    <Field type="hidden" disable name='idCustomer'/>
+                    <Field type="hidden" disable name='idFilm'/>
+                    <Field type="hidden" disable name='discount'/>
+                    <Field type="hidden" disable name='price'/>
                     {seats.map((seat, index) => (
-                        <Field as="checkbox" key={index} name="listSeat" value={seat}/>
+                        <Field type="hidden" as="checkbox" key={index} name="listSeat" value={seat}/>
                     ))}
                     <div className="container">
                         <div className="row">
