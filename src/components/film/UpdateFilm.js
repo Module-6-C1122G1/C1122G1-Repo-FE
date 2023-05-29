@@ -6,11 +6,16 @@ import * as TypeFilmService from "../../service/TypeFilmService";
 import {Form, Formik} from "formik";
 import * as Yup from 'yup';
 import {ColorRing} from "react-loader-spinner";
+import {storage} from "../../config/firebase";
+import {ref, uploadBytes, listAll, getDownloadURL} from 'firebase/storage'
+import {v4} from "uuid";
 
 export function UpdateFilm() {
     const navigate = useNavigate();
     const [films, setFilms] = useState();
-    const [listTypeFilm, setListTypeFilm] = useState();
+    const [listTypeFilm, setListTypeFilm] = useState([]);
+    const [imageUpload, setImageUpload] = useState(null);
+    const [imageList, setImageList] = useState([])
     const params = useParams();
 
     useEffect(() => {
@@ -34,6 +39,27 @@ export function UpdateFilm() {
     useEffect(() => {
         document.title = "Chỉnh sửa phim"
     }, [])
+    const imageListRef = ref(storage, "images/")
+    const uploadImage = () => {
+        if (imageUpload == null)
+            return;
+        const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+        uploadBytes(imageRef, imageUpload).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then((url)=> {
+                setImageList((prev) => [...prev,url])
+            })
+
+        });
+    };
+    useEffect(() => {
+        listAll(imageListRef).then((response) => {
+            response.items.forEach((item) => {
+                getDownloadURL(item).then((url) => {
+                    setImageList((prev) => [...prev, url]);
+                })
+            })
+        })
+    },[])
 
     if (!films) {
         return null;
@@ -103,14 +129,17 @@ export function UpdateFilm() {
                                     </label>
                                 </div>
                                 <div className="col-3">
-                                    <input type="file" style={{width: "100%"}}/>
+                                    <input type="file" onChange={(event) => {
+                                        setImageUpload(event.target.files[0])
+                                    }}
+                                           style={{width: "100%"}}/>
+                                    <button onClick={uploadImage}>Tải ảnh lên</button>
                                 </div>
                                 <div className="col-3">
-                                    <img
-                                        src="https://upload.wikimedia.org/wikipedia/vi/7/72/Star_wars_the_clone_wars.jpg"
-                                        alt=""
-                                        style={{height: "100%", width: "100%"}}
-                                    />
+
+                                    {imageList.map((url) =>{
+                                        return <img src={url} style={{height:"100%", width: "100%"}}/>
+                                    } )}
                                 </div>
                             </div>
                             <div className="row" style={{marginBottom: "2%"}}>
