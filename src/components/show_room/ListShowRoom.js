@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import * as showRoomService from "../../service/ShowRoomService";
+import {Link} from "react-router-dom";
 
 export function ListShowRoom() {
     const [showRoomList, setShowRoomList] = useState([])
@@ -96,7 +97,7 @@ export function ListShowRoom() {
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
                                                     <td>{showRoom.idShowRoom}</td>
-                                                    <td>{showRoom.nameShowRoom}</td>
+                                                    <td><Link to ={'/admin/showroom/detail?id='+showRoom.idShowRoom}>{showRoom.nameShowRoom}</Link></td>
                                                     <td>{showRoom.quantitySeat}</td>
                                                 </tr>
                                             ))
