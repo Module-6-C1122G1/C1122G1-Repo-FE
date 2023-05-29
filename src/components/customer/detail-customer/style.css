@@ -1,6 +1,7 @@
-*{
+* {
     font-family: "Roboto Light";
 }
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -17,14 +18,17 @@ table td {
 table th {
     background-color: #f3f3f3;
 }
+
 @media screen and (max-width: 668px) {
     .side-bar {
         display: none;
     }
+
     i.menu {
-        display: block!important;
+        display: block !important;
     }
 }
+
 @media only screen and (max-width: 700px) {
     /* Table full chiều rộng màn hình, cách đều trái phải 10px */
     table {
@@ -54,6 +58,7 @@ table th {
 .log-out:hover {
     color: black;
 }
+
 .sidebar {
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
@@ -101,6 +106,16 @@ table th {
     border: none;
 }
 
+.pagination {
+    list-style: none;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    font-size: 1.2rem;
+    gap: 5px;
+    margin-top: 20px;
+}
+
 .openbtn:hover {
     background-color: #444;
 }
@@ -113,6 +128,11 @@ table th {
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
-    .sidebar {padding-top: 15px;}
-    .sidebar a {font-size: 18px;}
+    .sidebar {
+        padding-top: 15px;
+    }
+
+    .sidebar a {
+        font-size: 18px;
+    }
 }

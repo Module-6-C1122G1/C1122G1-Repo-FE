@@ -1,15 +1,34 @@
-import * as customerService from '../../../service/CustomerService';
-import {useEffect, useState} from "react";
+import * as customerService from '../../../service/TicketManagementService';
+import React, {useEffect, useState} from "react";
+import '../detail-customer/style.css';
+import ReactPaginate from "react-paginate";
 
 export function CustomerPointHistory() {
     const [pointHistory, setPointHistory] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(0);
+
+    let stt = page * size + 1;
+
+    const handlePageClick = (event) => {
+        setPage(+event.selected);
+    };
+
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await customerService.findAllTicketBookingPoint();
-            setPointHistory(result.content);
+            try {
+                const result = await customerService.findAllTicketBookingPoint();
+                console.log(result)
+                setPointHistory(result.data.content);
+                setPageCount(result.data.totalPages);
+                setSize(result.data.size)
+            } catch (error) {
+                console.log(error)
+            }
         }
         fetchApi();
-    }, [])
+    }, [page])
     return (
         <>
             <div className="container">
@@ -151,7 +170,8 @@ export function CustomerPointHistory() {
                                     </div>
                                     <div className="col-md-12">
                                         <div className="mt-3" style={{width: "100%"}}>
-                                            <div className=" table-responsive px-5 py-3 d-flex justify-content-center">
+                                            <div
+                                                className=" table-responsive px-5 py-3 d-flex justify-content-center flex-column">
                                                 <table className="table table-striped table-hover">
                                                     <thead>
                                                     <tr>
@@ -163,69 +183,38 @@ export function CustomerPointHistory() {
                                                     </thead>
                                                     <tbody>
                                                     {
-                                                        pointHistory?.map((pointHistorys, index) => (
+                                                        pointHistory.map((pointHistorys, index) => (
                                                             <tr key={index}>
-                                                                <td>{pointHistorys.dateBooking}</td>
-                                                                <td>{pointHistorys.nameFilm}</td>
-                                                                <td>{pointHistorys.pointCustomer}</td>
+                                                                <td>{stt++}</td>
+                                                                <td>{pointHistorys?.dateBooking}</td>
+                                                                <td>{pointHistorys?.nameFilm}</td>
+                                                                <td>{pointHistorys?.pointCustomer}</td>
                                                             </tr>
                                                         ))
                                                     }
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>22/02/2022</td>
-                                                        <td>Đã Mua Pepsi</td>
-                                                        <td>7500</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>19/03/2023</td>
-                                                        <td>Đã Mua Bắp</td>
-                                                        <td>8000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>17/04/2024</td>
-                                                        <td>Đã Mua Khoai Tây Chiên</td>
-                                                        <td>9000</td>
-                                                    </tr>
                                                     </tbody>
                                                 </table>
+                                                <div className="d-grid">
+                                                    <ReactPaginate
+                                                        breakLabel="..."
+                                                        nextLabel=">"
+                                                        onPageChange={handlePageClick}
+                                                        pageCount={pageCount}
+                                                        pageRangeDisplayed={2}
+                                                        marginPagesDisplayed={1}
+                                                        previousLabel="<"
+                                                        containerClassName="pagination"
+                                                        pageClassName="page-item"
+                                                        pageLinkClassName="page-link"
+                                                        nextClassName="page-item"
+                                                        nextLinkClassName="page-link"
+                                                        previousClassName="page-item"
+                                                        previousLinkClassName="page-link"
+                                                        activeClassName="active"
+                                                        disabledClassName="d-none"
+                                                    />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div
-                                            className="d-flex justify-content-center"
-                                            style={{marginTop: 18}}
-                                        >
-                                            <nav aria-label="Page navigation example">
-                                                <ul className="pagination">
-                                                    <li className="page-item">
-                                                        <a className="page-link" href="#">
-                                                            Trước
-                                                        </a>
-                                                    </li>
-                                                    <li className="page-item">
-                                                        <a className="page-link" href="#">
-                                                            1
-                                                        </a>
-                                                    </li>
-                                                    <li className="page-item">
-                                                        <a className="page-link" href="#">
-                                                            2
-                                                        </a>
-                                                    </li>
-                                                    <li className="page-item">
-                                                        <a className="page-link" href="#">
-                                                            3
-                                                        </a>
-                                                    </li>
-                                                    <li className="page-item">
-                                                        <a className="page-link" href="#">
-                                                            Sau
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </nav>
                                         </div>
                                     </div>
                                 </div>

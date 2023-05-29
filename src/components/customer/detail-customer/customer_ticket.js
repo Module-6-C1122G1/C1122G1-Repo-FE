@@ -1,18 +1,46 @@
-import * as customerService from '../../../service/CustomerService';
-import {useEffect, useState} from "react";
+import * as customerService from '../../../service/TicketManagementService';
+import React, {useEffect, useState} from "react";
 import '../detail-customer/style.css';
+import ReactPaginate from "react-paginate";
 
-export function TickBookingList() {
+export function TickBookingList(effect, deps) {
     const [ticketBooking, setTicketBooking] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(0);
+    const [deleteTicket, setDeleteTicket] = useState();
+
+    let stt = page * size + 1
+
+    const handlePageClick = (event) => {
+        setPage(+event.selected);
+    };
+
+    const handleDeleteTicket = async (id) => {
+        setDeleteTicket(id);
+        console.log(deleteTicket)
+    }
+    const handleDelete = async () => {
+        console.log(deleteTicket)
+        await customerService.deleteTicket(deleteTicket)
+        setTicketBooking(ticketBooking.filter(e => e.idTicket != deleteTicket));
+    }
+
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await customerService.findAllTicketBooking();
-            console.log(result)
-            setTicketBooking(result.content);
+            try {
+                const result = await customerService.findAllTicketBooking();
+                console.log(result)
+                setTicketBooking(result.data.content);
+                setPageCount(result.data.totalPages);
+                setSize(result.data.size)
+            } catch (error) {
+                console.log(error)
+            }
         }
         fetchApi();
-    }, [])
-
+    }, [page], [deleteTicket])
+    console.log(deleteTicket);
     return (
         <>
             <div id="mySidebar" className="sidebar">
@@ -95,7 +123,8 @@ export function TickBookingList() {
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div>
-                                            <div className="table-responsive px-5 py-3  d-flex justify-content-center">
+                                            <div
+                                                className="table-responsive px-5 py-3 d-flex justify-content-center flex-column">
                                                 <table className="table table-striped table-hover">
                                                     <thead>
                                                     <tr>
@@ -109,140 +138,60 @@ export function TickBookingList() {
                                                     </thead>
                                                     <tbody>
                                                     {
-                                                        ticketBooking.map((ticketBookings, index) => (
+                                                        ticketBooking && ticketBooking.map((ticketBookings, index) => (
                                                             <tr key={index}>
+                                                                <td>{stt++}</td>
                                                                 <td scope={"row"}>{ticketBookings?.nameFilm}</td>
                                                                 <td>{ticketBookings?.dateBooking}</td>
-                                                                <td>{ticketBookings.priceAfterDiscount}</td>
-                                                                <td>{ticketBookings.statusTicket}</td>
+                                                                <td>{ticketBookings?.priceAfterDiscount}</td>
+                                                                <td>{ticketBookings?.statusTicket}</td>
+                                                                <td>
+                                                                    <button type="button" className="btn btn-danger"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#exampleModal"
+                                                                            onClick={() => handleDeleteTicket(ticketBookings.idTicket)}>
+                                                                        <svg
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width={16}
+                                                                            height={16}
+                                                                            fill="currentColor"
+                                                                            className="bi bi-trash"
+                                                                            viewBox="0 0 16 16"
+                                                                        >
+                                                                            <path
+                                                                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                                                            <path
+                                                                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                                                        </svg>
+                                                                    </button>
+                                                                </td>
                                                             </tr>
                                                         ))
                                                     }
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>Harry Potter và bảo bối tử thần</td>
-                                                        <td>22/02/2022</td>
-                                                        <td>120.000</td>
-                                                        <td>Đợi nhận vé</td>
-                                                        <td>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-danger"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteCustomer"
-                                                            >
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    width={16}
-                                                                    height={16}
-                                                                    fill="currentColor"
-                                                                    className="bi bi-trash"
-                                                                    viewBox="0 0 16 16"
-                                                                >
-                                                                    <path
-                                                                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                                                                    <path
-                                                                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                                                                </svg>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>Nhà Bà Nữ</td>
-                                                        <td>19/03/2023</td>
-                                                        <td>140.000</td>
-                                                        <td>Đã nhận vé</td>
-                                                        <td>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-danger"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteCustomer"
-                                                            >
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    width={16}
-                                                                    height={16}
-                                                                    fill="currentColor"
-                                                                    className="bi bi-trash"
-                                                                    viewBox="0 0 16 16"
-                                                                >
-                                                                    <path
-                                                                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                                                                    <path
-                                                                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                                                                </svg>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>Doraemon</td>
-                                                        <td>17/04/2024</td>
-                                                        <td>160.000</td>
-                                                        <td>Đang đợi vé</td>
-                                                        <td>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-danger"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteCustomer"
-                                                            >
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    width={16}
-                                                                    height={16}
-                                                                    fill="currentColor"
-                                                                    className="bi bi-trash"
-                                                                    viewBox="0 0 16 16"
-                                                                >
-                                                                    <path
-                                                                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                                                                    <path
-                                                                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                                                                </svg>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
                                                     </tbody>
                                                 </table>
+                                                <div className="d-grid">
+                                                    <ReactPaginate
+                                                        breakLabel="..."
+                                                        nextLabel=">"
+                                                        onPageChange={handlePageClick}
+                                                        pageCount={pageCount}
+                                                        pageRangeDisplayed={2}
+                                                        marginPagesDisplayed={1}
+                                                        previousLabel="<"
+                                                        containerClassName="pagination"
+                                                        pageClassName="page-item"
+                                                        pageLinkClassName="page-link"
+                                                        nextClassName="page-item"
+                                                        nextLinkClassName="page-link"
+                                                        previousClassName="page-item"
+                                                        previousLinkClassName="page-link"
+                                                        activeClassName="active"
+                                                        disabledClassName="d-none"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div
-                                        className="d-flex justify-content-center"
-                                        style={{marginTop: 18}}
-                                    >
-                                        <nav aria-label="Page navigation example">
-                                            <ul className="pagination">
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#">
-                                                        Trước
-                                                    </a>
-                                                </li>
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#">
-                                                        1
-                                                    </a>
-                                                </li>
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#">
-                                                        2
-                                                    </a>
-                                                </li>
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#">
-                                                        3
-                                                    </a>
-                                                </li>
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#">
-                                                        Sau
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
                                     </div>
                                 </div>
                             </div>
@@ -251,30 +200,22 @@ export function TickBookingList() {
                 </div>
             </div>
             {/*Modal xoá*/}
-            <div
-                className="modal fade"
-                id="deleteCustomer"
-                tabIndex="{-1}"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-            >
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">
-                                Xóa Phim
-                            </h1>
-                            <button
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            />
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">Hủy Đặt Vé</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                         </div>
-                        <div className="modal-body">Bạn có chắc chắn muốn xóa này không?</div>
+                        <div className="modal-body">
+                            Bạn Có Muốn Hủy Vé Này Không ?
+                        </div>
                         <div className="modal-footer">
-                            <button className="btn btn-danger" data-bs-dismiss="modal">
-                                Xóa
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Hủy Bỏ</button>
+                            <button onClick={() => handleDelete()} type="button" className="btn btn-primary"
+                                    data-bs-dismiss="modal">Xóa
                             </button>
                         </div>
                     </div>
