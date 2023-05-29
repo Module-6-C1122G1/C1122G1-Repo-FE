@@ -2,26 +2,46 @@ import { useState, useEffect } from "react";
 import "../ticket/ticket.css";
 import { Field, Form, Formik } from "formik";
 import ReactPaginate from "react-paginate";
-import { findAllTicket } from "../../service/TicketService";
+import { cancelTicket, findAllTicket } from "../../service/TicketService";
 
 export function ListTicket() {
   const [listTicket, setListTicket] = useState([]);
   const [pageCount, setPageCount] = useState(0);
-  const [nameAndPage, setNameAndPage] = useState({
+  const [ticketData, setTicketData] = useState({ id: 0, nameFilm: "" });
+  const [searchAndPage, setSearchAndPage] = useState({
     page: 0,
-    name: "",
+    search: "",
   });
   useEffect(() => {
     const list = async () => {
-      const result = await findAllTicket(nameAndPage);
-      setListTicket(result.content);
-      setPageCount(result.totalPages);
+      const result = await findAllTicket(searchAndPage);
+      try {
+        setListTicket(result.content);
+        setPageCount(result.totalPages);
+      } catch {
+        setListTicket([]);
+      }
     };
 
     list();
-  }, [nameAndPage]);
+  }, [searchAndPage]);
+
+  const handleCancleTicket = (id) => {
+    const cancel = async () => {
+      await cancelTicket(ticketData.id);
+      alert("Huỷ vé thành công");
+      const result = await findAllTicket(searchAndPage);
+      try {
+        setListTicket(result.content);
+        setPageCount(result.totalPages);
+      } catch {
+        setListTicket([]);
+      }
+    };
+    cancel();
+  };
   const handlePageClick = (event) => {
-    setNameAndPage((prev) => ({ ...prev, page: event.selected }));
+    setSearchAndPage((prev) => ({ ...prev, page: event.selected }));
   };
 
   return (
@@ -48,16 +68,16 @@ export function ListTicket() {
               <div className="col-2 col-md-6" />
               <div className="col-8 col-md-4 p-0 d-flex justify-content-center gap-2">
                 <Formik
-                  initialValues={{ name: "" }}
+                  initialValues={{ search: "" }}
                   onSubmit={(values) => {
-                    setNameAndPage((prev) => {
+                    setSearchAndPage((prev) => {
                       return { ...prev, ...values, page: 0 };
                     });
                   }}
                 >
                   <Form className="d-flex align-items-center">
                     <Field
-                      name="name"
+                      name="search"
                       className="form-control mx-2"
                       type="text"
                       placeholder="Tìm kiếm theo mã vé, tên phim..."
@@ -146,6 +166,12 @@ export function ListTicket() {
                                     className="btn btn-outline-danger"
                                     data-bs-toggle="modal"
                                     data-bs-target="#deleteCustomer"
+                                    onClick={() =>
+                                      setTicketData({
+                                        id: ticket.id_ticket,
+                                        nameFilm: ticket.name_film,
+                                      })
+                                    }
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -154,7 +180,7 @@ export function ListTicket() {
                                       fill="currentColor"
                                       className="bi bi-trash3"
                                       viewBox="0 0 16 16"
-                                      title="Xoá"
+                                      title="Huỷ vé"
                                     >
                                       <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                     </svg>
@@ -211,7 +237,11 @@ export function ListTicket() {
             </div>
             <div className="modal-body">
               Bạn có chắc chắn muốn huỷ vé phim
-              <span className="text-danger fw-bold">Harry Potter</span> không?
+              <span className="text-danger fw-bold">
+                {" "}
+                {ticketData.nameFilm}{" "}
+              </span>{" "}
+              không?
             </div>
             <div className="modal-footer">
               <button
@@ -221,8 +251,12 @@ export function ListTicket() {
               >
                 Hủy
               </button>
-              <button className="btn btn-danger" data-bs-dismiss="modal">
-                Xóa
+              <button
+                className="btn btn-danger"
+                data-bs-dismiss="modal"
+                onClick={() => handleCancleTicket(ticketData.id)}
+              >
+                Huỷ vé
               </button>
             </div>
           </div>
