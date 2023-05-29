@@ -26,7 +26,7 @@ function DiscountList() {
     }
 
     //State: Phục vụ cho việc phân trang (pagination)
-    const [paginationCustomer, setPaginationCustomer] = useState([]);
+    const [paginationDiscount, setPaginationDiscount] = useState([]);
     const PAGE_SIZE = 3;
 
     function handleUpdate(id) {
@@ -173,7 +173,7 @@ function DiscountList() {
                 nextLabel="next >"
                 // onPageChange={handlePageClick}
                 pageRangeDisplayed={1}
-                pageCount={Math.floor(customerList.length / PAGE_SIZE)}
+                pageCount={Math.floor(discountList.length / PAGE_SIZE)}
                 previousLabel="< previous"
                 renderOnZeroPageCount={null}
             />
