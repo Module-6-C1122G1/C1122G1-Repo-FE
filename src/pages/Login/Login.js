@@ -43,6 +43,7 @@ function Login() {
             .then((e) => {
               setFailedAccount(null);
               localStorage.setItem("token", e.token);
+              localStorage.setItem("username", e.username)
               navigate("/");
             })
             .catch((e) => {
