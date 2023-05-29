@@ -2,6 +2,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import CommonLayout from "./layout/CommonLayout";
+
 import Login from "./pages/Login/Login";
 import ConfirmEmail from "./pages/Login/ConfirmEmail";
 import ResetPassword from "./pages/Login/ResetPassword";
@@ -19,6 +20,7 @@ function App() {
     </Routes>
   );
 }
+
 
 
 export default App;

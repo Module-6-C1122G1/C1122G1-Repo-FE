@@ -1,10 +1,3 @@
-.footer-wrapper {
-    height: 60px;
-    position: fixed;
-    bottom: 0;
-    background: gray;
-    width: 100%;
-}
 *{
     font-family: Netflix Sans, Helvetica Neue, Segoe UI, Roboto, Ubuntu,
     sans-serif;
@@ -99,7 +92,7 @@
   .h1,
   .h2,
   .h3 {
-    color: #333;
+    color: var(--white);
     line-height: 1.2;
   }
   
@@ -129,7 +122,7 @@
   }
   
   .badge-fill {
-    color: white;
+    color: #333;
     border-color: #f26b38;
   }
   
@@ -192,7 +185,7 @@
     align-items: center;
     gap: 10px;
     padding: 16px 30px;
-    /* border: 1px solid #f26b38; */
+    border: 2px solid #f26b38;;
     border-radius: 50px;
     transition: var(--transition-1);
   }
@@ -204,7 +197,6 @@
   .btn-primary:is(:hover, :focus) {
     background: #f26b38;
     color: white;
-    border: 2px solid #f26b38;
   }
   
   
@@ -218,12 +210,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); */
-  }
-
-  .movie-card:hover{
-    /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); */
-
   }
   
   .movie-card .card-banner {
@@ -282,10 +268,7 @@
     gap: 15px;
   }
   
-  .movie-card .badge { 
-    color: white; 
-    background-color: #333;
-  }
+  .movie-card .badge { color: #333; }
   
   .movie-card .duration { margin-left: auto; }
   
@@ -293,7 +276,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    color: #333;
+    color: var(--gainsboro);
     font-size: var(--fs-11);
     font-weight: var(--fw-500);
   }
@@ -337,12 +320,11 @@
     padding-block: 25px;
     transition: var(--transition-2);
     z-index: 4;
-    padding: 0;
   }
   
   .header.active {
     background: var(--eerie-black);
-    /* padding-block: 20px; */
+    padding-block: 20px;
   }
   
   .header .container {
@@ -437,6 +419,19 @@
   .overlay.active {
     opacity: 1;
     pointer-events: all;
+  }
+  
+  .hero {
+    background: url("../images/slide1.png") no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 750px;
+    height: 100vh;
+    max-height: 1000px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-block: var(--section-padding);
   }
   
   .hero-content { margin-top: 60px; }
@@ -592,9 +587,7 @@
   }
   
   
-  .footer{
-    background-color: #333;
-  }
+  
   
   .footer-top {
     background-size: cover;
@@ -688,7 +681,7 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: #f26b38;;
+    background: #f26b38;
     color: var(--eerie-black);
     width: 50px;
     height: 50px;
@@ -899,7 +892,7 @@
     }
   
     .lang-wrapper select {
-      color: var(--white);
+      color: #333;
       font-size: var(--fs-9);
       font-weight: var(--fw-700);
     }
