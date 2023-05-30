@@ -1,21 +1,28 @@
 import React, {useEffect, useState} from 'react';
 import {Field, Form, Formik} from "formik";
-import {findAll} from "../../service/CustomerService";
-import {findAllCustomerType} from "../../service/CustomerTypeService";
+import {customerService} from "../../service/CustomerService";
+import {customerTypeService} from "../../service/CustomerTypeService";
+import { useNavigate } from "react-router-dom"
 
 function List() {
     const [customer, setCustomer] = useState([])
     const [customerType, setCustomerType] = useState([])
+    let navigate = useNavigate();
 
     useEffect(() => {
-        (async () => {
-            const customerApi = await findAll()
-            const customerTypeApi = await findAllCustomerType()
+        const customerList = async () => {
+            const customerApi = await customerService.findAll()
+            const customerTypeApi = await customerTypeService.findAllCustomerType()
 
-            setCustomer(customerApi.data)
-            setCustomerType(customerTypeApi.data)
-        })()
-    }, [])
+            setCustomer(customerApi)
+            setCustomerType(customerTypeApi)
+        }
+        customerList();
+    },[])
+
+    const handleEdit = (id) => {
+        navigate(`/edit/${id}`)
+    }
 
     return (
         <>
@@ -36,7 +43,7 @@ function List() {
                             <div className="col-md-6 justify-content-end">
                                 <Formik initialValues={{name: ''}}
                                         onSubmit={async (values) => {
-                                            const result = await findAll(
+                                            const result = await customerService.findAll(
                                                 values.name
                                             )
                                             if (result.length === 0) {
@@ -62,6 +69,7 @@ function List() {
                         </div>
                         <div className="table-responsive mt-4">
                             <table className="table table-striped">
+                                <thead>
                                 <tr>
                                     <th>Stt</th>
                                     <th>Mã thành viên</th>
@@ -72,29 +80,27 @@ function List() {
                                     <th>Loại Thành Viên</th>
                                     <th>Email</th>
                                     <th>Địa chỉ</th>
-                                    <th>Tổng tiền</th>
                                     <th>Số CMND</th>
-                                    <th>Account</th>
-                                    <th></th>
                                 </tr>
+                                </thead>
+                                <tbody>
                                 {
-                                    customer.map((customers, index) => (
+                                    customer.map((customers,index) => (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{customers.customerId}</td>
-                                            <td>{customers.name}</td>
+                                            <td>{customers.idCustomer}</td>
+                                            <td>{customers.nameCustomer}</td>
                                             <td>{customers.phone}</td>
-                                            <td>{customers.gender ? "Nam" : "Nữ"}</td>
-                                            <td>{customers.point}</td>
-                                            {/*<td>{customerType.filter((ct) => ct.id === customers.customerType)[0]?.name}</td>*/}
-                                            <td>{customers.customerType.name}</td>
+                                            <td>{customers.gender}</td>
+                                            <td>{customers.pointCustomer}</td>
+                                            <td>{customers.typeCustomer.nameTypeCustomer}</td>
                                             <td>{customers.email}</td>
                                             <td>{customers.address}</td>
-                                            <td>{customers.totalAmount}</td>
-                                            <td>{customers.card}</td>
-                                            <td>{customers.account}</td>
+                                            <td>{customers.identityCard}</td>
                                             <td>
-                                                <button type="button" className="btn btn-outline-warning">
+                                                <button
+                                                        onClick={() => handleEdit(customers.idCustomer)}
+                                                        className="btn btn-outline-warning">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                          fill="currentColor"
                                                          className="bi bi-pencil" viewBox="0 0 16 16">
@@ -106,6 +112,8 @@ function List() {
                                         </tr>
                                     ))
                                 }
+                                </tbody>
+
                             </table>
                         </div>
 
