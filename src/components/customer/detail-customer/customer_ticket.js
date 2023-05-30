@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import '../detail-customer/style.css';
 import ReactPaginate from "react-paginate";
 import {Link} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
 
 export function TickBookingList(effect, deps) {
     const [ticketBooking, setTicketBooking] = useState([]);
@@ -25,6 +26,7 @@ export function TickBookingList(effect, deps) {
         console.log(deleteTicket)
         await customerService.deleteTicket(deleteTicket)
         setTicketBooking(ticketBooking.filter(e => e.idTicket != deleteTicket));
+        toast("Xóa thành công !");
     }
 
     useEffect(() => {
@@ -68,7 +70,7 @@ export function TickBookingList(effect, deps) {
                             />
                         </p>
                         <p style={{fontSize: 14}} className="text-center mt-3">
-                            Dong PV
+                            {localStorage.getItem("username")}
                         </p>
                         <div className="mt-3 text-center">
                             <i className="bi bi-bookmark-star-fill"/>
@@ -193,6 +195,7 @@ export function TickBookingList(effect, deps) {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
             {/*Modal xoá*/}
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">

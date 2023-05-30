@@ -23,7 +23,7 @@ export function CustomerPointHistory() {
                 setPointHistory(result.data.content);
                 setPageCount(result.data.totalPages);
                 setSize(result.data.size)
-            } catch (error) {
+                } catch (error) {
                 console.log(error)
             }
         }
@@ -34,7 +34,7 @@ export function CustomerPointHistory() {
         const dateEnd = document.getElementById("end").value;
         const result = await findAllPlusPoint(0,dateStart, dateEnd);
         console.log(result)
-        setPointHistory(result.data.content);
+        setPointHistory(result.content);
     }
     return (
         <>
@@ -54,7 +54,7 @@ export function CustomerPointHistory() {
                             />
                         </p>
                         <p style={{fontSize: 14}} className="text-center mt-3">
-                            Dong PV
+                            {localStorage.getItem("username")}
                         </p>
                         <div className="mt-3 text-center">
                             <i className="bi bi-bookmark-star-fill"/>
