@@ -1,6 +1,6 @@
 import React from "react";
 
-function ListFilm() {
+export function ListFilm() {
   return (
     <div>
       <section className="upcoming">
