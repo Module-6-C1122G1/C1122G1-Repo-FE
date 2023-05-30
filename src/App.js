@@ -8,17 +8,15 @@ import ResetPassword from "./pages/Login/ResetPassword";
 import {ConfirmTicket} from "./components/confirm-ticket/ConfirmTicket";
 import Home from "./pages/Home";
 import React from "react";
+import { ListTicket } from "./components/ticket/ListTicket";
 
 
 function App() {
   return (
     <Routes>
       <Route path="" element={<CommonLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/confirm-email" element={<ConfirmEmail />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path='/confirm-ticket' element={<ConfirmTicket/>}/>
+        <Route path="/" element={<ListTicket />} />
+        
       </Route>
     </Routes>
 
