@@ -21,3 +21,10 @@ export const deleteTicket = async (id) => {
         console.log(error)
     }
 }
+export const findAllPlusPoint = async (page,dateStart,dateEnd) => {
+    try {
+        return (await axios.get(`http://localhost:8080/api/user/plus-point?dateStart=${dateStart}&dateEnd=${dateEnd}&page=${page ? page : 0}`)).data;
+    } catch (error) {
+        console.log(error)
+    }
+}

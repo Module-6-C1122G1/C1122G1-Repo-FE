@@ -91,8 +91,8 @@ export function TickBookingList(effect, deps) {
                             Thông tin tài khoản
                         </Link>
                         <hr/>
-                        <Link className="mt-2" style={{color: "black"}}>
-                            <link href="" style={{fontSize: 14}}/>
+                        <Link to={"/history"} className="mt-2" style={{color: "black"}}>
+                            <link  style={{fontSize: 14}}/>
                             <i className="bi bi-calculator"/>
                             Lịch sử
                         </Link>
@@ -101,12 +101,6 @@ export function TickBookingList(effect, deps) {
                             <link href="" style={{fontSize: 14}}/>
                             <i className="bi bi-ticket-detailed"/>
                             Vé đã đặt
-                        </Link>
-                        <hr/>
-                        <Link className="mt-2" style={{color: "black"}}>
-                            <link href="" style={{fontSize: 14}}/>
-                            <i className="bi bi-ticket"/>
-                            Vé đã hủy
                         </Link>
                     </div>
                     <div className=" container mx-auto my-5 col-9">

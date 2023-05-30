@@ -16,12 +16,9 @@ function App() {
     return (
         <Routes>
             <Route path='' element={<CommonLayout/>}>
-                {/*<Route path='customer_ticket' element={<TickBookingList />} />*/}
-                {/*<Route path='' element={<TickBookingList/>}/>*/}
-                <Route path='' element={<CustomerPointHistory/>}/>
-                {/*<Route path='/booking-ticket' element={<BookingTicket/>}/>*/}
+                <Route path='/' element={<TickBookingList/>}/>
+                <Route path='/history' element={<CustomerPointHistory/>}/>
             </Route>
-            {/*<Route path="/login" element={<Login/>}/>*/}
         </Routes>
     )
 };

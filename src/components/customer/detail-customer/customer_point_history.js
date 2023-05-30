@@ -2,13 +2,14 @@ import * as customerService from '../../../service/TicketManagementService';
 import React, {useEffect, useState} from "react";
 import '../detail-customer/style.css';
 import ReactPaginate from "react-paginate";
+import {Link} from "react-router-dom";
+import {findAllPlusPoint} from "../../../service/TicketManagementService";
 
 export function CustomerPointHistory() {
     const [pointHistory, setPointHistory] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(0);
-
     let stt = page * size + 1;
 
     const handlePageClick = (event) => {
@@ -19,7 +20,6 @@ export function CustomerPointHistory() {
         const fetchApi = async () => {
             try {
                 const result = await customerService.findAllTicketBookingPoint(page);
-                console.log(result)
                 setPointHistory(result.data.content);
                 setPageCount(result.data.totalPages);
                 setSize(result.data.size)
@@ -29,6 +29,13 @@ export function CustomerPointHistory() {
         }
         fetchApi();
     }, [page])
+    const handlePlusPoint = async () => {
+        const dateStart = document.getElementById("start").value;
+        const dateEnd = document.getElementById("end").value;
+        const result = await findAllPlusPoint(0,dateStart, dateEnd);
+        console.log(result)
+        setPointHistory(result.data.content);
+    }
     return (
         <>
             <div className="container">
@@ -64,34 +71,28 @@ export function CustomerPointHistory() {
                             </button>
                         </div>
                         <hr/>
-                        <div className="mt-2">
+                        <Link className="mt-2" style={{color: "black"}}>
                             <link href="" style={{fontSize: 14}}/>
                             <i className="bi bi-person-bounding-box"/>
                             Thông tin tài khoản
-                        </div>
+                        </Link>
                         <hr/>
-                        <div className="mt-2">
+                        <Link className="mt-2" style={{color: "black"}}>
                             <link href="" style={{fontSize: 14}}/>
                             <i className="bi bi-calculator"/>
                             Lịch sử
-                        </div>
+                        </Link>
                         <hr/>
-                        <div className="mt-2">
+                        <Link to={"/"} className="mt-2" style={{color: "black"}}>
                             <link href="" style={{fontSize: 14}}/>
                             <i className="bi bi-ticket-detailed"/>
                             Vé đã đặt
-                        </div>
-                        <hr/>
-                        <div className="mt-2">
-                            <link href="" style={{fontSize: 14}}/>
-                            <i className="bi bi-ticket"/>
-                            Vé đã hủy
-                        </div>
+                        </Link>
                     </div>
                     <div className=" container mx-auto my-5 col-9">
                         <div style={{marginBottom: 20}}>
                             <h2 className="d-flex justify-content-center" style={{padding: 16}}>
-                                Lịch Sử
+                                Lịch Sử Cộng Điểm
                             </h2>
                         </div>
                         <div style={{marginTop: 20}}>
@@ -108,7 +109,7 @@ export function CustomerPointHistory() {
                                                         </p>
                                                     </th>
                                                     <th style={{background: "white"}}>
-                                                        <input style={{width: 300}} type="date"/>
+                                                        <input id="start" style={{width: 300}} type="date"/>
                                                     </th>
                                                 </tr>
                                                 <tr>
@@ -118,48 +119,13 @@ export function CustomerPointHistory() {
                                                         </p>
                                                     </th>
                                                     <th style={{background: "white"}}>
-                                                        <input style={{width: 300}} type="date"/>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th style={{background: "right"}}/>
-                                                    <th style={{background: "right"}}>
-                                                        <input
-                                                            className="form-check-input"
-                                                            type="radio"
-                                                            name="flexRadioDefault"
-                                                            id="flexRadioDefault1"
-                                                        />
-                                                        <label
-                                                            className="form-check-label"
-                                                            htmlFor="flexRadioDefault1"
-                                                        >
-                                                            Lịch sử cộng điểm
-                                                        </label>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th style={{background: "right"}}/>
-                                                    <th style={{background: "right"}}>
-                                                        <input
-                                                            className="form-check-input"
-                                                            type="radio"
-                                                            name="flexRadioDefault"
-                                                            id="flexRadioDefault2"
-                                                            defaultChecked=""
-                                                        />
-                                                        <label
-                                                            className="form-check-label"
-                                                            htmlFor="flexRadioDefault2"
-                                                        >
-                                                            Lịch sử sử dụng điểm
-                                                        </label>
+                                                        <input id="end" style={{width: 300}} type="date"/>
                                                     </th>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             <div className="mt-3 text-center">
-                                                <button
+                                                <button onClick={() => handlePlusPoint()}
                                                     type="button"
                                                     className="log-out btn btn-outline-danger"
                                                 >
@@ -177,7 +143,7 @@ export function CustomerPointHistory() {
                                                     <tr>
                                                         <th>STT</th>
                                                         <th>Ngày Tạo</th>
-                                                        <th>Dịch Vụ Đã Sử Dụng</th>
+                                                        <th>Tên Phim</th>
                                                         <th>Tổng Điểm</th>
                                                     </tr>
                                                     </thead>
