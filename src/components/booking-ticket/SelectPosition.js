@@ -9,7 +9,7 @@ const positionStatus = {
     3: 'unavailable',
 };
 
-const seatRows = ['G', 'F', 'E', 'D', 'C', 'B', 'A'];
+const seatRows = ['I','H','G', 'F', 'E', 'D', 'C', 'B', 'A'];
 
 const SelectPosition = (props) => {
     const {onFinish, onBack, filmData} = props;
@@ -43,7 +43,6 @@ const SelectPosition = (props) => {
     };
 
     const handlerSelecting = async (seatId, seatStatus) => {
-        // chỉ áp dụng với ghế có status là unavailable
         if (seatStatus === 2) {
             if (!listSelecting.includes(seatId)) {
                 setListSelecting([...listSelecting, seatId]);
@@ -166,10 +165,10 @@ const SelectPosition = (props) => {
                 </div>
                 <div className='col-12 col-md-4'>
                     <div className='film-info'>
-                        <h4 className="title text-center">Phim đã chọn</h4>
-                        <img className='w-100'
-                             src="https://cdn.galaxycine.vn/media/2023/5/26/450x300-tien-ca_1685071817669.jpg"/>
-                        <h5 className='film-title text-center mt-2'>
+                        {/*<h4 className="title text-center">Phim đã chọn</h4>*/}
+                        <img className='w-100 text-center px-4'
+                             src={filmData?.film?.imgFilm} style={{height:200}}/>
+                        <h5 className='film-title text-center mt-2' >
                             {filmData?.film?.nameFilm}
                         </h5>
                         <div className="font-weight-normal mb-1">Ngày chiếu: {filmData?.showTime.showDate}</div>
