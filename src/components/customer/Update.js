@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Form, Field, Formik} from 'formik';
 import {customerService} from "../../service/CustomerService";
 import {useNavigate, useParams} from "react-router";
+import Swal from "sweetalert2";
+import {NavLink} from "react-router-dom";
 
 function Update() {
     let param = useParams()
@@ -40,7 +42,8 @@ function Update() {
                     navigate('/customer');
                 };
                 edit();
-            }}
+            }
+            }
         >
 
 
@@ -50,7 +53,7 @@ function Update() {
                     <div className="col-10 fw-center">
                         <div>
                             <Form>
-                                <Field type="hidden" name="idCustomer" />
+                                <Field type="hidden" name="idCustomer"/>
                                 <div className="container mt-5">
                                     <div>
                                         <div style={{background: "orangered"}}>
@@ -91,25 +94,6 @@ function Update() {
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
-                                                {/*<div className="mb-3 align-items-center">*/}
-                                                {/*    <label className="col-form-label">Giới tính:</label>*/}
-                                                {/*    <div className="form-check">*/}
-                                                {/*        <input type="radio" name="option" defaultValue="option1" />{" "}*/}
-                                                {/*        Nam*/}
-                                                {/*        <input*/}
-                                                {/*            type="radio"*/}
-                                                {/*            name="option"*/}
-                                                {/*            defaultValue="option2"*/}
-                                                {/*        />{" "}*/}
-                                                {/*        Nữ*/}
-                                                {/*        <input*/}
-                                                {/*            type="radio"*/}
-                                                {/*            name="option"*/}
-                                                {/*            defaultValue="option3"*/}
-                                                {/*        />{" "}*/}
-                                                {/*        LGBT*/}
-                                                {/*    </div>*/}
-                                                {/*</div>*/}
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="mb-3 align-items-center">
@@ -170,15 +154,18 @@ function Update() {
                                             <div className="mt-3">
 
                                                 <button type="submit" className="btn btn-outline-light"
-                                                        style={{background: "orangered"}}>Chỉnh sửa
+                                                        style={{background: "orangered"}}>Lưu lại
                                                 </button>
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-outline-secondary"
-                                                    data-bs-dismiss="modal"
-                                                >
-                                                    Quay lại
-                                                </button>
+
+                                                <NavLink to={'/customer'}>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-outline-secondary"
+                                                        data-bs-dismiss="modal">
+                                                        Quay lại
+                                                    </button>
+                                                </NavLink>
+
                                             </div>
                                         </div>
                                     </div>

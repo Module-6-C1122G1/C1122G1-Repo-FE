@@ -3,6 +3,7 @@ import {Field, Form, Formik} from "formik";
 import {customerService} from "../../service/CustomerService";
 import {customerTypeService} from "../../service/CustomerTypeService";
 import { useNavigate } from "react-router-dom"
+import Swal from "sweetalert2";
 
 function List() {
     const [customer, setCustomer] = useState([])
@@ -41,19 +42,24 @@ function List() {
 
 
                             <div className="col-md-6 justify-content-end">
-                                <Formik initialValues={{name: ''}}
+                                <Formik initialValues={{nameSearch: ''}}
                                         onSubmit={async (values) => {
-                                            const result = await customerService.findAll(
-                                                values.name
+                                            const result = await customerService.findAllAndSearch(
+                                                values.nameSearch
                                             )
                                             if (result.length === 0) {
-                                                alert("không tìm thấy kết quả")
+                                                Swal.fire({
+                                                    title: 'Thông báo!',
+                                                    text: 'Không tìm thấy kết quả',
+                                                    icon: 'error',
+                                                    confirmButtonText: 'OK'
+                                                });
                                             } else {
                                                 setCustomer(result)
                                             }
                                         }}>
                                     <Form className="d-flex">
-                                        <Field className="form-control me-2 flex-grow-1" type="text" name="name"
+                                        <Field className="form-control me-2 flex-grow-1" type="text" name="nameSearch"
                                                placeholder="Tìm kiếm theo tên thành viên..."/>
                                         <button className="btn btn-outline-success">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -72,7 +78,7 @@ function List() {
                                 <thead>
                                 <tr>
                                     <th>Stt</th>
-                                    <th>Mã thành viên</th>
+                                    {/*<th>Mã thành viên</th>*/}
                                     <th>Tên thành viên</th>
                                     <th>Số điện thoại</th>
                                     <th>Giới tính</th>
@@ -88,7 +94,7 @@ function List() {
                                     customer.map((customers,index) => (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{customers.idCustomer}</td>
+                                            {/*<td>{customers.idCustomer}</td>*/}
                                             <td>{customers.nameCustomer}</td>
                                             <td>{customers.phone}</td>
                                             <td>{customers.gender}</td>
