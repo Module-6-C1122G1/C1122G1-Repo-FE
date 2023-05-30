@@ -11,7 +11,7 @@ export const findAll = async () => {
 }
 export const editCustomer = async (customer) => {
     try {
-        await axios.put(`http://localhost:8080/customer/${customer.idCustomer}`, { ...customer })
+        await axios.patch(`http://localhost:8080/customer/update`, { ...customer })
         alert("Edit Success!")
     } catch (error) {
         console.log(error)
