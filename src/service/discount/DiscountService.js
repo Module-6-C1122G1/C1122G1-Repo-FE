@@ -2,16 +2,16 @@ import axios from "axios"
 
 export const findByName = async(value,currentPage) => {
     try {
-        return (await axios.get(`http:localhost:8080/discount/list?name_like=${value}&_page=${currentPage}&_limit=5&_sort=id&_order=desc`)).data
+        return (await axios.get(`http://localhost:8080/discount/list?name=${value}&_page=${currentPage}`)).data
     } catch (error) {
         console.log(error);
     }
 }
 
 
-export const findAll = async () => {
+export const findAllDiscount = async () => {
     try {
-        const result = await axios.get(`http:localhost:8080/discount/list`);
+        const result = await axios.get(`http://localhost:8080/discount/list`);
         return result.data
     } catch (e) {
         console.log(e)
