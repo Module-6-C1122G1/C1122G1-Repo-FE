@@ -288,3 +288,13 @@ th {
 .text-comingMovie{
     font-family: Arial;
 }
+
+.abc {
+    width: 75%!important;
+    margin: 0 auto;
+}
+
+.xxx{
+    background: #f26b38;;
+    border: 1px solid #f26b38;
+}

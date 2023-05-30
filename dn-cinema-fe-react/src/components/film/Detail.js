@@ -2,7 +2,7 @@ import {useEffect, useState} from "react"
 import {useParams} from "react-router";
 import * as filmService from '../../service/FilmService'
 import '../film/detailStyle.css';
-
+import { format } from "date-fns";
 export default function () {
     const param = useParams()
     const [movieDetail, setMovieDetail] = useState()
@@ -33,7 +33,7 @@ export default function () {
                     </div>
                     <div className="row mx-0">
                         <div className="col-3 mt-2 col-md-6 col-sm-9">
-                        {/*<div className="col-lg-3 col-12">*/}
+                            {/*<div className="col-lg-3 col-12">*/}
                             <div className="detail-feat-img">
                                 <img
                                     src={movieDetail?.imgFilm}
@@ -72,12 +72,12 @@ export default function () {
                                 fontFamily: '"Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif'
                             }}
                         >
-                        {/*<div*/}
-                        {/*    className="col-lg-6 col-12"*/}
-                        {/*    style={{*/}
-                        {/*        fontFamily: '"Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif'*/}
-                        {/*    }}*/}
-                        {/*>*/}
+                            {/*<div*/}
+                            {/*    className="col-lg-6 col-12"*/}
+                            {/*    style={{*/}
+                            {/*        fontFamily: '"Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif'*/}
+                            {/*    }}*/}
+                            {/*>*/}
                             <div>
                                 <h3 className="text-secondary">{movieDetail?.nameFilm}</h3>
                             </div>
@@ -118,7 +118,8 @@ export default function () {
                                         </tr>
                                         <tr style={{height: 46, width: 200}}>
                                             <th className="text-secondary">Ngày khởi chiếu :</th>
-                                            <td>{movieDetail?.dateStartFilm}</td>
+                                            {/*<td>{movieDetail?.dateStartFilm}</td>*/}
+                                            <td>{format(new Date(movieDetail?.dateStartFilm), "dd/MM/yyyy")}</td>
                                         </tr>
                                         {/*<tr style={{ height: 45 }}>*/}
                                         {/*  <th className="text-secondary">Nhà sản xuất :</th>*/}
@@ -160,13 +161,13 @@ export default function () {
                                     '"Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif'
                             }}
                         >
-                        {/*<div*/}
-                        {/*    className="col-lg-3 col-12 text-secondary"*/}
-                        {/*    style={{*/}
-                        {/*        fontFamily:*/}
-                        {/*            '"Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif'*/}
-                        {/*    }}*/}
-                        {/*>*/}
+                            {/*<div*/}
+                            {/*    className="col-lg-3 col-12 text-secondary"*/}
+                            {/*    style={{*/}
+                            {/*        fontFamily:*/}
+                            {/*            '"Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif'*/}
+                            {/*    }}*/}
+                            {/*>*/}
                             <div>
                                 <h3>PHIM ĐANG CHIẾU</h3>
                             </div>
@@ -243,6 +244,6 @@ export default function () {
                     </div>
                 </div>
             </div>
-            </>
+        </>
     )
 }
