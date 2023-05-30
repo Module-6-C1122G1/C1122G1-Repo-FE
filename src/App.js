@@ -8,6 +8,8 @@ import ResetPassword from "./pages/Login/ResetPassword";
 import {ConfirmTicket} from "./components/confirm-ticket/ConfirmTicket";
 import Home from "./pages/Home";
 import React from "react";
+import {CreateFilm} from "./components/film/CreateFilm";
+import List from "./components/film/List";
 
 
 function App() {
@@ -15,6 +17,7 @@ function App() {
     <Routes>
       <Route path="" element={<CommonLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/admin/film/create" element={<CreateFilm/>}></Route>
         <Route path="/login" element={<Login />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />
         <Route path="/reset-password" element={<ResetPassword />} />
