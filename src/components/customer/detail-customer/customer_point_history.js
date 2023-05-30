@@ -18,7 +18,7 @@ export function CustomerPointHistory() {
     useEffect(() => {
         const fetchApi = async () => {
             try {
-                const result = await customerService.findAllTicketBookingPoint();
+                const result = await customerService.findAllTicketBookingPoint(page);
                 console.log(result)
                 setPointHistory(result.data.content);
                 setPageCount(result.data.totalPages);

@@ -7,9 +7,9 @@ export const findAllTicketBooking = async (page) => {
         console.log(error)
     }
 }
-export const findAllTicketBookingPoint = async () => {
+export const findAllTicketBookingPoint = async (page) => {
     try {
-        return axios.get('http://localhost:8080/api/user/history');
+        return axios.get(`http://localhost:8080/api/user/history?page=${page?page:0}`);
     } catch (error) {
         console.log(error)
     }
