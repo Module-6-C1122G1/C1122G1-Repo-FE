@@ -13,6 +13,14 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Circles } from "react-loader-spinner";
 import { toast } from "react-toastify";
+/**
+ * @author ChinhLV
+ * @returns ResetPassword
+ * @since 27/05/2023
+ * ResetPassword component được sử dụng để đổi mật khẩu. Nếu mật khẩu trùng với xác nhận mật khẩu
+ * và mã code đúng với mã đã được gửi qua email
+ * thì cho reset password. Còn không thông báo lỗi cho người dùng.
+ */
 function ResetPassword() {
   const data = useSelector((state) => state.api.data);
   const location = useLocation();

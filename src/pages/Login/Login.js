@@ -3,14 +3,48 @@ import { LoginSocialFacebook } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { handleCallApiLogin } from "../../service/LoginService";
+import {
+  handleCallApiLogin,
+  handleCallApiToCreateAccountFb,
+} from "../../service/LoginService";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+/**
+ * @author ChinhLV
+ * @returns Login
+ * @since 27/05/2023
+ * Login component được sử dụng để đăng nhập bằng tài khoản đã có sẵn hoặc đăng nhập bằng facebook. Ngoài ra còn hỗ trợ chức năng
+ * quên mật khẩu nếu người người không nhớ mật khẩu.
+ */
 function Login() {
   const [failedAccount, setFailedAccount] = useState(null);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const [accountFacebook, setAccountFacebook] = useState(null);
   const navigate = useNavigate();
+  const handleCreateAccountByFacebook = () => {
+    handleCallApiToCreateAccountFb(accountFacebook)
+      .then((e) => {
+        console.log(e);
+        if (e.status === 201) {
+          toast.warn("Tạo tài khoản " + accountFacebook.email + " thành công.");
+        } else {
+          toast.error(
+            accountFacebook.email +
+              " đã tồn tại. Vui lòng đăng ký tài khoản để tiếp tục sử dụng các dịch vụ."
+          );
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   return (
     <div className="login-container container d-flex justify-content-center align-items-center flex-column mt-5">
       <Formik
@@ -41,8 +75,10 @@ function Login() {
         onSubmit={(values) => {
           handleCallApiLogin(values)
             .then((e) => {
+              console.log(e);
               setFailedAccount(null);
               localStorage.setItem("token", e.token);
+              localStorage.setItem("username", e.username);
               navigate("/");
             })
             .catch((e) => {
@@ -141,7 +177,9 @@ function Login() {
                   <LoginSocialFacebook
                     appId="257872636750784"
                     onResolve={(resolve) => {
-                      console.log(resolve);
+                      console.log(resolve.data);
+                      setAccountFacebook({ email: resolve.data.email });
+                      handleShow();
                     }}
                     onReject={(reject) => console.log(reject)}
                   >
@@ -154,6 +192,35 @@ function Login() {
         </Form>
       </Formik>
       <ToastContainer />
+      {accountFacebook && (
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title style={{ fontSize: "14px!important" }}>
+              Xác nhận tạo tài khoản
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Chúng tôi sẽ tạo một tài khoản với tên đăng nhập là{" "}
+            <span className="fw-bold">{accountFacebook.email}</span> và mật khẩu
+            sẽ được gửi qua email của bạn. Vui lòng xác nhận để tiếp tục đăng
+            nhập.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Đóng
+            </Button>
+            <Button
+              variant="warning"
+              onClick={() => {
+                handleClose();
+                handleCreateAccountByFacebook();
+              }}
+            >
+              Xác nhận
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </div>
   );
 }

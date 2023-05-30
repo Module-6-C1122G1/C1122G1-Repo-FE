@@ -10,6 +10,13 @@ import { Circles } from "react-loader-spinner";
 import { handleCallApiToConfirmEmail } from "../../service/LoginService";
 import { useDispatch } from "react-redux";
 import { receiveData } from "../../redux/action";
+/**
+ * @author ChinhLV
+ * @returns ComfirmEmail
+ * @since 27/05/2023
+ * ConfirmEmail component được sử dụng để xác minh tài khoản trước khi đổi mật khẩu thông qua mã code được gửi qua email.
+ * nếu email đã tồn tại thì gửi mã code, nếu không thì báo lỗi email không tồn tại.
+ */
 function ConfirmEmail() {
   const [failedEmail, setFailedEmail] = useState(null);
   const dispatch = useDispatch();
@@ -35,25 +42,22 @@ function ConfirmEmail() {
               setSubmitting(false);
               handleCallApiToConfirmEmail(values)
                 .then((e) => {
-                  if (e.status === 200) {
-                    dispatch(
-                      receiveData({
-                        email: values.email,
-                        code: e.data.message,
-                      })
-                    );
-                  } else {
-                    setFailedEmail(
-                      "Email của bạn không tồn tại, vui lòng thử lại."
-                    );
-                  }
+                  dispatch(
+                    receiveData({
+                      email: values.email,
+                      code: e.data.code,
+                    })
+                  );
+                  navigate("/reset-password", {
+                    state: { email: values.email },
+                  });
                 })
                 .catch((e) => {
+                  console.log(e);
                   setFailedEmail(
-                    "Email của bạn không tồn tại, vui lòng thử lại."
+                    "Email này chưa được đăng ký, vui lòng thử lại."
                   );
                 });
-              navigate("/reset-password", { state: { email: values.email } });
             }, 5000);
           }}
         >
