@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const findAllTicketBooking = async () => {
+export const findAllTicketBooking = async (page) => {
     try {
-        return await axios.get('http://localhost:8080/api/user');
+        return await axios.get(`http://localhost:8080/api/user?page=${page?page:0}`);
     } catch (error) {
         console.log(error)
     }

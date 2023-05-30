@@ -30,8 +30,7 @@ export function TickBookingList(effect, deps) {
     useEffect(() => {
         const fetchApi = async () => {
             try {
-                const result = await customerService.findAllTicketBooking();
-                console.log(result)
+                const result = await customerService.findAllTicketBooking(page);
                 setTicketBooking(result.data.content);
                 setPageCount(result.data.totalPages);
                 setSize(result.data.size)
@@ -40,12 +39,12 @@ export function TickBookingList(effect, deps) {
             }
         }
         fetchApi();
-    }, [page], [deleteTicket])
-    console.log(deleteTicket);
+    }, [page, deleteTicket])
+
     return (
         <>
             <div id="mySidebar" className="sidebar">
-                <a href="javascript:void(0)" className="closebtn" onclick="closeNav()">
+                <a href="javascript:void(0)" className="closebtn" onClick="closeNav()">
                     ×
                 </a>
                 <a href="#">About</a>
@@ -55,7 +54,7 @@ export function TickBookingList(effect, deps) {
             </div>
             <div className="container">
                 <div className="row">
-                    <i className="bi bi-list menu d-none" onclick="openNav()"/>
+                    <i className="bi bi-list menu d-none" onClick="openNav()"/>
                     <div className="col-3 side-bar">
                         <h2 style={{fontSize: 24}} className="text-center mt-3">
                             Quản lý tài khoản
