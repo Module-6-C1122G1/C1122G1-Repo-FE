@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import * as TypeFilmService from "../../service/TypeFilmService";
 import * as Yup from "yup";
 import * as FilmService from "../../service/FilmService";
-import {Form, Formik} from "formik";
+import {Field, Form, Formik} from "formik";
 import {ColorRing} from "react-loader-spinner";
 import {storage} from "../../config/firebase";
 import {ref, uploadBytes, listAll, getDownloadURL} from 'firebase/storage'
@@ -119,7 +119,7 @@ export function CreateFilm() {
                                     <h1 style={{textAlign: "center", marginBottom: "5%"}}>
                                         Thêm mới phim
                                     </h1>
-                                    <Form action="">
+                                    <Form>
                                         <div className="row" style={{marginBottom: "2%"}}>
                                             <div className="col-3" style={{textAlign: "right"}}>
                                                 <label className="fw-bold" style={{marginRight: "2%"}}>
@@ -127,7 +127,7 @@ export function CreateFilm() {
                                                 </label>
                                             </div>
                                             <div className="col-3">
-                                                <input type="file" onChange={(event) => {
+                                                <input type="file" name="imgFilm" onChange={(event) => {
                                                     setImageUpload(event.target.files[0])
                                                 }}
                                                        style={{width: "100%"}}/>
@@ -150,7 +150,7 @@ export function CreateFilm() {
                                                 <input
                                                     type="text"
                                                     style={{width: "100%"}}
-                                                    name="movieName"
+                                                    name="nameFilm"
 
                                                 />
                                             </div>
@@ -166,7 +166,6 @@ export function CreateFilm() {
                                                     type="text"
                                                     style={{width: "100%"}}
                                                     name="nation"
-
                                                 />
                                             </div>
                                         </div>
@@ -180,7 +179,7 @@ export function CreateFilm() {
                                                 <input
                                                     type="date"
                                                     style={{width: "100%"}}
-                                                    name="dateFrom"
+                                                    name="dateStartFilm"
 
                                                 />
                                             </div>
@@ -195,7 +194,7 @@ export function CreateFilm() {
                                                 <input
                                                     type="date"
                                                     style={{width: "100%"}}
-                                                    name="dateTo"
+                                                    name="dateEndFilm"
 
                                                 />
                                             </div>
@@ -225,7 +224,7 @@ export function CreateFilm() {
                                                 <input
                                                     type="text"
                                                     style={{width: "100%"}}
-                                                    name=""
+                                                    name="studioFilm"
 
                                                 />
                                             </div>
@@ -240,7 +239,7 @@ export function CreateFilm() {
                                                 <input
                                                     type="text"
                                                     style={{width: "100%"}}
-                                                    name=""
+                                                    name="director"
 
                                                 />
                                             </div>
@@ -255,7 +254,7 @@ export function CreateFilm() {
                                                 <input
                                                     type="number"
                                                     style={{width: "100%"}}
-                                                    name=""
+                                                    name="timeFilm"
                                                 />
                                             </div>
                                         </div>
@@ -269,7 +268,7 @@ export function CreateFilm() {
                                                 <input
                                                     type="text"
                                                     style={{width: "100%"}}
-                                                    name=""
+                                                    name="movieLabel"
 
                                                 />
                                             </div>
@@ -295,78 +294,12 @@ export function CreateFilm() {
                                                     Thể loại <span className="warning">(*)</span>
                                                 </label>
                                             </div>
-                                            <div className="col-8 row">
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Hành động</span>
-                                                </div>
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Viễn tưởng</span>
-                                                </div>
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Hoạt hình</span>
-                                                </div>
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Võ thuật</span>
-                                                </div>
-                                            </div>
-                                            <div className="col-3">
-                                                <input type="hidden"/>
-                                            </div>
-                                            <div className="col-8 row">
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Hài hước</span>
-                                                </div>
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Chiến tranh</span>
-                                                </div>
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Kinh dị</span>
-                                                </div>
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Kinh điển</span>
-                                                </div>
-                                            </div>
-                                            <div className="col-3">
-                                                <input type="hidden"/>
-                                            </div>
-                                            <div className="col-8 row">
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Lãng mạn</span>
-                                                </div>
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Kiếm hiệp</span>
-                                                </div>
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Phiêu lưu</span>
-                                                </div>
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Tâm lý</span>
-                                                </div>
-                                            </div>
-                                            <div className="col-3">
-                                                <input type="hidden"/>
-                                            </div>
-                                            <div className="col-8 row">
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Tình cảm</span>
-                                                </div>
-                                                <div className="col-3">
-                                                    <input type="checkbox"/>
-                                                    <span style={{marginRight: "5%"}}>Âm nhạc</span>
-                                                </div>
+                                            <div className="col-8">
+                                                <Field as='select' name="idTypeFilm">
+                                                    {listTypeFilm.map((listType,index) => (
+                                                        <option value={listType.idTypeFilm}>{listType.nameTypeFilm}</option>
+                                                    ))}
+                                                </Field>
                                             </div>
                                         </div>
                                         <div className="row" style={{marginBottom: "2%"}}>
@@ -379,7 +312,7 @@ export function CreateFilm() {
                                                 <input
                                                     type="number"
                                                     style={{width: "100%"}}
-                                                    name=""
+                                                    name="normalSeatPrice"
 
                                                 />
                                             </div>
@@ -394,7 +327,7 @@ export function CreateFilm() {
                                                 <input
                                                     type="number"
                                                     style={{width: "100%"}}
-                                                    name=""
+                                                    name="vipSeatPrice"
 
                                                 />
                                             </div>
@@ -406,7 +339,7 @@ export function CreateFilm() {
                                                 </label>
                                             </div>
                                             <div className="col-8">
-                                                <textarea name="content" rows={4} cols={86} placeholder="Nội dung phim"
+                                                <textarea name="describeFilm" rows={4} cols={86} placeholder="Nội dung phim"
                                                           style={{maxWidth: "100%"}}>
                                                 </textarea>
                                             </div>
