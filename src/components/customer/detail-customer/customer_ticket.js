@@ -2,6 +2,7 @@ import * as customerService from '../../../service/TicketManagementService';
 import React, {useEffect, useState} from "react";
 import '../detail-customer/style.css';
 import ReactPaginate from "react-paginate";
+import {Link} from "react-router-dom";
 
 export function TickBookingList(effect, deps) {
     const [ticketBooking, setTicketBooking] = useState([]);
@@ -85,29 +86,29 @@ export function TickBookingList(effect, deps) {
                             </button>
                         </div>
                         <hr/>
-                        <div className="mt-2">
+                        <Link className="mt-2" style={{color: "black"}}>
                             <link href="" style={{fontSize: 14}}/>
                             <i className="bi bi-person-bounding-box"/>
                             Thông tin tài khoản
-                        </div>
+                        </Link>
                         <hr/>
-                        <div className="mt-2">
+                        <Link className="mt-2" style={{color: "black"}}>
                             <link href="" style={{fontSize: 14}}/>
                             <i className="bi bi-calculator"/>
                             Lịch sử
-                        </div>
+                        </Link>
                         <hr/>
-                        <div className="mt-2">
+                        <Link className="mt-2" style={{color: "black"}}>
                             <link href="" style={{fontSize: 14}}/>
                             <i className="bi bi-ticket-detailed"/>
                             Vé đã đặt
-                        </div>
+                        </Link>
                         <hr/>
-                        <div className="mt-2">
+                        <Link className="mt-2" style={{color: "black"}}>
                             <link href="" style={{fontSize: 14}}/>
                             <i className="bi bi-ticket"/>
                             Vé đã hủy
-                        </div>
+                        </Link>
                     </div>
                     <div className=" container mx-auto my-5 col-9">
                         <div style={{boxShadow: "1px 3px 10px 5px rgba(0, 0, 0, 0.2)"}}>
