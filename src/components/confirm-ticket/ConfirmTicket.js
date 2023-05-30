@@ -8,37 +8,40 @@ import {checkDiscount, findByIdSeat, getCustomer, pay} from "../../service/Ticke
 export function ConfirmTicket(props) {
     const {filmData, listSelectingData} = props;
     const useName = localStorage.getItem("username");
+    const token = localStorage.getItem("token")
     const [seats, setSeat] = useState([]);
     const [price, setPrice] = useState(0);
     const [discounts, setDiscount] = useState({});
     const [customer, setCustomer] = useState({});
     useEffect(() => {
+        console.log(filmData)
         const fetchApi = async () => {
             const listSeat = [];
             let prices = 0;
-            await listSelectingData.forEach((seat) => {
-                const result = findByIdSeat(seat);
+            listSelectingData.forEach((seat) => {
+                const result = findByIdSeat(seat,token);
                 if (result.typeSeat.idTypeSeat === 1) {
                     prices += filmData.film.normalSeatPrice;
                 } else {
                     prices += filmData.film.vipSeatPrice;
                 }
-                listSeat.push(findByIdSeat(seat))
+                listSeat.push(result)
             })
-            const customers = await getCustomer(useName)
+            const customers = await getCustomer(useName,token)
             setCustomer(customers)
             setPrice(prices);
             setSeat(listSeat);
+            console.log(listSelectingData)
         }
         fetchApi();
     }, [])
     const handleDiscount = async () => {
         const discount = document.getElementById("nameDiscount").value;
         if (discount.trim !== null) {
-            const result = await checkDiscount();
+            const result = await checkDiscount(discount,token);
             const prices = result.percentDiscount * price / 100 + price;
             setPrice(prices);
-            setDiscount(discount);
+            setDiscount(result);
         }
     }
     return (
@@ -92,7 +95,7 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
-                                                value={token.name}
+                                                value={customer.name}
                                                 disabled
                                                 style={{width: "40%", height: 40}}
                                             />
@@ -103,7 +106,7 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
-                                                value={token.email}
+                                                value={customer.email}
                                                 style={{width: "40%"}}
                                             />
                                         </td>
@@ -113,7 +116,7 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
-                                                value={token.phone}
+                                                value={customer.phone}
                                                 style={{width: "40%"}}
                                             />
                                         </td>
@@ -193,7 +196,7 @@ export function ConfirmTicket(props) {
                                                         {/*  | #{sessionInfo.dayOfWeekLabel}, #{sessionInfo.showDate}*/}
                                                         <div className="dotted-line">
                                                             <b>Suất
-                                                                chiếu: &nbsp;</b>{filmData.showTime}&nbsp; | {filmData.showDate}
+                                                                chiếu: &nbsp;</b>{filmData.showTime.showTime}&nbsp; | {filmData.showTime.showDate}
                                                         </div>
                                                         <div className="dotted-line">
                                                             <b>Ghế: &nbsp;</b>
