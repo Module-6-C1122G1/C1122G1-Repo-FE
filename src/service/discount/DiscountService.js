@@ -1,8 +1,17 @@
 import axios from "axios"
 
-export const findAll = async () => {
+export const findByName = async(value,currentPage) => {
     try {
-        const result = await axios.get(`http:localhost:8080/discount/list`);
+        return (await axios.get(`http://localhost:8080/discount/list?name=${value}&_page=${currentPage}`)).data
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+export const findAllDiscount = async () => {
+    try {
+        const result = await axios.get(`http://localhost:8080/discount/list`);
         return result.data
     } catch (e) {
         console.log(e)

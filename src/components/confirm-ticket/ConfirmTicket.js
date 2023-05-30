@@ -2,7 +2,7 @@ import "./ConfirmTicket.css"
 import Footer from "../common/footer/Footer";
 import Header from "../common/header/Header";
 import React, {useEffect, useState} from "react";
-import {Formik, Form, Field} from "formik";
+import {Field, Form, Formik} from "formik";
 import {checkDiscount, findByIdSeat, getCustomer, pay} from "../../service/TicketService";
 
 export function ConfirmTicket(props) {
@@ -14,63 +14,52 @@ export function ConfirmTicket(props) {
     const [discounts, setDiscount] = useState({});
     const [customer, setCustomer] = useState({});
     useEffect(() => {
-        console.log(filmData)
         const fetchApi = async () => {
-            const listSeat = [];
-            let prices = 0;
-            listSelectingData.forEach((seat) => {
-                const result = findByIdSeat(seat,token);
-                if (result.typeSeat.idTypeSeat === 1) {
-                    prices += filmData.film.normalSeatPrice;
-                } else {
-                    prices += filmData.film.vipSeatPrice;
-                }
-                listSeat.push(result)
-            })
-            const customers = await getCustomer(useName,token)
+            const result = await findByIdSeat(listSelectingData, filmData.film.idFilm, token)
+            const customers = await getCustomer(useName, token)
             setCustomer(customers)
-            setPrice(prices);
-            setSeat(listSeat);
-            console.log(listSelectingData)
+            console.log(result)
+            setSeat(result.listSeats)
+            setPrice(result.priceTicket)
         }
         fetchApi();
     }, [])
     const handleDiscount = async () => {
-        const discount = document.getElementById("nameDiscount").value;
+        const discount = await document.getElementById("nameDiscount").value;
         if (discount.trim !== null) {
-            const result = await checkDiscount(discount,token);
-            const prices = result.percentDiscount * price / 100 + price;
+            const result = await checkDiscount(discount, token);
+            const prices = -result.percentDiscount * price / 100 + price;
+             document.getElementById('discount').value = result.idDiscount;
+             document.getElementById('priceAfter').value = prices;
             setPrice(prices);
             setDiscount(result);
+            const customers = await getCustomer(useName, token)
+            setCustomer(customers)
         }
     }
     return (
-        <>
+        customer && price && seats && <>
             <Header/>
             <Formik
                 initialValues={{
                     idCustomer: customer.idCustomer,
                     idFilm: filmData.film.idFilm,
-                    listSeat: seats,
-                    discount: discounts.idDiscount,
+                    listSeat: listSelectingData,
+                    idDiscount: null,
                     price: price
                 }}
                 onSubmit={(values) => {
+                    console.log(values)
+                    debugger
                     const save = async () => {
-                        await pay(values)
-                        alert("ok")
+                        window.location.href = await pay(values, token)
                     }
                     save();
                 }}
             >
                 <Form>
-                    <Field type="hidden" disable name='idCustomer'/>
-                    <Field type="hidden" disable name='idFilm'/>
-                    <Field type="hidden" disable name='discount'/>
-                    <Field type="hidden" disable name='price'/>
-                    {seats.map((seat, index) => (
-                        <Field type="hidden" as="checkbox" key={index} name="listSeat" value={seat}/>
-                    ))}
+                    <Field type='hidden' name='idDiscount' id='discount'/>
+                    <Field type='hidden' name='price' id='priceAfter'/>
                     <div className="container">
                         <div className="row">
                             <div className="col-md-9" style={{background: "#f26b38", height: "auto"}}>
@@ -95,7 +84,7 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
-                                                value={customer.name}
+                                                value={customer.nameCustomer}
                                                 disabled
                                                 style={{width: "40%", height: 40}}
                                             />
@@ -106,6 +95,7 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
+                                                disabled
                                                 value={customer.email}
                                                 style={{width: "40%"}}
                                             />
@@ -115,6 +105,7 @@ export function ConfirmTicket(props) {
                                         <td>Số điện thoại</td>
                                         <td>
                                             <input
+                                                disabled
                                                 type="text"
                                                 value={customer.phone}
                                                 style={{width: "40%"}}
@@ -134,7 +125,8 @@ export function ConfirmTicket(props) {
                                     <tr>
                                         <td/>
                                         <td>
-                                            <button type="submit" onClick={() => handleDiscount} style={{width: "40%"}}>
+                                            <button type="button" onClick={() => handleDiscount()}
+                                                    style={{width: "40%"}}>
                                                 Áp dụng
                                             </button>
                                         </td>
@@ -151,7 +143,7 @@ export function ConfirmTicket(props) {
                                     <tr>
                                         <td/>
                                         <td>
-                                            <button type="submit" style={{width: "18%", marginRight: "4%"}}>
+                                            <button type="button" style={{width: "18%", marginRight: "4%"}}>
                                                 Quay lại
                                             </button>
                                             <button type="submit">Thanh toán</button>

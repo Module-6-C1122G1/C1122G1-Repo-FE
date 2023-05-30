@@ -1,19 +1,45 @@
-import {useState, useEffect} from "react"
 import {NavLink, useNavigate} from "react-router-dom";
 import * as discountService from "../../service/discount/DiscountService"
-import DiscountModalDelete from "/Delete";
-import {toast} from "react-toastify"
+import DiscountModalDelete from "../discount/Delete"
+import {toast} from "react-toastify";
 import ReactPaginate from "react-paginate";
+import {Field, Form, Formik} from "formik";
+import {findAllDiscount} from "../../service/discount/DiscountService";
+import React, {useEffect, useState} from "react";
 
 function DiscountList() {
     const [discountList, setDiscountList] = useState([]);
+    let[count, setCount] = useState(1)
 
     const navigate = useNavigate();
 
+    const [pageCount,setPageCount] = useState(0)
+    const [discounts, setDiscounts] = useState([])
+
+    const findAll = async () => {
+        const rs = await discountService.findByName("",1)
+        setDiscounts(rs)
+        const dt = await discountService.findAllDiscount()
+        let total = Math.ceil(dt.length/5)
+        setPageCount(total);
+    }
+
+    useEffect(() => {
+        findAll()
+    }, [])
+
+    const handlePageClick = async(page)=>{
+        let currentPage = page.selected+1
+        const rs = await discountService.findByName('',currentPage)
+        setDiscounts(rs)
+        setCount(currentPage*5-4)
+    }
+
     useEffect(() => {
         const showAll = async () => {
-            const result = await discountService.findAll();
-            setDiscountList(result);
+            const result = await discountService.findAllDiscount();
+            debugger
+            setDiscountList(result.content);
         };
         showAll();
     }, []);
@@ -26,7 +52,7 @@ function DiscountList() {
     }
 
     //State: Phục vụ cho việc phân trang (pagination)
-    const [paginationCustomer, setPaginationCustomer] = useState([]);
+    const [paginationDiscount, setPaginationDiscount] = useState([]);
     const PAGE_SIZE = 3;
 
     function handleUpdate(id) {
@@ -35,14 +61,14 @@ function DiscountList() {
 
     useEffect(() => {
         const pagination = async () => {
-            const result = await discountService.findAll();
-            setPaginationCustomer(result.slice(0, 3));
+            const result = await discountService.findAllDiscount();
+            setPaginationDiscount(result.slice(0, 3));
         };
     }, []);
 
 
     return (
-        <>
+        discountList && <>
             <div className="row mx-0">
                 <div className="container mx-auto my-5 col-10">
                     <div style={{boxShadow: "1px 3px 10px 5px rgba(0, 0, 0, 0.2)"}}>
@@ -52,6 +78,7 @@ function DiscountList() {
                                 style={{padding: 16, backgroundColor: "#f26b38", color: "#fff"}}
                             >
                                 DANH SÁCH KHUYẾN MÃI
+                                <p id="empty"></p>
                             </h2>
                         </div>
                         <div className="row">
@@ -64,22 +91,39 @@ function DiscountList() {
                                 </button>
                             </div>
                             <div className="row col-md-8">
-                                <div className="col-md-9">
-                                    <input
-                                        style={{width: "100%", marginLeft: 90}}
-                                        className="form-control float-start"
-                                        type="text"
-                                        placeholder="Tìm kiếm khuyến mãi theo tên"
-                                    />
-                                </div>
-                                <div className="col-md-3">
-                                    <button
-                                        style={{marginLeft: 75}}
-                                        className="btn btn-outline-success"
-                                    >
-                                        <i className="bi bi-search"/>
-                                    </button>
-                                </div>
+                                <Formik initialValues={{
+                                    name: ''
+                                }}
+                                        onSubmit={(value) => {
+                                            const search = async () => {
+                                                const rs = await discountService.findByName(value.name)
+                                                if (rs === "") {
+                                                    document.getElementById("empty").innerHTML = `Không Tìm Thấy Tên ${value.name}`
+                                                } else {
+                                                    document.getElementById("empty").innerHTML = ``
+                                                }
+                                                setDiscountList(rs.content)
+                                            }
+                                            search();
+                                        }}
+                                >
+                                    <Form>
+                                        <div className="form-group float-end w-75" style={{
+                                            paddingLeft: 80
+                                        }}>
+                                            <i className="ti-search ti-search1"/>
+                                            <Field type="text"
+                                                   className="form-control d-inline float-start me-3 rounded-pill"
+                                                   style={{
+                                                       width: 250,
+                                                       paddingLeft: 35
+                                                   }} name="name" aria-describedby="helpId" placeholder="Tìm kiếm..."/>
+                                            <button type="submit"
+                                                    className="btn btn-secondary float-start rounded-pill">Tìm kiếm
+                                            </button>
+                                        </div>
+                                    </Form>
+                                </Formik>
                             </div>
                         </div>
                         <div style={{marginTop: 20}}>
@@ -88,7 +132,7 @@ function DiscountList() {
                                     <div className="d-flex justify-content-center">
                                         <table
                                             className="table table-striped table-hover"
-                                            style={{width: "85%"}}
+                                            style={discountList === '' ? {display: 'none'} : {}}
                                         >
                                             <thead>
                                             <tr>
@@ -127,7 +171,7 @@ function DiscountList() {
                                                                     data-bs-toggle="modal"
                                                                     className="btn btn-outline-danger"
                                                                     data-bs-target="#exampleModal"
-                                                                    onClick={() => getPropsDeleteDiscount(discount.id, discount.name)}
+                                                                    onClick={() => getPropsDeleteDiscount(discount.idDiscount, discount.nameDiscount)}
                                                                 >
                                                                     <i className="bi bi-trash"/>
                                                                 </button>
@@ -146,16 +190,20 @@ function DiscountList() {
                 </div>
             </div>
             {/*Phân trang*/}
-            <nav aria-label="Page navigation example">
-                <ul className="pagination">
-                    <li className="page-item"><a className="page-link" href="#">Previous</a>
-                    </li>
-                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                    <li className="page-item"><a className="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
+            <ReactPaginate
+                previousLabel={'Trước'}
+                nextLabel={'Sau'}
+                pageCount={pageCount}
+                onPageChange={handlePageClick}
+                containerClassName="pagination"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                activeClassName="active"
+            />
             {/*<CustomerModalDelete*/}
             {/*    id={deleteId}*/}
             {/*    name={deleteName}*/}
@@ -164,18 +212,9 @@ function DiscountList() {
                 id={deleteId}
                 name={deleteName}
                 getShowList={() => {
-                    toast("Xóa thành công");
-                    findAll();
+                    toast("Thêm mới thành công");
+                    findAllDiscount();
                 }}
-            />
-            <ReactPaginate
-                breakLabel="..."
-                nextLabel="next >"
-                // onPageChange={handlePageClick}
-                pageRangeDisplayed={1}
-                pageCount={Math.floor(customerList.length / PAGE_SIZE)}
-                previousLabel="< previous"
-                renderOnZeroPageCount={null}
             />
         </>
 
