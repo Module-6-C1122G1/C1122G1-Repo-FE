@@ -2,6 +2,7 @@ import { apiGetAllFilms } from '../../service/FilmService';
 import './index.css';
 import React, {useEffect, useState} from "react";
 import { apiGetShowTimesByDate, apiGetShowTimesByFilm } from '../../service/ShowTimeService';
+import {useNavigate} from "react-router";
 
 const SelectShowTime = (props) => {
     const {onFinish} = props;
@@ -11,6 +12,8 @@ const SelectShowTime = (props) => {
     const [selectedFilm, setSelectedFilm] = useState();
     const [selectedDate, setSelectedDate] = useState(0);
     const [selectedTime, setSelectedTime] = useState();
+    const username=localStorage.getItem("username")
+    const navigate = useNavigate();
 
     const fetchListFilm = async () => {
         const data = await apiGetAllFilms();
@@ -40,6 +43,9 @@ const SelectShowTime = (props) => {
         setSelectedTime(showTime);
     };
     const handleCLickSetTicket = () => {
+        // if(username == null){
+        //     navigate("/login")
+        // }
         onFinish(selectedFilm, selectedTime);
     }
     useEffect(() => {

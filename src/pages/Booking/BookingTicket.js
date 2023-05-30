@@ -4,6 +4,7 @@ import SelectPosition from "../../components/booking-ticket/SelectPosition";
 import SelectShowTime from "../../components/booking-ticket/SelectShowTime";
 import {apiBookingTicket} from '../../service/BookingTicketService';
 import {ConfirmTicket} from "../../components/confirm-ticket/ConfirmTicket";
+import Payment from "../../components/booking-ticket/Payment";
 
 const BookingTicket = () => {
     const [data, setData] = useState();

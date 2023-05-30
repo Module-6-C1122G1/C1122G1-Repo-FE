@@ -8,6 +8,7 @@ import ResetPassword from "./pages/Login/ResetPassword";
 import {ConfirmTicket} from "./components/confirm-ticket/ConfirmTicket";
 import Home from "./pages/Home";
 import React from "react";
+import BookingTicket from "./pages/Booking/BookingTicket";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/confirm-email" element={<ConfirmEmail />} />
         <Route path="/reset-password" element={<ResetPassword />} />
           <Route path='/confirm-ticket' element={<ConfirmTicket/>}/>
+          <Route path='/booking-ticket' element={<BookingTicket/>}/>
       </Route>
     </Routes>
 
