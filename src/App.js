@@ -1,29 +1,21 @@
 import "./App.css";
 import {Routes, Route} from "react-router-dom";
 import CommonLayout from "./layout/CommonLayout";
-import Login from "./pages/Login/Login";
-import ConfirmEmail from "./pages/Login/ConfirmEmail";
-import ResetPassword from "./pages/Login/ResetPassword";
-
 import Home from "./pages/Home";
 import React from "react";
-import {CreateFilm} from "./components/film/CreateFilm";
-import List from "./components/film/List";
-import BookingTicket from "./pages/Booking/BookingTicket";
+import {ListShowRoom} from "./components/show_room/ListShowRoom";
+import DetailShowRoom from "./components/show_room/DetailShowRoom";
 
 function App() {
     return (
         <Routes>
-            <Route path="" element={<CommonLayout/>}>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/admin/film/create" element={<CreateFilm/>}/>
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/confirm-email" element={<ConfirmEmail/>}/>
-                <Route path="/reset-password" element={<ResetPassword/>}/>
-                <Route path='/booking-ticket' element={<BookingTicket/>}/>
+            <Route path='' element={<CommonLayout/>}>
+                <Route path='' element={<Home/>}/>
+                <Route path='/admin/showroom/list' element={<ListShowRoom/>}/>
+                <Route path='/admin/showroom/detail/:id' element={<DetailShowRoom/>}/>
             </Route>
         </Routes>
-
     );
 }
+
 export default App;
