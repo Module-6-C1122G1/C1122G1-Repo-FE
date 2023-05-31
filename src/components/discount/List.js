@@ -183,7 +183,6 @@ function DiscountList() {
                 id={deleteId}
                 name={deleteName}
                 getShowList={() => {
-                    toast("Xóa thành công");
                     findAll();
                 }}
             />

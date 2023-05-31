@@ -30,7 +30,6 @@ export const save = async (discount) => {
 export const remove = async (id) => {
     try {
         await axios.delete(`http://localhost:8080/api/discount/${id}`)
-        alert("Xóa khách hàng thành công!!")
     } catch (e) {
         console.log(e)
     }
