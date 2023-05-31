@@ -1,32 +1,34 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router";
-import * as showRoomService from "../../service/ShowRoomService";
+import {findAll} from "../../service/ShowRoomService";
 import {Link} from "react-router-dom";
+import ReactPaginate from "react-paginate";
+import {Field, Form, Formik} from "formik";
 
 export function ListShowRoom() {
-    const [showRoomList, setShowRoomList] = useState([])
-    const navigate = useNavigate()
+    const [showRoomList, setShowRoomList] = useState([]);
+    const [searchAndPage, setSearchAndPage] = useState({
+        page: 0,
+        search: "",
+    });
+    const [pageCount, setPageCount] = useState(0);
+    const auth = localStorage.getItem("token");
     useEffect(() => {
-        const fetchApi = async () => {
-            const result = await showRoomService.findAll()
-            console.log(result.content)
-            setShowRoomList(result.content)
-        }
-        fetchApi()
-
-    }, [])
-
-    const [paginationShowRoom, setPaginationShowRoom] = useState([]);
-    const PAGE_SIZE = 3;
-
-    useEffect(() => {
-        const pagination = async () => {
-            const result = await showRoomService.findAll();
-            setPaginationShowRoom(result.content.slice(0, 3));
+        const list = async () => {
+            const result = await findAll(searchAndPage, auth);
+            try {
+                setShowRoomList(result.content);
+                setPageCount(result.totalPages);
+            } catch {
+                setShowRoomList([]);
+            }
         };
-        pagination();
-    }, []);
+        list();
+    }, [searchAndPage]);
 
+    const handlePageClick = (event) => {
+        console.log(event.selected)
+        setSearchAndPage((prev) => ({...prev, page: event.selected}));
+    };
     return (
         <>
             <div className="row mx-0 list-cinema-room">
@@ -37,93 +39,107 @@ export function ListShowRoom() {
                                 DANH SÁCH PHÒNG CHIẾU
                             </h2>
                         </div>
-                        <div className="row">
-                            <div className="col-md-4">
-                                <button
-                                    style={{marginLeft: 70}}
-                                    className="btn btn-outline-primary"
-                                >
-                                    <i className="bi bi-plus"/>
-                                    Thêm Mới
-                                </button>
-                            </div>
-                            <div className="row col-md-8">
-                                <div className="col-md-9">
-                                    <input
-                                        style={{width: "90%", marginLeft: 100}}
-                                        className="form-control float-start"
-                                        type="text"
-                                        placeholder="Tìm kiếm theo tên phòng chiếu...."
-                                    />
-                                </div>
-                                <div className="col-md-3">
-                                    <button
-                                        style={{marginLeft: 50}}
-                                        className="btn btn-outline-success"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width={16}
-                                            height={16}
-                                            fill="currentColor"
-                                            className="bi bi-search"
-                                            viewBox="0 0 16 16"
-                                        >
-                                            <path
-                                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+
                         <div style={{marginTop: 20}}>
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="d-flex justify-content-center">
-                                        <table
-                                            className="table table-striped table-hover"
-                                            style={{width: "85%"}}
-                                        >
-                                            <thead>
-                                            <tr>
-                                                <th>STT</th>
-                                                <th>Mã phòng chiếu</th>
-                                                <th>Tên phòng chiếu</th>
-                                                <th>Số lượng ghế</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {showRoomList.map((showRoom, index) => (
-                                                <tr key={index}>
-                                                    <td>{index + 1}</td>
-                                                    <td>{showRoom.idShowRoom}</td>
-                                                    <td><Link to ={'/admin/showroom/detail?id='+showRoom.idShowRoom}>{showRoom.nameShowRoom}</Link></td>
-                                                    <td>{showRoom.quantitySeat}</td>
-                                                </tr>
-                                            ))
-                                            }
-                                            </tbody>
-                                        </table>
+                                        {showRoomList.length === 0 ? (
+                                            <p style={{color: 'black'}} >Không tìm thấy kết quả cho từ khóa <span style={{color : "red"}}>"{searchAndPage.search}"</span></p>
+                                        ) : (
+                                            <div className="row container-fluid">
+                                                <div className="row ">
+                                                    <Formik
+                                                        initialValues={{search: ""}}
+                                                        onSubmit={(values) => {
+                                                            setSearchAndPage((prev) => {
+                                                                return {...prev, ...values, page: 0};
+                                                            });
+                                                        }}
+                                                    >
+                                                        <Form className="d-flex" style={{marginLeft:'600px',marginBottom:'20px'}}>
+                                                            <Field
+                                                                name="search"
+                                                                style={{width: "30%"}}
+                                                                className="form-control"
+                                                                type="text"
+                                                                placeholder="Tìm kiếm theo tên phòng chiếu..."
+                                                            />
+                                                            <button
+                                                                type="submit"
+                                                                className="btn btn-outline-primary"
+                                                                title="Tìm kiếm"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    width={16}
+                                                                    height={16}
+                                                                    fill="currentColor"
+                                                                    className="bi bi-search"
+                                                                    viewBox="0 0 16 16"
+                                                                >
+                                                                    <path
+                                                                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                                                </svg>
+                                                            </button>
+                                                        </Form>
+                                                    </Formik>
+                                                </div>
+                                                <table
+                                                    className="table table-striped table-hover"
+                                                >
+                                                    <thead>
+                                                    <tr>
+                                                        <th>STT</th>
+                                                        <th>Mã phòng chiếu</th>
+                                                        <th>Tên phòng chiếu</th>
+                                                        <th>Số lượng ghế</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {showRoomList.map((showRoom, index) => (
+                                                        <tr key={index}>
+                                                            <td>{index + 1}</td>
+                                                            <td>{showRoom.idShowRoom}</td>
+                                                            <td>
+                                                                <Link
+                                                                    to={'/admin/showroom/detail/' + showRoom.idShowRoom}
+
+                                                                >
+                                                                    {showRoom.nameShowRoom}
+                                                                </Link>
+                                                            </td>
+                                                            <td>{showRoom.quantitySeat}</td>
+                                                        </tr>
+                                                    ))
+                                                    }
+                                                    </tbody>
+                                                </table>
+                                                <div className="d-grid">
+                                                    <ReactPaginate
+                                                        breakLabel="..."
+                                                        nextLabel=">"
+                                                        onPageChange={handlePageClick}
+                                                        pageCount={pageCount}
+                                                        previousLabel="< "
+                                                        containerClassName="pagination"
+                                                        pageLinkClassName="page-num"
+                                                        nextLinkClassName="page-next"
+                                                        previousLinkClassName="page-previous"
+                                                        activeClassName="active"
+                                                        disabledClassName="d-none"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                    <nav aria-label="Page navigation example">
-                                        <ul className="pagination">
-                                            <li className="page-item"><a className="page-link" href="#">Previous</a>
-                                            </li>
-                                            <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">Next</a></li>
-                                        </ul>
-                                    </nav>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </>
     )
-
 }
+

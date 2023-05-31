@@ -8,13 +8,14 @@ import React from "react";
 import DetailShowRoom from "./components/show_room/DetailShowRoom";
 
 
+
 function App() {
     return (
         <Routes>
             <Route path='' element={<CommonLayout/>}>
                 <Route path='' element={<Home/>}/>
-                <Route path='/api/admin/showroom/list' element={<ListShowRoom/>}/>
-                <Route path='/api/admin/showroom/detail/:id' element={<DetailShowRoom/>}/>
+                <Route path='/admin/showroom/list' element={<ListShowRoom/>}/>
+                <Route path='/admin/showroom/detail/:id' element={<DetailShowRoom/>}/>
             </Route>
             <Route path="/login" element={<Login/>}/>
         </Routes>

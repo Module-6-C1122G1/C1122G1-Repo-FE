@@ -1,8 +1,13 @@
 import axios from "axios";
 
-export const findAll = async () => {
+export const findAll = async ({page,search}, auth) => {
+    const headers =  {
+        'Authorization': 'Bearer ' + auth
+    }
     try {
-        const result = await axios.get("http://localhost:8080/api/admin/showroom/list")
+        const result = await axios.get(`http://localhost:8080/api/admin/showroom/list?page=${page?page:0}
+        &search=${search}`, {headers})
+        console.log(result)
         return result.data
     }catch (e) {
         console.log(e)
@@ -10,10 +15,14 @@ export const findAll = async () => {
 }
 
 
+
 // Lấy dữ liệu của 1 phần tử trong list theo id
-export const getShowRoom = async (id) => {
+export const getShowRoom = async (id,auth) => {
+    const headers =  {
+        'Authorization': 'Bearer ' + auth
+    }
     try {
-        const result = await axios.get("http://localhost:8080/api/admin/showroom/list" + id)
+        const result = await axios.get(`http://localhost:8080/api/admin/showroom/list/${id}`,{headers})
         return result.data
     }catch (e) {
         console.log(e)
