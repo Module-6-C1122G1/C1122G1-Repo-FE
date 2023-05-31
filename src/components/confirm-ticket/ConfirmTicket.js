@@ -1,8 +1,8 @@
-import "./ConfirmTicket.css"
+import "./ConfirmTicket.css";
 import Footer from "../common/footer/Footer";
 import Header from "../common/header/Header";
 import React, {useEffect, useState} from "react";
-import {Formik, Form, Field} from "formik";
+import {Field, Form, Formik} from "formik";
 import {checkDiscount, findByIdSeat, getCustomer, pay} from "../../service/TicketService";
 
 export function ConfirmTicket(props) {
@@ -23,15 +23,15 @@ export function ConfirmTicket(props) {
                 } else {
                     prices += filmData.film.vipSeatPrice;
                 }
-                listSeat.push(findByIdSeat(seat))
-            })
-            const customers = await getCustomer(useName)
-            setCustomer(customers)
+                listSeat.push(findByIdSeat(seat));
+            });
+            const customers = await getCustomer(useName);
+            setCustomer(customers);
             setPrice(prices);
             setSeat(listSeat);
-        }
+        };
         fetchApi();
-    }, [])
+    }, []);
     const handleDiscount = async () => {
         const discount = document.getElementById("nameDiscount").value;
         if (discount.trim !== null) {
@@ -40,7 +40,7 @@ export function ConfirmTicket(props) {
             setPrice(prices);
             setDiscount(discount);
         }
-    }
+    };
     return (
         <>
             <Header/>
@@ -54,9 +54,9 @@ export function ConfirmTicket(props) {
                 }}
                 onSubmit={(values) => {
                     const save = async () => {
-                        await pay(values)
-                        alert("ok")
-                    }
+                        await pay(values);
+                        alert("ok");
+                    };
                     save();
                 }}
             >
@@ -263,5 +263,5 @@ export function ConfirmTicket(props) {
             </Formik>
             <Footer/>
         </>
-    )
+    );
 }

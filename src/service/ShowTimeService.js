@@ -8,7 +8,7 @@ export const apiGetShowTimesByFilm = async (id) => {
         console.log(e);
     }
 };
-export const apiGetShowTimesByDate = async (filmId,date) => {
+export const apiGetShowTimesByDate = async (filmId, date) => {
     try {
         const result = await axios.get(`http://localhost:8080/api/public/showtime/${filmId}/${date}`);
         return result.data;
@@ -19,40 +19,40 @@ export const apiGetShowTimesByDate = async (filmId,date) => {
 
 export const findAllShowTime = async () => {
     try {
-        const result = await axios.get(`http://localhost:8080/showTime`)
-    }catch (e){
-        console.log(e)
+        const result = await axios.get(`http://localhost:8080/showTime`);
+    } catch (e) {
+        console.log(e);
     }
-}
+};
 
 export const createShowTime = async (showTime) => {
     try {
-        await axios.post(`http://localhost:8080/showTime`, {...showTime})
-    }catch (e){
-        console.log(e)
+        await axios.post(`http://localhost:8080/showTime`, {...showTime});
+    } catch (e) {
+        console.log(e);
     }
-}
+};
 
 export const findShowTimeById = async (idShowTime) => {
     try {
-        const result = await axios.get(`http://localhost:8080/showTime/${idShowTime}`)
+        const result = await axios.get(`http://localhost:8080/showTime/${idShowTime}`);
         return result.data;
-    }catch (e){
-        console.log(e)
+    } catch (e) {
+        console.log(e);
     }
-}
+};
 export const deleteShowTime = async (idShowTime) => {
     try {
-        await axios.delete(`http://localhost:8080/showTime/${idShowTime}`)
-    }catch (e){
-        console.log(e)
+        await axios.delete(`http://localhost:8080/showTime/${idShowTime}`);
+    } catch (e) {
+        console.log(e);
     }
-}
+};
 export const updateShowTime = async (showTime) => {
     try {
-        await axios.put(`http://localhost:8080/showTime/${showTime.idShowTime}`, {...showTime})
-    }catch (e){
-        console.log(e)
+        await axios.put(`http://localhost:8080/showTime/${showTime.idShowTime}`, {...showTime});
+    } catch (e) {
+        console.log(e);
     }
-}
+};
 
