@@ -83,7 +83,7 @@ export function CustomerPointHistory() {
                             Lịch sử
                         </Link>
                         <hr/>
-                        <Link to={"/"} className="mt-2" style={{color: "black"}}>
+                        <Link to={"/ticket-customer"} className="mt-2" style={{color: "black"}}>
                             <link href="" style={{fontSize: 14}}/>
                             <i className="bi bi-ticket-detailed"/>
                             Vé đã đặt

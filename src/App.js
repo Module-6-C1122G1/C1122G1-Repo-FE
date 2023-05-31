@@ -16,8 +16,8 @@ function App() {
     return (
         <Routes>
             <Route path='' element={<CommonLayout/>}>
-                <Route path='/' element={<TickBookingList/>}/>
-                <Route path='/history' element={<CustomerPointHistory/>}/>
+                <Route path='/ticket-customer' element={<TickBookingList/>}/>
+                <Route path='/ticket-customer/history' element={<CustomerPointHistory/>}/>
             </Route>
         </Routes>
     )

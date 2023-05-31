@@ -11,8 +11,9 @@ export function TickBookingList(effect, deps) {
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(0);
     const [deleteTicket, setDeleteTicket] = useState();
+    const token =localStorage.getItem("token");
 
-    let stt = page * size + 1
+        let stt = page * size + 1
 
     const handlePageClick = (event) => {
         setPage(+event.selected);
@@ -32,10 +33,11 @@ export function TickBookingList(effect, deps) {
     useEffect(() => {
         const fetchApi = async () => {
             try {
-                const result = await customerService.findAllTicketBooking(page);
+                const result = await customerService.findAllTicketBooking(page,token);
                 setTicketBooking(result.data.content);
                 setPageCount(result.data.totalPages);
                 setSize(result.data.size)
+                console.log(result)
             } catch (error) {
                 console.log(error)
             }
@@ -93,8 +95,8 @@ export function TickBookingList(effect, deps) {
                             Thông tin tài khoản
                         </Link>
                         <hr/>
-                        <Link to={"/history"} className="mt-2" style={{color: "black"}}>
-                            <link  style={{fontSize: 14}}/>
+                        <Link to={"/ticket-customer/history"} className="mt-2" style={{color: "black"}}>
+                            <link style={{fontSize: 14}}/>
                             <i className="bi bi-calculator"/>
                             Lịch sử
                         </Link>
@@ -195,7 +197,7 @@ export function TickBookingList(effect, deps) {
                     </div>
                 </div>
             </div>
-            <ToastContainer />
+            <ToastContainer/>
             {/*Modal xoá*/}
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">
