@@ -10,6 +10,7 @@ import React from "react";
 import {CreateFilm} from "./components/film/CreateFilm";
 import List from "./components/film/List";
 import BookingTicket from "./pages/Booking/BookingTicket";
+import {DetailDiscount} from "./components/discount/DetailDiscount";
 
 function App() {
     return (
@@ -21,11 +22,10 @@ function App() {
                 <Route path="/confirm-email" element={<ConfirmEmail/>}/>
                 <Route path="/reset-password" element={<ResetPassword/>}/>
                 <Route path='/booking-ticket' element={<BookingTicket/>}/>
+                <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>
             </Route>
         </Routes>
 
     );
 }
-
-
 export default App;
