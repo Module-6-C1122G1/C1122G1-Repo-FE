@@ -31,21 +31,22 @@ export function CreateFilm() {
             return;
         const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
         uploadBytes(imageRef, imageUpload).then((snapshot) => {
-            getDownloadURL(snapshot.ref).then((url)=> {
-                setImageList((prev) => [...prev,url])
+            getDownloadURL(snapshot.ref).then((url) => {
+                setImageList((prev) => [...prev, url])
             })
 
         });
     };
     useEffect(() => {
+        setImageList([]);
         listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
                 getDownloadURL(item).then((url) => {
-                    setImageList((prev) => [...prev, url]);
+                    setImageList((prev) => [...prev.filter(item => item != url), url]);
                 })
             })
         })
-    },[])
+    }, [])
 
     return (
         <>
@@ -113,7 +114,7 @@ export function CreateFilm() {
                 }>
                 {
                     ({isSubmitting}) => (
-                        <div className="row mx-0">
+                        <div className="row mx-0" style={{marginTop: "30%"}}>
                             <div className="container mx-auto my-5 col-8">
                                 <div className="form-edit-movie">
                                     <h1 style={{textAlign: "center", marginBottom: "5%"}}>
@@ -128,16 +129,14 @@ export function CreateFilm() {
                                             </div>
                                             <div className="col-3">
                                                 <input type="file" name="imgFilm" onChange={(event) => {
-                                                    setImageUpload(event.target.files[0])
+                                                    setImageUpload(event.target.files[0]);
+                                                    uploadImage();
                                                 }}
                                                        style={{width: "100%"}}/>
-                                                <button onClick={uploadImage}>Tải ảnh lên</button>
+                                                <button type="button" className="btn btn-primary" onClick={uploadImage}>Tải ảnh lên</button>
                                             </div>
                                             <div className="col-3">
-
-                                                {imageList.map((url) =>{
-                                                    return <img src={url} style={{height:"100%", width: "100%"}}/>
-                                                } )}
+                                                <img src={imageList[imageList.length - 1]} style={{height: "100%", width: "100%"}}/>
                                             </div>
                                         </div>
                                         <div className="row" style={{marginBottom: "2%"}}>
@@ -296,8 +295,9 @@ export function CreateFilm() {
                                             </div>
                                             <div className="col-8">
                                                 <Field as='select' name="idTypeFilm">
-                                                    {listTypeFilm.map((listType,index) => (
-                                                        <option value={listType.idTypeFilm}>{listType.nameTypeFilm}</option>
+                                                    {listTypeFilm.map((listType, index) => (
+                                                        <option
+                                                            value={listType.idTypeFilm}>{listType.nameTypeFilm}</option>
                                                     ))}
                                                 </Field>
                                             </div>
@@ -339,7 +339,8 @@ export function CreateFilm() {
                                                 </label>
                                             </div>
                                             <div className="col-8">
-                                                <textarea name="describeFilm" rows={4} cols={86} placeholder="Nội dung phim"
+                                                <textarea name="describeFilm" rows={4} cols={86}
+                                                          placeholder="Nội dung phim"
                                                           style={{maxWidth: "100%"}}>
                                                 </textarea>
                                             </div>
@@ -362,7 +363,7 @@ export function CreateFilm() {
                                                         />
                                                         :
                                                         <button type="submit"
-                                                                className="btn btn-primary">Submit</button>
+                                                                className="btn btn-primary">Thêm mới phim</button>
                                                 }
                                             </div>
                                         </div>

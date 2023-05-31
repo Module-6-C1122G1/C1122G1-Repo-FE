@@ -1,70 +1,43 @@
-import {NavLink, useNavigate} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 import * as discountService from "../../service/discount/DiscountService"
-import DiscountModalDelete from "../discount/Delete"
-import {toast} from "react-toastify";
+import DiscountModalDelete from "../discount/Delete";
+import {toast} from "react-toastify"
 import ReactPaginate from "react-paginate";
 import {Field, Form, Formik} from "formik";
-import {findAllDiscount} from "../../service/discount/DiscountService";
 import React, {useEffect, useState} from "react";
 
 function DiscountList() {
     const [discountList, setDiscountList] = useState([]);
-    let[count, setCount] = useState(1)
-
-    const navigate = useNavigate();
-
-    const [pageCount,setPageCount] = useState(0)
-    const [discounts, setDiscounts] = useState([])
-
-    const findAll = async () => {
-        const rs = await discountService.findByName("",1)
-        setDiscounts(rs)
-        const dt = await discountService.findAllDiscount()
-        let total = Math.ceil(dt.length/5)
-        setPageCount(total);
-    }
-
-    useEffect(() => {
-        findAll()
-    }, [])
-
-    const handlePageClick = async(page)=>{
-        let currentPage = page.selected+1
-        const rs = await discountService.findByName('',currentPage)
-        setDiscounts(rs)
-        setCount(currentPage*5-4)
-    }
-
-    useEffect(() => {
-        const showAll = async () => {
-            const result = await discountService.findAllDiscount();
-            debugger
-            setDiscountList(result.content);
-        };
-        showAll();
-    }, []);
-
     const [deleteId, setDeleteId] = useState(0)
     const [deleteName, setDeleteName] = useState("")
+    const navigate = useNavigate();
+    const [pageCount, setPageCount] = useState(0)
+    const [page, setPage] = useState(0)
+    const [size, setSize] = useState(0)
+    let stt = page * size + 1;
+
     const getPropsDeleteDiscount = (id, name) => {
         setDeleteId(id);
         setDeleteName(name);
     }
 
-    //State: Phục vụ cho việc phân trang (pagination)
-    const [paginationDiscount, setPaginationDiscount] = useState([]);
-    const PAGE_SIZE = 3;
-
     function handleUpdate(id) {
         navigate(`/discount-edit/${id}`)
     }
+    const handlePageClick = (data) => {
+        setPage(+data.selected);
+    }
+
+    const findAll = async () => {
+        const rs = await discountService.findByName("", page)
+        setDiscountList(rs.data.content)
+        setPageCount(rs.data.totalPages)
+        setSize(rs.data.size)
+    }
 
     useEffect(() => {
-        const pagination = async () => {
-            const result = await discountService.findAllDiscount();
-            setPaginationDiscount(result.slice(0, 3));
-        };
-    }, []);
+        findAll()
+    }, [page])
 
 
     return (
@@ -96,13 +69,14 @@ function DiscountList() {
                                 }}
                                         onSubmit={(value) => {
                                             const search = async () => {
-                                                const rs = await discountService.findByName(value.name)
+                                                const rs = await discountService.findByName(value.name,0)
                                                 if (rs === "") {
                                                     document.getElementById("empty").innerHTML = `Không Tìm Thấy Tên ${value.name}`
                                                 } else {
                                                     document.getElementById("empty").innerHTML = ``
                                                 }
-                                                setDiscountList(rs.content)
+                                                setDiscountList(rs.data.content)
+                                                setPageCount(rs.data.totalPages)
                                             }
                                             search();
                                         }}
@@ -152,7 +126,7 @@ function DiscountList() {
                                                 discountList.map((discount, index) => {
                                                     return (
                                                         <tr key={index}>
-                                                            <td>{index + 1}</td>
+                                                            <td scope="row">{stt++}</td>
                                                             <td>{discount.nameDiscount}</td>
                                                             <td>{discount.imageDiscount}</td>
                                                             <td>{discount.dateStart}</td>
@@ -186,40 +160,36 @@ function DiscountList() {
                                 </div>
                             </div>
                         </div>
+                        <div>
+                            <ReactPaginate
+                                previousLabel={'Trước'}
+                                nextLabel={'Sau'}
+                                pageCount={pageCount}
+                                onPageChange={handlePageClick}
+                                containerClassName="pagination"
+                                pageClassName="page-item"
+                                pageLinkClassName="page-link"
+                                nextClassName="page-item"
+                                nextLinkClassName="page-link"
+                                previousClassName="page-item"
+                                previousLinkClassName="page-link"
+                                activeClassName="active"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
-            {/*Phân trang*/}
-            <ReactPaginate
-                previousLabel={'Trước'}
-                nextLabel={'Sau'}
-                pageCount={pageCount}
-                onPageChange={handlePageClick}
-                containerClassName="pagination"
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                nextClassName="page-item"
-                nextLinkClassName="page-link"
-                previousClassName="page-item"
-                previousLinkClassName="page-link"
-                activeClassName="active"
-            />
-            {/*<CustomerModalDelete*/}
-            {/*    id={deleteId}*/}
-            {/*    name={deleteName}*/}
-            {/*/>*/}
             <DiscountModalDelete
                 id={deleteId}
                 name={deleteName}
                 getShowList={() => {
-                    toast("Thêm mới thành công");
-                    findAllDiscount();
+                    toast("Xóa thành công");
+                    findAll();
                 }}
             />
         </>
-
     );
-
 }
 
 export default DiscountList;
+

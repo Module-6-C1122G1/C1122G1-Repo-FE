@@ -123,7 +123,6 @@ export function ConfirmTicket(props) {
                                             <input
                                                 type="text"
                                                 value={customer.nameCustomer}
-                                                disabled
                                                 style={{width: "40%", height: 40}}
                                             />
                                         </td>

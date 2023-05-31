@@ -7,20 +7,23 @@ import ResetPassword from "./pages/Login/ResetPassword";
 
 import Home from "./pages/Home";
 import React from "react";
+import {CreateFilm} from "./components/film/CreateFilm";
+import List from "./components/film/List";
 import BookingTicket from "./pages/Booking/BookingTicket";
-
 
 function App() {
     return (
         <Routes>
             <Route path="" element={<CommonLayout/>}>
                 <Route path="/" element={<Home/>}/>
+                <Route path="/admin/film/create" element={<CreateFilm/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/confirm-email" element={<ConfirmEmail/>}/>
                 <Route path="/reset-password" element={<ResetPassword/>}/>
                 <Route path='/booking-ticket' element={<BookingTicket/>}/>
             </Route>
         </Routes>
+
     );
 }
 
