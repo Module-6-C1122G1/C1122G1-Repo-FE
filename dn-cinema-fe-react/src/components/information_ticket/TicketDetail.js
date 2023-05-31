@@ -7,6 +7,7 @@ import {useReactToPrint} from "react-to-print";
 import {TicketPrint} from "./TicketPrint";
 import { format } from "date-fns";
 import {Link} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
 
 export default function TicketDetail() {
     const param = useParams()
@@ -79,6 +80,7 @@ export default function TicketDetail() {
                                                     }
                                                 }
                                                 deleteTicket()
+                                                // toast("Hủy vé thành công");
                                             }}
                                         >
                                             <Form>
@@ -127,6 +129,7 @@ export default function TicketDetail() {
                                                             >
                                                                 Hủy vé
                                                             </button>
+                                                            {/*<ToastContainer />*/}
                                                         </td>
 
 

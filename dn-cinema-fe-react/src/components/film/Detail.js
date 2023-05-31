@@ -3,6 +3,7 @@ import {useParams} from "react-router";
 import * as filmService from '../../service/FilmService'
 import '../film/detailStyle.css';
 import { format } from "date-fns";
+import {Link} from "react-router-dom";
 export default function () {
     const param = useParams()
     const [movieDetail, setMovieDetail] = useState()
@@ -61,7 +62,7 @@ export default function () {
                                             placeholder="Nhập Email Của Bạn"
                                             className=" input-movie w-100 form-control"
                                         />
-                                        <button className="button-movie-1 mt-2 ">Đăng Ký</button>
+                                        <button className="button-movie-1 mt-2 ">Đăng ký</button>
                                     </form>
                                 </div>
                             </section>
@@ -95,13 +96,13 @@ export default function () {
                                     <table>
                                         <thead>
                                         <tr style={{height: 45}}>
-                                            <th className="text-secondary">Thể Loại :</th>
+                                            <th className="text-secondary">Thể loại :</th>
                                             <td>{movieDetail?.typeFilm.nameTypeFilm}</td>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr style={{height: 45}}>
-                                            <th className="text-secondary">Quốc Gia :</th>
+                                            <th className="text-secondary">Quốc gia :</th>
                                             <td>{movieDetail?.nation}</td>
                                         </tr>
                                         <tr style={{height: 45}}>
@@ -127,9 +128,9 @@ export default function () {
                                         {/*</tr>*/}
                                         <tr style={{height: 45}}>
                                             <th className="">
-                    <span type="button" className="button-movie">
+                    <Link to={'/booking-ticket'} type="button" className="btn button-movie">
                       Đặt vé
-                    </span>
+                    </Link>
                                             </th>
                                         </tr>
                                         </tbody>
