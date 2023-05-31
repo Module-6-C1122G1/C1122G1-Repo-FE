@@ -45,8 +45,8 @@ export function UpdateFilm() {
             return;
         const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
         uploadBytes(imageRef, imageUpload).then((snapshot) => {
-            getDownloadURL(snapshot.ref).then((url)=> {
-                setImageList((prev) => [...prev,url])
+            getDownloadURL(snapshot.ref).then((url) => {
+                setImageList((prev) => [...prev, url])
             })
 
         });
@@ -59,7 +59,7 @@ export function UpdateFilm() {
                 })
             })
         })
-    },[])
+    }, [])
 
     if (!films) {
         return null;
@@ -70,39 +70,53 @@ export function UpdateFilm() {
         {films && <Formik
             initialValues={{
                 idFilm: films?.idFilm,
-                imgFilm: films.imgFilm,
-                nameFilm: films.nameFilm,
-                nation: films.nation,
-                dateStartFilm: films.dateStartFilm,
-                dateEndFilm: films.dateEndFilm,
-                actor: films.actor,
-                studioFilm: films.studioFilm,
-                director: films.director,
-                timeFilm: films.timeFilm,
-                movieLabel: films.movieLabel,
-                trailer: films.trailer,
-                idTypeFilm: films.typeFilm.idTypeFilm,
-                normalSeatPrice: films.normalSeatPrice,
-                vipSeatPrice: films.vipSeatPrice,
-                describeFilm: films.describeFilm
+                imgFilm: films?.imgFilm,
+                nameFilm: films?.nameFilm,
+                nation: films?.nation,
+                dateStartFilm: films?.dateStartFilm,
+                dateEndFilm: films?.dateEndFilm,
+                actor: films?.actor,
+                studioFilm: films?.studioFilm,
+                director: films?.director,
+                timeFilm: films?.timeFilm,
+                movieLabel: films?.movieLabel,
+                trailer: films?.trailer,
+                idTypeFilm: films.typeFilm?.idTypeFilm,
+                normalSeatPrice: films?.normalSeatPrice,
+                vipSeatPrice: films?.vipSeatPrice,
+                describeFilm: films?.describeFilm
 
             }}
             validationSchema={Yup.object({
                 imgFilm: Yup.string()
-                    .required("Nhập ảnh phim"), nameFilm: Yup.string()
-                    .required("Nhập tên phim"), nation: Yup.string()
-                    .required("Nhập quốc gia"), dateStartFilm: Yup.date()
-                    .required("Nhập ngày khởi chiếu"), dateEndFilm: Yup.date()
-                    .required("Nhập ngày kết thúc"), actor: Yup.string()
-                    .required("Nhập diễn viên"), studioFilm: Yup.string()
-                    .required("Nhập hãng phim"), director: Yup.string()
-                    .required("Nhập đạo diễn"), timeFilm: Yup.number().integer()
-                    .required("Nhập thời lượng phim"), movieLabel: Yup.string()
-                    .required("Nhập nhãn phim"), trailer: Yup.string()
-                    .required("Nhập trailer phim"), idTypeFilm: Yup.number().integer()
-                    .required("Nhập loại phim"), normalSeatPrice: Yup.number()
-                    .required("Nhập giá ghế thường"), vipSeatPrice: Yup.number()
-                    .required("Nhập giá ghế vip"), describeFilm: Yup.string()
+                    .required("Nhập ảnh phim"),
+                nameFilm: Yup.string()
+                    .required("Nhập tên phim"),
+                nation: Yup.string()
+                    .required("Nhập quốc gia"),
+                dateStartFilm: Yup.date()
+                    .required("Nhập ngày khởi chiếu"),
+                dateEndFilm: Yup.date()
+                    .required("Nhập ngày kết thúc"),
+                actor: Yup.string()
+                    .required("Nhập diễn viên"),
+                studioFilm: Yup.string()
+                    .required("Nhập hãng phim"),
+                director: Yup.string()
+                    .required("Nhập đạo diễn"),
+                timeFilm: Yup.number().integer()
+                    .required("Nhập thời lượng phim"),
+                movieLabel: Yup.string()
+                    .required("Nhập nhãn phim"),
+                trailer: Yup.string()
+                    .required("Nhập trailer phim"),
+                idTypeFilm: Yup.number().integer()
+                    .required("Nhập loại phim"),
+                normalSeatPrice: Yup.number()
+                    .required("Nhập giá ghế thường"),
+                vipSeatPrice: Yup.number()
+                    .required("Nhập giá ghế vip"),
+                describeFilm: Yup.string()
                     .required("Nhập nội dung phim")
             })}
             onSubmit={(values, {setSubmitting}) => {
@@ -137,9 +151,9 @@ export function UpdateFilm() {
                                 </div>
                                 <div className="col-3">
 
-                                    {imageList.map((url) =>{
-                                        return <img src={url} style={{height:"100%", width: "100%"}}/>
-                                    } )}
+                                    {imageList.map((url) => {
+                                        return <img src={url} style={{height: "100%", width: "100%"}}/>
+                                    })}
                                 </div>
                             </div>
                             <div className="row" style={{marginBottom: "2%"}}>
@@ -450,7 +464,6 @@ export function UpdateFilm() {
                 </div>
             </div>)}
         < /Formik>}
-
         }
     </>)
 }
