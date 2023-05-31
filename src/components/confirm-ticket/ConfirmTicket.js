@@ -1,9 +1,23 @@
 import "./ConfirmTicket.css"
 import Footer from "../common/footer/Footer";
 import Header from "../common/header/Header";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Field, Form, Formik} from "formik";
-import {checkDiscount, findByIdSeat, getCustomer, pay} from "../../service/TicketService";
+import {cancelSeat, checkDiscount, findByIdSeat, getCustomer, pay} from "../../service/TicketService";
+import {useNavigate} from "react-router";
+
+
+const formatTime = (time) => {
+    let minutes = Math.floor(time / 60)
+    let second = Math.floor(time - minutes * 60)
+    if (minutes < 10) {
+        minutes = "0" + minutes
+    }
+    if (second < 10) {
+        second = "0" + second
+    }
+    return minutes + ":" + second
+}
 
 export function ConfirmTicket(props) {
     const {filmData, listSelectingData} = props;
@@ -13,6 +27,28 @@ export function ConfirmTicket(props) {
     const [price, setPrice] = useState(0);
     const [discounts, setDiscount] = useState({});
     const [customer, setCustomer] = useState({});
+    const [countDown, setCountDown] = useState(900)
+    const timerId = useRef()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        timerId.current = setInterval(() => {
+            setCountDown(prevState => prevState - 1)
+        }, 1000)
+        return () => clearInterval(timerId.current)
+    }, [])
+
+    useEffect(() => {
+        if (countDown <= 0) {
+            clearInterval(timerId.current)
+            const cancels = async () => {
+                await cancelSeat(listSelectingData)
+            }
+            cancels();
+            navigate('/')
+        }
+    }, [countDown])
+
     useEffect(() => {
         const fetchApi = async () => {
             const result = await findByIdSeat(listSelectingData, filmData.film.idFilm, token)
@@ -29,17 +65,14 @@ export function ConfirmTicket(props) {
         if (discount.trim !== null) {
             const result = await checkDiscount(discount, token);
             const prices = -result.percentDiscount * price / 100 + price;
-             document.getElementById('discount').value = result.idDiscount;
-             document.getElementById('priceAfter').value = prices;
+            debugger
             setPrice(prices);
             setDiscount(result);
-            const customers = await getCustomer(useName, token)
-            setCustomer(customers)
         }
     }
     return (
         customer && price && seats && <>
-            <Header/>
+            {/*<Header/>*/}
             <Formik
                 initialValues={{
                     idCustomer: customer.idCustomer,
@@ -49,21 +82,26 @@ export function ConfirmTicket(props) {
                     price: price
                 }}
                 onSubmit={(values) => {
+
+                    let price = +document.getElementById('ok').innerText;
+                    let dis = +document.getElementById('dis').value;
+                    debugger
                     console.log(values)
                     debugger
                     const save = async () => {
-                        window.location.href = await pay(values, token)
+                        window.location.href = await pay({...values, price: price, idDiscount: dis}, token)
                     }
                     save();
                 }}
             >
                 <Form>
-                    <Field type='hidden' name='idDiscount' id='discount'/>
-                    <Field type='hidden' name='price' id='priceAfter'/>
+                    <input type="hidden" value={discounts} id="dis"/>
                     <div className="container">
                         <div className="row">
                             <div className="col-md-9" style={{background: "#f26b38", height: "auto"}}>
-                                <h1 style={{color: "white"}}>Vui lòng thanh toán</h1>
+                                <h1 style={{color: "white"}}>Vui lòng thanh toán
+                                    <span style={{float: "right"}}>{formatTime(countDown)}</span>
+                                </h1>
                                 <table className="table" style={{background: "white"}}>
                                     <tbody>
                                     <tr>
@@ -218,7 +256,9 @@ export function ConfirmTicket(props) {
                                                                 ng-loyayty-discount="loyaltyDiscount"
                                                                 className="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty"
                                                             >
-                                                                <span className="ng-binding">{price} VNĐ</span>
+                                                                <p><span className="ng-binding"
+                                                                         id="ok">{price}</span>
+                                                                    VNĐ</p>
                                                             </galaxy-summary-ticket>
                                                         </p>
                                                     </div>
