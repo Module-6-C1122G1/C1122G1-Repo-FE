@@ -1,11 +1,12 @@
-import * as DiscountService from '../../service/DiscountService'
+import * as DiscountService from '../../service/discount/DiscountService'
 import * as Yup from 'yup'
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import {storage} from "../../firebase";
-
+import "react-toastify/dist/ReactToastify.css"
+import {ToastContainer, toast} from "react-toastify"
 export default function DiscountUpdate() {
     useEffect(() => {
         document.title = "Chỉnh sửa khuyến mãi"
@@ -80,7 +81,7 @@ export default function DiscountUpdate() {
                 }
             }
             validationSchema={Yup.object({
-                nameDiscount: Yup.string().required("Tên khuyến mãi không được để trống"),
+                nameDiscount: Yup.string().trim().required("Tên khuyến mãi không được để trống"),
                 dateStart: Yup.date()
                     .required('Ngày bắt đầu không được để trống')
                     .min(
@@ -97,11 +98,13 @@ export default function DiscountUpdate() {
                         Yup.ref('dateStart'),
                         'Ngày kết thúc phải lớn hơn ngày bắt đầu'
                     ),
-                describeDiscount: Yup.string().required("Chi tiết khuyến mãi không được để trống"),
-                percentDiscount: Yup.number().required("Phần trăm giảm giá không được để trống")
+                describeDiscount: Yup.string().trim().required("Chi tiết khuyến mãi không được để trống"),
+                percentDiscount: Yup.number().required("Phần trăm giảm giá không được để trống").
+                min(0.01,"Phần trăm giảm giá không được nhỏ hơn hoặc bằng 0").
+                max(100,"Phần trăm giảm giá không được lớn hơn 100")
             })}
             onSubmit={
-                async (values) => {
+                async (values,{setSubmitting}) => {
                     const newValue = {
                         ...values,
                         imageDiscount: img
@@ -110,10 +113,13 @@ export default function DiscountUpdate() {
                     try {
                         newValue.imageDiscount = await handleSubmitImg();
                         await DiscountService.updateDiscount(newValue);
+                        toast(`Thêm khuyến mãi thành công! `)
+                        navigate(`/discount/update/${param.id}`);
+                        setSubmitting(false)
                     } catch (e) {
                         console.log(e)
                     }
-                    // navigate('/discount');
+
                 }
             }
         >

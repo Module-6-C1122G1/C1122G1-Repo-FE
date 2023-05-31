@@ -5,7 +5,10 @@ import {useNavigate} from "react-router";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage"
 import {storage} from "../../firebase"
-
+import "./DiscountFormCss.css";
+import {ColorRing} from "react-loader-spinner"
+import "react-toastify/dist/ReactToastify.css"
+import {ToastContainer, toast} from "react-toastify"
 
 export default function DiscountCreate() {
     useEffect(() => {
@@ -23,7 +26,7 @@ export default function DiscountCreate() {
     }
     const handleSubmitImg = async () => {
         return new Promise((resolve, reject) => {
-            debugger
+
             const file = selectedFile;
             if (!file) {
                 return reject("Chưa có file ảnh được chọn")
@@ -64,7 +67,7 @@ export default function DiscountCreate() {
                 }
             }
             validationSchema={Yup.object({
-                nameDiscount: Yup.string().required("Tên khuyến mãi không được để trống"),
+                nameDiscount: Yup.string().trim().required("Tên khuyến mãi không được để trống"),
                 dateStart: Yup.date()
                     .required('Ngày bắt đầu không được để trống')
                     .min(
@@ -81,20 +84,23 @@ export default function DiscountCreate() {
                         Yup.ref('dateStart'),
                         'Ngày kết thúc phải lớn hơn ngày bắt đầu'
                     ),
-                imageDiscount:Yup.string().required("Hình ảnh không được để trống"),
-                describeDiscount: Yup.string().required("Chi tiết khuyến mãi không được để trống"),
-                percentDiscount: Yup.number().required("Phần trăm giảm giá không được để trống")
+                describeDiscount: Yup.string().trim().required("Chi tiết khuyến mãi không được để trống"),
+                percentDiscount: Yup.number().required("Phần trăm giảm giá không được để trống").
+                min(0.01,"Phần trăm giảm giá không được nhỏ hơn hoặc bằng 0").
+                max(100,"Phần trăm giảm giá không được lớn hơn 100")
             })}
             onSubmit={
-                async values => {
-                    debugger
+                async (values,{setSubmitting}) => {
+
                     const newValue = {
                         ...values,
                         imageDiscount: img
                     }
                     newValue.imageDiscount = await handleSubmitImg();
                     await DiscountService.createDiscount(newValue);
-                    navigate('/discount');
+                    toast(`Thêm khuyến mãi thành công! `)
+                    navigate('/discount/create');
+                    setSubmitting(false)
                 }
             }
         >
@@ -116,13 +122,13 @@ export default function DiscountCreate() {
                                     </thead>
                                     <tbody>
                                     <tr className="">
-                                        <td className="" style={{alignItems: "end"}}>
+                                        <td className="row" style={{alignItems: "end"}}>
                                             <label
-                                                className="normal-font float-end"
+                                                className="normal-font col-11"
                                                 htmlFor="name"
                                                 style={{marginRight: 15}}
                                             >
-                                                Tiêu đề <span style={{color: "red", fontSize: 20}}>*</span>
+                                                Tiêu đề <span style={{color: "red", fontSize: 20, }}>*</span>
                                             </label>
                                         </td>
                                         <td className="">
@@ -139,7 +145,7 @@ export default function DiscountCreate() {
                                     <tr className="">
                                         <td className="">
                                             <label
-                                                className="normal-font float-end"
+                                                className="normal-font "
                                                 htmlFor="startTime"
                                                 style={{marginRight: 15}}
                                             >
@@ -148,14 +154,15 @@ export default function DiscountCreate() {
                                         </td>
                                         <td className="">
                                             <Field name="dateStart" className="form-control" id="startTime"
-                                                   type="date"/>
+                                                   type="date"
+                                                   />
                                             <ErrorMessage name='dateStart' component='span' className='text-danger'/>
                                         </td>
                                     </tr>
                                     <tr className="">
                                         <td className="">
                                             <label
-                                                className="normal-font float-end"
+                                                className="normal-font "
                                                 htmlFor="endTime"
                                                 style={{marginRight: 15}}
                                             >
@@ -169,6 +176,7 @@ export default function DiscountCreate() {
                                                 id="endTime"
                                                 placeholder=""
                                                 type="date"
+
                                             />
                                             <ErrorMessage name='dateEnd' component='span' className='text-danger'/>
                                         </td>
@@ -176,7 +184,7 @@ export default function DiscountCreate() {
                                     <tr className="">
                                         <td className="">
                                             <label
-                                                className="normal-font float-end"
+                                                className="normal-font"
                                                 style={{marginRight: 15}}
                                             >
                                                 Mức giảm giá (%)<span style={{color: "red"}}>*</span>
@@ -196,7 +204,7 @@ export default function DiscountCreate() {
                                     <tr className="">
                                         <td className="">
                                             <label
-                                                className="normal-font float-end"
+                                                className="normal-font "
                                                 htmlFor="img"
                                                 style={{marginRight: 15}}
                                             >
@@ -222,7 +230,9 @@ export default function DiscountCreate() {
                                                 }}>
                                                     Chọn hình ảnh
                                                 </label></p>
-
+                                            {!selectedFile && (
+                                                <span className={"mt-2 text-danger"} >Chưa có hình ảnh được chọn</span>
+                                            )}
                                             {selectedFile && (
                                                 <img
                                                     className={"mt-2"}
@@ -234,7 +244,7 @@ export default function DiscountCreate() {
                                     </tr>
                                     <tr className="">
                                         <td className="align-top">
-                                            <div className="float-end">
+                                            <div className="">
                                                 <label
                                                     className="normal-font align-top"
                                                     htmlFor="detail"
@@ -263,10 +273,10 @@ export default function DiscountCreate() {
                                             }}
                                                     className="btn btn-secondary float-end"
                                                     style={{
-                                                        width: 95,
+                                                        width: "20%",
                                                         background: "black",
                                                         color: "white",
-                                                        marginLeft: 7
+                                                        marginLeft: "3%"
                                                     }}
                                             >
                                                 Quay lại
