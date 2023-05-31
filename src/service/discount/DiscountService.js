@@ -30,11 +30,11 @@ export const save = async (discount) => {
 export const remove = async (id) => {
     try {
         await axios.delete(`http://localhost:8080/api/discount/${id}`)
-        alert("Xóa khách hàng thành công!!")
     } catch (e) {
         console.log(e)
     }
 }
+
 export const findByIdDiscount=async (id)=>{
     try {
         const result=await axios.get(`http://localhost:8080/api/public/discount/`+id)
@@ -43,3 +43,12 @@ export const findByIdDiscount=async (id)=>{
         console.log(e)
     }
 }
+
+export const createDiscount=async (discount)=>{
+    return await axios.post('http://localhost:8080/discount/create',{...discount})
+}
+export const findDiscountById=async (id)=>{
+    return (await axios.get(`http://localhost:8080/discount/${id}`)).data
+}
+export const updateDiscount=async (discount)=>{
+    return await axios.put(`http://localhost:8080/discount/update/${discount.id}`,{...discount})}

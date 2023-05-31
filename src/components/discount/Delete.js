@@ -7,7 +7,8 @@ function DiscountModalDelete(props) {
 
     const handleDelete = async (id) => {
         await discountService.remove(id)
-        toast("Xóa thành công!");
+        // debugger
+        toast.success("Xóa mã khuyến mãi thành công!");
         props.getShowList();
     };
 

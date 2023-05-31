@@ -1,10 +1,14 @@
 import {Link, NavLink, useNavigate} from "react-router-dom";
 import * as discountService from "../../service/discount/DiscountService"
 import DiscountModalDelete from "../discount/Delete";
+
 import {toast} from "react-toastify"
+
 import ReactPaginate from "react-paginate";
 import {Field, Form, Formik} from "formik";
 import React, {useEffect, useState} from "react";
+import "react-toastify/dist/ReactToastify.css"
+import {toast, ToastContainer} from "react-toastify";
 
 function DiscountList() {
     const [discountList, setDiscountList] = useState([]);
@@ -179,11 +183,22 @@ function DiscountList() {
                     </div>
                 </div>
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={1000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark" />
+
             <DiscountModalDelete
                 id={deleteId}
                 name={deleteName}
                 getShowList={() => {
-                    toast("Xóa thành công");
                     findAll();
                 }}
             />
