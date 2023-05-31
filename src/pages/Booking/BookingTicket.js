@@ -11,14 +11,12 @@ const BookingTicket = () => {
     const [listSelecting, setListSelecting] = useState([]);
 
     const handleDataShowTimeData = (film, showTime) => {
-        console.log({film, showTime});
         setData({film, showTime});
         setStep(2);
     };
 
     const handleBuyTicket = async (listSeat) => {
         setListSelecting(listSeat)
-        console.log(data);
         const res = await apiBookingTicket(listSeat);
         if (res.status === 200) {
             setStep(3);
