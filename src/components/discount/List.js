@@ -27,13 +27,15 @@ function DiscountList() {
     const handlePageClick = (data) => {
         setPage(+data.selected);
     }
+
+    const findAll = async () => {
+        const rs = await discountService.findByName("", page)
+        setDiscountList(rs.data.content)
+        setPageCount(rs.data.totalPages)
+        setSize(rs.data.size)
+    }
+
     useEffect(() => {
-        const findAll = async () => {
-            const rs = await discountService.findByName("", page)
-            setDiscountList(rs.data.content)
-            setPageCount(rs.data.totalPages)
-            setSize(rs.data.size)
-        }
         findAll()
     }, [page])
 
@@ -182,6 +184,7 @@ function DiscountList() {
                 name={deleteName}
                 getShowList={() => {
                     toast("Xóa thành công");
+                    findAll();
                 }}
             />
         </>
