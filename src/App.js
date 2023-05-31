@@ -1,13 +1,10 @@
-import './App.css';
-import {Route, Routes} from 'react-router-dom';
-import Home from "./pages/Home";
+import "./App.css";
+import {Routes, Route} from "react-router-dom";
 import CommonLayout from "./layout/CommonLayout";
-import Login from "./pages/Login";
-import {ListShowRoom} from "./components/show_room/ListShowRoom";
+import Home from "./pages/Home";
 import React from "react";
+import {ListShowRoom} from "./components/show_room/ListShowRoom";
 import DetailShowRoom from "./components/show_room/DetailShowRoom";
-
-
 
 function App() {
     return (
@@ -17,9 +14,8 @@ function App() {
                 <Route path='/admin/showroom/list' element={<ListShowRoom/>}/>
                 <Route path='/admin/showroom/detail/:id' element={<DetailShowRoom/>}/>
             </Route>
-            <Route path="/login" element={<Login/>}/>
         </Routes>
-    )
-};
+    );
+}
 
 export default App;

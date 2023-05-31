@@ -1,4 +1,4 @@
-import {apiGetListSeat} from '../../service/SeatService';
+import {apiGetListSeat, apiGetListSeatLanhNM} from '../../service/SeatService';
 
 import React, {useEffect, useState} from "react";
 import './show-room.css';
@@ -16,7 +16,7 @@ const seatRows = ['G', 'F', 'E', 'D', 'C', 'B', 'A'];
 
 const DetailShowRoom = () => {
 
-    const [allSeat, setAllSeat] = useState([]);
+    const [allSeat, setAllSeat] = useState(null);
     const [showRoom, setShowRoom] = useState(null);
     const [listStatus, setListStatus] = useState([]);
     const [listType, setListType] = useState([]);
@@ -28,7 +28,7 @@ const DetailShowRoom = () => {
     const token= localStorage.getItem("token")
 
     const fetchListPosition = async () => {
-        const res = await apiGetListSeat(param.id,token);
+        const res = await apiGetListSeatLanhNM(param.id,token);
         setAllSeat(res);
         console.log(res);
         const resShowRoom = await getShowRoom(param.id,token);
