@@ -11,6 +11,8 @@ import Home from "./pages/Home";
 import React from "react";
 import {CreateFilm} from "./components/film/CreateFilm";
 import List from "./components/film/List";
+import {TickBookingList} from "./components/customer/detail-customer/customer_ticket";
+import {CustomerPointHistory} from "./components/customer/detail-customer/customer_point_history";
 
 
 function App() {
@@ -23,12 +25,11 @@ function App() {
         <Route path="/confirm-email" element={<ConfirmEmail />} />
         <Route path="/reset-password" element={<ResetPassword />} />
           <Route path='/confirm-ticket' element={<ConfirmTicket/>}/>
+          <Route path='/ticket-customer' element={<TickBookingList />} ></Route>
+        <Route path='/ticket-customer/history' element={<CustomerPointHistory />} ></Route>
       </Route>
     </Routes>
 
   );
 }
-
-
-
 export default App;

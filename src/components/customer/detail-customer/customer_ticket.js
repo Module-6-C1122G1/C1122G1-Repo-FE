@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
 
 export function TickBookingList(effect, deps) {
-    const [ticketBooking, setTicketBooking] = useState([]);
+    const [ticketBooking, setTicketBooking] = useState(null);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(0);
@@ -67,11 +67,11 @@ export function TickBookingList(effect, deps) {
                             <img
                                 src="https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2022/05/hinh-avatar-doi-dep-2022-6-696x696.jpg?fit=700%2C20000&quality=95&ssl=1"
                                 className="rounded-circle"
-                                style={{width: 100}}
+                                style={{width: 100 , margin : `0 auto`}}
                                 height="100px"
                             />
                         </p>
-                        <p style={{fontSize: 14}} className="text-center mt-3">
+                        <p style={{fontSize: 25}} className="text-center mt-3">
                             {localStorage.getItem("username")}
                         </p>
                         <div className="mt-3 text-center">

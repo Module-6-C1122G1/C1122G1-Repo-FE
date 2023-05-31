@@ -11,6 +11,7 @@ export function CustomerPointHistory() {
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(0);
     let stt = page * size + 1;
+    const token = localStorage.getItem("token");
 
     const handlePageClick = (event) => {
         setPage(+event.selected);
@@ -19,7 +20,7 @@ export function CustomerPointHistory() {
     useEffect(() => {
         const fetchApi = async () => {
             try {
-                const result = await customerService.findAllTicketBookingPoint(page);
+                const result = await customerService.findAllTicketBookingPoint(page,token);
                 setPointHistory(result.data.content);
                 setPageCount(result.data.totalPages);
                 setSize(result.data.size)
@@ -32,7 +33,7 @@ export function CustomerPointHistory() {
     const handlePlusPoint = async () => {
         const dateStart = document.getElementById("start").value;
         const dateEnd = document.getElementById("end").value;
-        const result = await findAllPlusPoint(0,dateStart, dateEnd);
+        const result = await findAllPlusPoint(0,dateStart, dateEnd,token);
         console.log(result)
         setPointHistory(result.content);
     }
@@ -45,15 +46,15 @@ export function CustomerPointHistory() {
                         <h2 style={{fontSize: 24}} className="text-center mt-3">
                             Quản lý tài khoản
                         </h2>
-                        <p className="text-center">
+                        <p className="text-center flex-column">
                             <img
                                 src="https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2022/05/hinh-avatar-doi-dep-2022-6-696x696.jpg?fit=700%2C20000&quality=95&ssl=1"
                                 className="rounded-circle"
-                                style={{width: 100}}
+                                style={{width: 100 , margin : `0 auto`}}
                                 height="100px"
                             />
                         </p>
-                        <p style={{fontSize: 14}} className="text-center mt-3">
+                        <p style={{fontSize: 25}} className="text-center mt-3">
                             {localStorage.getItem("username")}
                         </p>
                         <div className="mt-3 text-center">
