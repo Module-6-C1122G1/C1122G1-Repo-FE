@@ -2,12 +2,12 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 
 import React from "react";
-import Discount from "./components/discount/List"
+import DiscountList from "./components/discount/ListDiscount"
 
 function App() {
   return (
     <Routes>
-                <Route path='/discount'element={<Discount/>}></Route>
+                <Route path='/discount'element={<DiscountList/>}></Route>
             
         </Routes>
 
