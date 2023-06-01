@@ -1,5 +1,5 @@
 import "./detail-discount.css"
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {findAllDiscount, findByIdDiscount} from "../../service/discount/DiscountService";
 import {useParams} from "react-router";
 
@@ -27,7 +27,7 @@ export function DetailDiscount() {
                     <br/>
                     <br/>
                     <div className="col-6" style={{display: "inline"}}>
-                        <div className="col-6 float-start ps-3">
+                        <div >
                             <p>
                                 <strong>Ngày bắt đầu:</strong> {discount.dateStart}
                             </p>
@@ -38,7 +38,7 @@ export function DetailDiscount() {
                                 <strong>Giảm giá vé :</strong>{discount.percentDiscount}%;
                             </p>
                         </div>
-                        <div className="col-3 float-start" style={{width:"50%",float:"left"}}>
+                        <div style={{width:"50%", marginLeft:"20%",marginBottom:"10px"}}>
                             <img
                                 className="box-shadow-card"
                                 style={{width: "100%", alignContent: "center"}}
@@ -48,12 +48,11 @@ export function DetailDiscount() {
                         </div>
                         <div>
                             <h4>Điều kiện áp dụng</h4>
-                            <ol>
+                            <ul>
                                 <li>Dành cho khách hàng thành viên</li>
                                 <li>Mỗi khách hàng mua tối đa 01 Combo 1/ Combo 2 U22 mỗi lần</li>
                                 <li>Trong mọi trường hợp ,quyết định của DN Cinema là quyết định cuối cùng</li>
-                                <li></li>
-                            </ol>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -114,7 +113,7 @@ export function DetailDiscount() {
                                 </select>
                             </div>
                         </div>
-                        <button className="btn btn-secondary">Mua vé</button>
+                        <button className=" btn-secondary">Mua vé</button>
                     </div>
                     <br/>
                     <h5>PHIM HOT THÁNG 5</h5>

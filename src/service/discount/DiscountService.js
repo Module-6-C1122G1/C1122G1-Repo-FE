@@ -31,6 +31,7 @@ export const remove = async (id) => {
         console.log(e)
     }
 }
+
 export const createDiscount = async (discount) => {
     return await axios.post('http://localhost:8080/discount/create', {...discount})
 }
@@ -48,3 +49,4 @@ export const findByIdDiscount = async (id) => {
         console.log(e)
     }
 }
+
