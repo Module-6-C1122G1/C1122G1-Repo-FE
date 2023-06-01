@@ -21,7 +21,6 @@ const SelectPosition = (props) => {
     const fetchListPosition = async () => {
         const res = await apiGetListSeat(filmData.showTime.idShowTime);
         setAllSeat(res);
-        console.log(res);
         const positionsByRow = orderSeatByRow(res);
         setAllSeatByRow(positionsByRow);
     };
@@ -54,7 +53,6 @@ const SelectPosition = (props) => {
     };
 
     const handleContinue = () => {
-        console.log(listSelecting, numberOfSeat);
         if (listSelecting.length !== numberOfSeat) {
             toast.error('Vui lòng chọn đúng số lượng ghế',
                 {autoClose: 3000});

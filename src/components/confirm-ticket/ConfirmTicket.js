@@ -1,77 +1,122 @@
-import "./ConfirmTicket.css";
+import "./ConfirmTicket.css"
 import Footer from "../common/footer/Footer";
 import Header from "../common/header/Header";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Field, Form, Formik} from "formik";
-import {checkDiscount, findByIdSeat, getCustomer, pay} from "../../service/TicketService";
+import {cancelSeat, checkDiscount, findByIdSeat, getCustomer, pay} from "../../service/TicketService";
+import {useNavigate} from "react-router";
+
+
+const formatTime = (time) => {
+    let minutes = Math.floor(time / 60)
+    let second = Math.floor(time - minutes * 60)
+    if (minutes < 10) {
+        minutes = "0" + minutes
+    }
+    if (second < 10) {
+        second = "0" + second
+    }
+    return minutes + ":" + second
+}
 
 export function ConfirmTicket(props) {
     const {filmData, listSelectingData} = props;
     const useName = localStorage.getItem("username");
+    const token = localStorage.getItem("token")
     const [seats, setSeat] = useState([]);
     const [price, setPrice] = useState(0);
     const [discounts, setDiscount] = useState({});
     const [customer, setCustomer] = useState({});
+    const [countDown, setCountDown] = useState(1000)
+    const timerId = useRef()
+    const navigate = useNavigate()
+
+
+    useEffect(() => {
+        timerId.current = setInterval(() => {
+            setCountDown(prevState => prevState - 1)
+        }, 1000)
+        return () => clearInterval(timerId.current)
+    }, [])
+
+
+    useEffect(() => {
+        if (countDown <= 0) {
+            clearInterval(timerId.current)
+            const cancels = async () => {
+                await cancelSeat(listSelectingData)
+            }
+            cancels();
+            navigate('/')
+        }
+    }, [countDown])
+
+
     useEffect(() => {
         const fetchApi = async () => {
-            const listSeat = [];
-            let prices = 0;
-            await listSelectingData.forEach((seat) => {
-                const result = findByIdSeat(seat);
-                if (result.typeSeat.idTypeSeat === 1) {
-                    prices += filmData.film.normalSeatPrice;
-                } else {
-                    prices += filmData.film.vipSeatPrice;
-                }
-                listSeat.push(findByIdSeat(seat));
-            });
-            const customers = await getCustomer(useName);
-            setCustomer(customers);
-            setPrice(prices);
-            setSeat(listSeat);
-        };
-        fetchApi();
-    }, []);
-    const handleDiscount = async () => {
-        const discount = document.getElementById("nameDiscount").value;
-        if (discount.trim !== null) {
-            const result = await checkDiscount();
-            const prices = result.percentDiscount * price / 100 + price;
-            setPrice(prices);
-            setDiscount(discount);
+            const result = await findByIdSeat(listSelectingData, filmData.film.idFilm, token)
+            const customers = await getCustomer(useName, token)
+            setCustomer(customers)
+            console.log(customers)
+            console.log(result.listSeats)
+            setSeat(result.listSeats)
+            setPrice(result.priceTicket)
         }
-    };
+        fetchApi();
+    }, [])
+
+
+    const handleDiscount = async () => {
+        const discount = await document.getElementById("nameDiscount").value;
+        if (discount.trim !== null) {
+            const result = await checkDiscount(discount, token);
+            console.log(result)
+            if (discounts.idDiscount==null){
+                if (result===undefined){
+                    document.getElementById('error').innerText='Mã giảm giá không tồn tại'
+                }else {
+                    const prices = -result.percentDiscount * price / 100 + price;
+                    setPrice(prices);
+                    setDiscount(result);
+                }
+            }
+            else {
+                document.getElementById('error').innerText='Bạn chỉ được áp dụng 1 mã giảm giá'
+            }
+        }
+    }
     return (
-        <>
-            <Header/>
+        customer && price && seats && <>
+            {/*<Header/>*/}
             <Formik
                 initialValues={{
                     idCustomer: customer.idCustomer,
                     idFilm: filmData.film.idFilm,
-                    listSeat: seats,
-                    discount: discounts.idDiscount,
+                    listSeat: listSelectingData,
+                    idDiscount: null,
                     price: price
                 }}
                 onSubmit={(values) => {
+
+                    let price = +document.getElementById('ok').innerText;
+                    let dis = +document.getElementById('dis').value;
+                    debugger
+                    console.log(values)
+                    debugger
                     const save = async () => {
-                        await pay(values);
-                        alert("ok");
-                    };
+                        window.location.href = await pay({...values, price: price, idDiscount: dis}, token)
+                    }
                     save();
                 }}
             >
                 <Form>
-                    <Field type="hidden" disable name='idCustomer'/>
-                    <Field type="hidden" disable name='idFilm'/>
-                    <Field type="hidden" disable name='discount'/>
-                    <Field type="hidden" disable name='price'/>
-                    {seats.map((seat, index) => (
-                        <Field type="hidden" as="checkbox" key={index} name="listSeat" value={seat}/>
-                    ))}
+                    <input type="hidden" value={discounts} id="dis"/>
                     <div className="container">
                         <div className="row">
                             <div className="col-md-9" style={{background: "#f26b38", height: "auto"}}>
-                                <h1 style={{color: "white"}}>Vui lòng thanh toán</h1>
+                                <h1 style={{color: "white"}}>Vui lòng thanh toán
+                                    <span style={{float: "right"}}>{formatTime(countDown)}</span>
+                                </h1>
                                 <table className="table" style={{background: "white"}}>
                                     <tbody>
                                     <tr>
@@ -92,8 +137,8 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
-                                                value={customer.name}
                                                 disabled
+                                                value={customer.nameCustomer}
                                                 style={{width: "40%", height: 40}}
                                             />
                                         </td>
@@ -103,6 +148,7 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
+                                                disabled
                                                 value={customer.email}
                                                 style={{width: "40%"}}
                                             />
@@ -112,6 +158,7 @@ export function ConfirmTicket(props) {
                                         <td>Số điện thoại</td>
                                         <td>
                                             <input
+                                                disabled
                                                 type="text"
                                                 value={customer.phone}
                                                 style={{width: "40%"}}
@@ -129,9 +176,14 @@ export function ConfirmTicket(props) {
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td></td>
+                                        <td><p id='error'></p></td>
+                                    </tr>
+                                    <tr>
                                         <td/>
                                         <td>
-                                            <button type="submit" onClick={() => handleDiscount} style={{width: "40%"}}>
+                                            <button type="button" onClick={() => handleDiscount()}
+                                                    style={{width: "40%"}}>
                                                 Áp dụng
                                             </button>
                                         </td>
@@ -148,7 +200,7 @@ export function ConfirmTicket(props) {
                                     <tr>
                                         <td/>
                                         <td>
-                                            <button type="submit" style={{width: "18%", marginRight: "4%"}}>
+                                            <button type="button" style={{width: "18%", marginRight: "4%"}}>
                                                 Quay lại
                                             </button>
                                             <button type="submit">Thanh toán</button>
@@ -193,7 +245,7 @@ export function ConfirmTicket(props) {
                                                         {/*  | #{sessionInfo.dayOfWeekLabel}, #{sessionInfo.showDate}*/}
                                                         <div className="dotted-line">
                                                             <b>Suất
-                                                                chiếu: &nbsp;</b>{filmData.showTime.showTime}&nbsp; | {filmData.showDate}
+                                                                chiếu: &nbsp;</b>{filmData.showTime.showTime}&nbsp; | {filmData.showTime.showDate}
                                                         </div>
                                                         <div className="dotted-line">
                                                             <b>Ghế: &nbsp;</b>
@@ -202,10 +254,8 @@ export function ConfirmTicket(props) {
                                                                 ng-seat-label="seatLabel"
                                                                 className="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty"
                                                             >
-                                                                {seats.map((seat) => (
-                                                                    <span
-                                                                        className="select-seat ng-binding">{seat} &nbsp; |</span>
-
+                                                                {seats.map((seat,index) => (
+                                                                    <span className="select-seat ng-binding"  >{seat} &nbsp; |</span>
                                                                 ))}
                                                                 {/* ngIf: items.length */}
                                                             </galaxy-summary-seats>
@@ -223,7 +273,9 @@ export function ConfirmTicket(props) {
                                                                 ng-loyayty-discount="loyaltyDiscount"
                                                                 className="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty"
                                                             >
-                                                                <span className="ng-binding">{price} VNĐ</span>
+                                                                <p><span className="ng-binding"
+                                                                         id="ok">{price}</span>
+                                                                    VNĐ</p>
                                                             </galaxy-summary-ticket>
                                                         </p>
                                                     </div>
@@ -261,7 +313,6 @@ export function ConfirmTicket(props) {
                     </div>
                 </Form>
             </Formik>
-            <Footer/>
         </>
-    );
+    )
 }

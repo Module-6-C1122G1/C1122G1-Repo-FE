@@ -1,286 +1,238 @@
-import React from "react";
 
+import React, {useEffect, useState} from 'react';
+import {Form, Field, Formik} from 'formik';
+import {customerService} from "../../service/CustomerService";
+import {useNavigate, useParams} from "react-router";
+import Swal from "sweetalert2";
+import {NavLink} from "react-router-dom";
 
-export function UpdateCustomer() {
+function Update() {
+    let param = useParams()
+
+    let navigate = useNavigate();
+
+    const [customers, setCustomers] = useState();
+
+    useEffect(() => {
+        const fetchApi = async () => {
+            const res = await customerService.findById(param.id)
+            setCustomers(res)
+        }
+        fetchApi()
+    }, [])
+
+    if (!customers) {
+        return null;
+    }
     return (
-        <>
-            <div className="container">
+        <Formik
+            initialValues={{
+                idCustomer: customers?.idCustomer,
+                nameCustomer: customers?.nameCustomer,
+                dateOfBirth: customers?.dateOfBirth,
+                phone: customers?.phone,
+                address: customers?.address,
+                email: customers?.email,
+                identityCard: customers?.identityCard
+
+            }}
+            onSubmit={(values) => {
+                const edit = async () => {
+                    console.log(values);
+                    await customerService.editCustomer(values)
+                    navigate('/customer');
+                };
+                edit();
+            }
+            }
+        >
+
+
+            <>
                 <div className="row">
-                    <div className="col-3">
-                        <h2 style={{fontSize: 24}}>Quản lý tài khoản</h2>
-                        <p className="text-center">
-                            <img
-                                src="https://cdn.shopify.com/s/files/1/0517/9188/8542/products/neon-luffy.jpg?v=1665766157"
-                                className="rounded-circle avatar"
-                                style={{width: 200}}
-                                height="200px"
-                            />
-                        </p>
-                        <h3 style={{textAlign: "center"}}>Truong NN</h3>
-                        <div className="mt-3" style={{textAlign: "center"}}>
-                            <i className="bi bi-bookmark-star-fill"/>
-                            Điểm tích lũy : 120
+                    <div className="col-1"></div>
+                    <div className="col-10 fw-center">
+                        <div>
+                            <Form>
+                                <Field type="hidden" name="idCustomer"/>
+                                <div className="container mt-5">
+                                    <div>
+                                        <div style={{background: "orangered"}}>
+                                            <h2
+                                                className="d-flex justify-content-center"
+                                                style={{
+                                                    padding: 16,
+                                                    backgroundColor: "orangered",
+                                                    color: "#fff"
+                                                }}
+                                            >
+                                                THÔNG TIN THÀNH VIÊN
+                                            </h2>
+                                        </div>
+                                        <div className="mb-3 align-items-center">
+                                            <label htmlFor="name" className="col-form-label">
+                                                Họ &amp; Tên:
+                                            </label>
+                                            <Field
+                                                type="text"
+                                                name="nameCustomer"
+                                                id="name"
+                                                className="form-control"
+                                            />
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-md-2">
+                                                <div className="mb-3 align-items-center">
+                                                    <label htmlFor="birthday" className="col-form-label">
+                                                        Ngày sinh:
+                                                    </label>
+                                                    <Field
+                                                        type="date"
+                                                        name="dateOfBirth"
+                                                        id="birthday"
+                                                        className="form-control"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-4">
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="mb-3 align-items-center">
+                                                    <label htmlFor="phone" className="col-form-label">
+                                                        Số điện thoại:
+                                                    </label>
+                                                    <Field
+                                                        type="text"
+                                                        id="phone"
+                                                        name="phone"
+                                                        className="form-control"
+                                                        placeholder="Số điện thoại"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <div className="mb-3 align-items-center">
+                                                    <label htmlFor="email" className="col-form-label">
+                                                        Email:
+                                                    </label>
+                                                    <Field
+                                                        type="text"
+                                                        id="email"
+                                                        name="email"
+                                                        className="form-control"
+                                                        placeholder="Email"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="mb-3 align-items-center">
+                                                    <label htmlFor="cmnd" className="col-form-label">
+                                                        Số CMND:
+                                                    </label>
+                                                    <Field
+                                                        type="text"
+                                                        id="cmnd"
+                                                        name="identityCard"
+                                                        className="form-control"
+                                                        placeholder="Chứng minh nhân dân"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="mb-3 align-items-center">
+                                            <label htmlFor="address" className="col-form-label">
+                                                Địa chỉ:
+                                            </label>
+                                            <Field
+                                                type="text"
+                                                id="address"
+                                                name="address"
+                                                className="form-control"
+                                                placeholder="Địa chỉ"
+                                            />
+                                            <div className="mt-3">
+
+                                                <button type="submit" className="btn btn-outline-light"
+                                                        style={{background: "orangered"}}>Lưu lại
+                                                </button>
+
+                                                <NavLink to={'/customer'}>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-outline-secondary"
+                                                        data-bs-dismiss="modal">
+                                                        Quay lại
+                                                    </button>
+                                                </NavLink>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Form>
                         </div>
-                        <div className="mt-3" style={{textAlign: "center"}}>
-                            <button type="button" className="log-out btn btn-outline-danger">
-                                <i className="bi bi-arrow-right-circle"/>
-                                Đăng xuất
-                            </button>
-                        </div>
-                        <hr/>
-                        <div className="mt-2">
-                            <link href="" style={{fontSize: 14}}/>
-                            <i className="bi bi-person-bounding-box"/>
-                            Thông tin tài khoản
-                        </div>
-                        <hr/>
-                        <div className="mt-2">
-                            <link href="" style={{fontSize: 14}}/>
-                            <i className="bi bi-calculator"/>
-                            Lịch sử
-                        </div>
-                        <hr/>
-                        <div className="mt-2">
-                            <link href="" style={{fontSize: 14}}/>
-                            <i className="bi bi-ticket-detailed"/>
-                            Vé đã đặt
-                        </div>
-                        <hr/>
-                        <div className="mt-2">
-                            <link href="" style={{fontSize: 14}}/>
-                            <i className="bi bi-ticket"/>
-                            Vé đã hủy
-                        </div>
-                    </div>
-                    <div className=" container mx-auto my-5 col-9">
-                        <div className="border-form">
-                            <h5 style={{textAlign: "center"}}>Thông tin đăng nhập</h5>
-                            <br/>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Thẻ thành viên:{" "}
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input
-                                        type="text"
-                                        style={{width: "100%"}}
-                                        disabled=""
-                                        defaultValue="TV00001"
+                        <div className="row container-fluid mt-5">
+                            <h2>Phim đang chiếu</h2>
+                            <div className="col-md-3">
+                                <div className="card" style={{width: "18rem"}}>
+                                    <img
+                                        src="https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/3/5/350x495_1.png"
+                                        className="card-img-top"
+                                        alt="..."
                                     />
+                                    <div className="card-body">
+                                        <p className="card-text">GUARDIANS OF THE GALAXY VOL.3</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Tài khoản:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input
-                                        type="text"
-                                        style={{width: "100%"}}
-                                        disabled=""
-                                        defaultValue="TruongNN"
+                            <div className="col-md-3">
+                                <div className="card" style={{width: "18rem"}}>
+                                    <img
+                                        src="https://cdn.galaxycine.vn/media/2023/4/27/300x450_1682565518580.jpg"
+                                        className="card-img-top"
+                                        alt="..."
                                     />
+                                    <div className="card-body">
+                                        <p className="card-text">CON NHÓT MÓT CHỒNG</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Mật khẩu cũ <span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input type="password" style={{width: "100%"}}/>
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Mật khẩu mới <span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input type="password" style={{width: "100%"}}/>
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Xác nhận mật khẩu mới <span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input type="password" style={{width: "100%"}}/>
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <input type="hidden"/>
-                                </div>
-                                <div className="col-4">
-                                    <button
-                                        type="submit"
-                                        className="btn btn-primary"
-                                        style={{background: "#f26b38"}}
-                                    >
-                                        Đổi mật khẩu
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <br/>
-                        <div className="border-form">
-                            <h5 style={{textAlign: "center"}}>Thông tin tài khoản</h5>
-                            <br/>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Họ tên <span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input
-                                        type="text"
-                                        style={{width: "100%"}}
-                                        defaultValue="Ngô Ngọc Trường"
+                            <div className="col-md-3">
+                                <div className="card" style={{width: "18rem"}}>
+                                    <img
+                                        src="https://cdn.galaxycine.vn/media/2023/4/17/300wx450h_1681703428813.jpg"
+                                        className="card-img-top"
+                                        alt="..."
                                     />
+                                    <div className="card-body">
+                                        <p className="card-text">LẬT MẶT 6: TẤM VÉ ĐỊNH MỆNH</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Ngày sinh <span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input style={{width: "100%"}} defaultValue="10/09/1998"/>
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Giới tính <span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-2">
-                                    <input
-                                        type="radio"
-                                        id="nam"
-                                        name="fav_language"
-                                        defaultValue="HTML"
+                            <div className="col-md-3">
+                                <div className="card" style={{width: "18rem"}}>
+                                    <img
+                                        src="https://cdn.galaxycine.vn/media/2023/4/28/300_1682666851796.jpg"
+                                        className="card-img-top"
+                                        alt="..."
                                     />
-                                    &nbsp; <label htmlFor="nam">Nam</label>
-                                </div>
-                                <div className="col-2">
-                                    <input
-                                        type="radio"
-                                        id="nữ"
-                                        name="fav_language"
-                                        defaultValue="HTML"
-                                    />
-                                    &nbsp; <label htmlFor="nữ">Nữ</label>
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Email <span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input
-                                        type="type"
-                                        style={{width: "100%"}}
-                                        defaultValue="ngongoctruong1111ts@gmail.com"
-                                    />
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        CMND <span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input
-                                        type="type"
-                                        style={{width: "100%"}}
-                                        defaultValue={197366689}
-                                    />
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label
-                                        className="fw-bold"
-                                        htmlFor="address"
-                                        style={{marginRight: "2%"}}
-                                    >
-                                        Địa chỉ<span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-            <textarea
-                name="address"
-                id="address"
-                rows={2}
-                cols={37}
-                style={{maxWidth: "100%"}}
-                defaultValue={
-                    "15/11 Bắc Đẩu, Q.Hải Châu, TP.Đà Nẵng\n            "
-                }
-            />
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Số điện thoại <span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input
-                                        type="type"
-                                        style={{width: "100%"}}
-                                        defaultValue={378730129}
-                                    />
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <label className="fw-bold" style={{marginRight: "2%"}}>
-                                        Hình ảnh <span className="color-span">(*)</span>:
-                                    </label>
-                                </div>
-                                <div className="col-4">
-                                    <input
-                                        type="type"
-                                        style={{width: "100%"}}
-                                        defaultValue="https://cdn.shopify.com/s/files/1/0517/9188/8542/products/neon-luffy.jpg?v=1665766157"
-                                    />
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "2%"}}>
-                                <div className="col-4" style={{textAlign: "right"}}>
-                                    <input type="hidden"/>
-                                </div>
-                                <div className="col-4">
-                                    <button
-                                        type="submit"
-                                        className="btn btn-primary"
-                                        style={{background: "#f26b38"}}
-                                    >
-                                        Cập nhật
-                                    </button>
+                                    <div className="card-body">
+                                        <p className="card-text">SISU</p>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
-    )
+
+            </>
+        </Formik>
+    );
 }
+
+
+export default Update;
+
