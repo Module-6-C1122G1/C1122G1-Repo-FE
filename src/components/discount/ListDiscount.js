@@ -1,63 +1,248 @@
-import { useEffect, useState } from "react"
+import {Link, NavLink, useNavigate} from "react-router-dom";
 import * as discountService from "../../service/discount/DiscountService"
+import DiscountModalDelete from "./DeleteDiscount";
+import ReactPaginate from "react-paginate";
+import {Field, Form, Formik} from "formik";
+import React, {useEffect, useState} from "react";
+import "react-toastify/dist/ReactToastify.css"
+import {toast, ToastContainer} from "react-toastify";
 
-const DiscountList = () => {
-    const [discounts, setDiscount] = useState([])
-    const discountList = async () => {
-        const result = await discountService.findAll();
-        setDiscount(result)
+function DiscountList() {
+    const [discountList, setDiscountList] = useState([]);
+    const [deleteId, setDeleteId] = useState(0)
+    const [deleteName, setDeleteName] = useState("")
+    const navigate = useNavigate();
+    const [pageCount, setPageCount] = useState(0)
+    const [page, setPage] = useState(0)
+    const [size, setSize] = useState(0)
+    let stt = page * size + 1;
+    const [showMessage, setShowMessage] = useState(false)
+    const [firstRecord, setFirstRecord] = useState(1);
+    const [lastRecord, setLastRecord] = useState(0);
+    const [totalRecords, setTotalRecords] = useState(0);
+
+    const getPropsDeleteDiscount = (id, name) => {
+        setDeleteId(id);
+        setDeleteName(name);
     }
+
+    function handleUpdate(id) {
+        navigate(`/discount-edit/${id}`)
+    }
+
+    const handlePageClick = (data) => {
+        setPage(data.selected);
+    };
+
+    const findAll = async () => {
+        const rs = await discountService.findByName("", page)
+        setDiscountList(rs.data.content)
+        setPageCount(rs.data.totalPages)
+        setSize(rs.data.size)
+        setTotalRecords(rs.data.totalElements);
+
+        const first = page * size + 1;
+        const last = (page + 1) * size;
+        setFirstRecord(first);
+        setLastRecord(Math.min(last, rs.data.totalElements));
+
+    }
+
     useEffect(() => {
-        discountList();
-    }, [])
+        findAll()
+    }, [page])
 
 
     return (
-        <>
-            <div>
-                <div class="row mx-0 ">
-                    <div class="event">
-                        <div className="row mx-0 ">
-                            <div style={{ backgroundColor: "#f26b38" }}>
-                                <h3 style={{ color: "white" }}>Khuyến Mãi -Sự Kiện</h3>
+        discountList && <>
+            <div className="row mx-0">
+                <div className="container mx-auto my-5 col-10">
+                    <div style={{boxShadow: "1px 3px 10px 5px rgba(0, 0, 0, 0.2)"}}>
+                        <div style={{marginBottom: 20}}>
+                            <h2
+                                className="d-flex justify-content-center"
+                                style={{padding: 16, backgroundColor: "#f26b38", color: "#fff"}}
+                            >
+                                DANH SÁCH KHUYẾN MÃI
+                            </h2>
+
+                        </div>
+                        <div className="row">
+                            <div className="col-md-4">
+                                <button
+                                    style={{marginLeft: 85}}
+                                    className="btn btn-outline-primary"
+                                >
+                                    <i className="bi bi-plus-circle"/> Thêm mới khuyến mãi
+                                </button>
+                            </div>
+                            <div className="row col-md-8">
+                                <Formik initialValues={{
+                                    name: ''
+                                }}
+                                        onSubmit={(value) => {
+                                            const search = async () => {
+                                                const rs = await discountService.findByName(value.name, 0)
+                                                if (rs.data.content.length === 0) {
+                                                    setShowMessage(true);
+                                                } else {
+                                                    setShowMessage(false);
+                                                    setDiscountList(rs.data.content);
+                                                    setPageCount(rs.data.totalPages);
+                                                }
+                                            }
+                                            search();
+                                        }}
+                                >
+                                    <Form>
+                                        <div className="form-group float-end w-75" style={{
+                                            paddingLeft: 80
+                                        }}>
+                                            <i className="ti-search ti-search1"/>
+                                            <Field type="text"
+                                                   className="form-control d-inline float-start me-3 rounded-pill"
+                                                   style={{
+                                                       width: 250,
+                                                       paddingLeft: 35
+                                                   }} name="name" aria-describedby="helpId" placeholder="Tìm kiếm..."/>
+                                            <button type="submit"
+                                                    className="btn btn-secondary float-start rounded-pill">Tìm kiếm
+                                            </button>
+                                        </div>
+                                    </Form>
+                                </Formik>
                             </div>
                         </div>
-                        <div class="row mx-0 ps-5">
-                            {
-                                discounts.map((discount) => (
-                                    <div className="col-md-4 container" style={{ paddingTop: 20 }}>
-                                        <div
-                                            className="card"
-                                            style={{ width: 400, backgroundColor: "rgb(0 0 0)" }}
-                                        >
-                                            <a href="detailmovie.html">
-                                                <img
-                                                    style={{ height: 500 }}
-                                                    src={discount.imageDiscount}
-                                                    className="image"
-                                                />
-                                                <div className="readmore">
-                                                    <p style={{ color: "white" }}>
-                                                        <b>{discount.nameDiscount}</b>
-                                                        <p>"Ngày bắt đầu:"{discount.dateStart}</p>
-                                                        <p>Ngày kết thúc:"{discount.dateEnd}</p>
-                                                        <p>Giảm giá:{discount.percentDiscount}</p>
-                                                    </p>
-                                                    <div className="text" style={{ marginTop: 200 }}>
-                                                        Chi tiết
-                                                    </div>
+                        <div style={{marginTop: 20}}>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div>
+                                        {showMessage && (
+                                            <div className="d-flex justify-content-center">
+                                                <span id="empty">Không tìm thấy tên khuyến mãi</span>
+                                                <div>
+                                                    <button
+                                                        className="btn btn-outline-primary ms-3"
+                                                        onClick={() => setShowMessage(false)}
+                                                    >
+                                                        Trở về danh sách khuyến mãi
+                                                    </button>
                                                 </div>
-                                            </a>
-                                        </div>
+                                            </div>
+                                        )}
                                     </div>
-                                ))}
+                                    <div className="d-flex justify-content-center">
+
+                                        {!showMessage && discountList.length > 0 && (
+                                            <table
+                                                className="table table-striped table-hover"
+                                            >
+                                                <thead>
+                                                <tr>
+                                                    <th style={{width: "2%"}} className="text-center">STT</th>
+                                                    <th style={{width: "15%"}} className="text-center">Khuyến mãi</th>
+                                                    <th className="text-center">Hình ảnh</th>
+                                                    <th style={{width: "10%"}} className="text-center">Ngày bắt đầu</th>
+                                                    <th style={{width: "10%"}} className="text-center">Ngày kết thúc
+                                                    </th>
+                                                    <th style={{width: "25%"}} className="text-center">Nội dung</th>
+                                                    <th className="text-center">Mức ưu đãi (%)</th>
+                                                    <th className="text-center">Sửa</th>
+                                                    <th className="text-center">Xoá</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {
+                                                    discountList.map((discount, index) => {
+                                                        return (
+                                                            <tr key={index}>
+                                                                <td scope="row" className="text-center">{stt++}</td>
+                                                                <td>{discount.nameDiscount}</td>
+                                                                <td>{discount.imageDiscount}</td>
+                                                                <td className="text-center">{discount.dateStart}</td>
+                                                                <td className="text-center">{discount.dateEnd}</td>
+                                                                <td>{discount.describeDiscount}</td>
+                                                                <td className="text-center">{discount.percentDiscount}</td>
+                                                                <td>
+                                                                    <div className="d-flex justify-content-center">
+                                                                        <button type="button"
+                                                                                className="btn btn-outline-warning">
+                                                                            <i className="bi bi-pencil"/>
+                                                                        </button>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div className="d-flex justify-content-center">
+                                                                        <button
+                                                                            type="button"
+                                                                            data-bs-toggle="modal"
+                                                                            className="btn btn-outline-danger"
+                                                                            data-bs-target="#exampleModal"
+                                                                            onClick={() => getPropsDeleteDiscount(discount.idDiscount, discount.nameDiscount)}
+                                                                        >
+                                                                            <i className="bi bi-trash"/>
+                                                                        </button>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })
+                                                }
+                                                </tbody>
+                                            </table>
+                                        )}
+                                    </div>
+                                    <div className="d-flex justify-content-center">
+                                        <p>
+                                            Hiển thị <strong>{firstRecord} - {lastRecord} </strong> trong tổng
+                                            số <strong>{totalRecords}</strong> bản ghi
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-
+                        <div>
+                            <ReactPaginate
+                                previousLabel={'Trước'}
+                                nextLabel={'Sau'}
+                                pageCount={pageCount}
+                                onPageChange={handlePageClick}
+                                containerClassName="pagination"
+                                pageClassName="page-item"
+                                pageLinkClassName="page-link"
+                                previousClassName="page-item"
+                                previousLinkClassName="page-link"
+                                nextClassName="page-item"
+                                nextLinkClassName="page-link"
+                                activeClassName="active"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={1000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"/>
+
+            <DiscountModalDelete
+                id={deleteId}
+                name={deleteName}
+                getShowList={() => {
+                    findAll();
+                }}
+            />
         </>
-    )
+    );
 }
+
 export default DiscountList;
+
+

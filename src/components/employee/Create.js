@@ -1,27 +1,22 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import {storage} from "../../firebase";
-import * as Yup from "yup";
 import * as employeeService from "../../service/employee/employeeService"
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import {Oval} from "react-loader-spinner";
-import * as Swal from "sweetalert2";
-import {useNavigate} from "react-router";
+import * as Yup from 'yup';
 
 export function CreateEmployee() {
-    let navigate = useNavigate();
-    const [addEmployee, setAddEmployee] = useState([])
     const [selectedFile, setSelectedFile] = useState(null);
     const [firebaseImg, setImg] = useState(null);
-    const [progresspercent, setProgresspercent] = useState(0);
+    const [progress, setProgress] = useState(0);
 
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
+        console.log(file)
         if (file) {
             setSelectedFile(file);
         }
     };
-
     const handleSubmitAsync = async () => {
         return new Promise((resolve, reject) => {
             const file = selectedFile;
@@ -35,7 +30,7 @@ export function CreateEmployee() {
                     const progress = Math.round(
                         (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                     );
-                    setProgresspercent(progress);
+                    setProgress(progress);
                 },
                 (error) => {
                     reject(error);
@@ -51,20 +46,72 @@ export function CreateEmployee() {
     return (
         <>
             <Formik initialValues={{
-                imgEmployee: "",
-                nameAccount: "",
-                passwordAccount: "",
-                nameEmployee: "",
-                dateOfBirth: "",
-                gender: "",
-                email: "",
-                identityCard: "",
-                phone: "",
-                address: ""
+                imgEmployee: "", accountUser: {
+                    nameAccount: "", passwordAccount: ""
+                }, nameEmployee: "", dateOfBirth: "", gender: "",
+                email: "", identityCard: "", phone: "", address: ""
             }}
+                    validationSchema={Yup.object({
+                        accountUser: Yup.object().shape({
+                            nameAccount: Yup.string().required('Vui lòng nhập tên tài khoản')
+                                .test('check-username', 'Tài khoản đã tồn tại', async function (value) {
+                                    // debugger;
+                                    try {
+                                        if (!value) {
+                                            return true;
+                                        }
+                                        const isUsernameExists = await employeeService.checkUsernameExists(value);
+                                        console.log(isUsernameExists)
+                                        return !isUsernameExists;
+                                    } catch (error) {
+                                        console.log(error);
+                                    }
+
+                                }),
+                            passwordAccount: Yup.string().required('Vui lòng nhập mật khẩu tài khoản')
+                        }),
+                        nameEmployee: Yup.string().required('Vui lòng nhập tên nhân viên'),
+                        dateOfBirth: Yup.date().required('Vui lòng nhập ngày sinh'),
+                        gender: Yup.string().required('Vui lòng chọn giới tính'),
+                        email: Yup.string().required('Vui lòng nhập địa chỉ email')
+                            .test('check-email', 'Email đã tồn tại', async function (value) {
+                                if (!value) {
+                                    return true; // Không kiểm tra nếu không có giá trị
+                                }
+
+                                const isUsernameExists = await employeeService.checkEmailExists(value);
+                                return !isUsernameExists;
+                            }),
+                        identityCard: Yup.string().required('Vui lòng nhập số CMND')
+                            .test('check-identityCard', 'CCCD đã tồn tại', async function (value) {
+                                if (!value) {
+                                    return true; // Không kiểm tra nếu không có giá trị
+                                }
+
+                                const isUsernameExists = await employeeService.checkIdentityCardExists(value);
+                                return !isUsernameExists;
+                            }),
+                        phone: Yup.string().required('Vui lòng nhập số điện thoại')
+                            .test('check-phone', 'Số điện thoại đã tồn tại', async function (value) {
+                                if (!value) {
+                                    return true; // Không kiểm tra nếu không có giá trị
+                                }
+
+                                const isUsernameExists = await employeeService.checkPhoneExists(value);
+                                return !isUsernameExists;
+                            }),
+                        address: Yup.string().required('Vui lòng nhập địa chỉ'),
+                    })}
                     onSubmit={(values, {resetForm}) => {
                         const create = async () => {
-                            await employeeService.saveEmployee();
+                            const newValue = {
+                                ...values,
+                                imgEmployee: firebaseImg,
+                            };
+                            newValue.imgEmployee = await handleSubmitAsync();
+                            await employeeService.saveEmployee(newValue);
+                            console.log(newValue)
+                            resetForm();
                         }
                         create();
                     }}
@@ -80,14 +127,40 @@ export function CreateEmployee() {
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
                                             <label className="fw-bold" style={{marginRight: "2%"}}>
-                                                Ảnh <span className="warning">(*)</span>
+                                                Ảnh <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
                                         <div className="col-md-3 col-xs-12 col-sm-12 col-lg-3">
-                                            <Field name="imgEmployee" type="file" style={{width: "100%"}}/>
+                                            <Field
+                                                type="file"
+                                                onChange={(e) => handleFileSelect(e)}
+                                                id="imgEmployee"
+                                                name={"imgEmployee"}
+                                                className="form-control-plaintext d-none "
+                                            />
+                                            <p>
+                                                <label htmlFor="imgEmployee" style={{
+                                                    display: "inline-block",
+                                                    padding: "6px 12px",
+                                                    border: "1px solid",
+                                                    borderRadius: "4px"
+                                                }}>
+                                                    Chọn hình ảnh
+                                                </label></p>
+                                            {!selectedFile && (
+                                                <span className={"mt-2 text-danger"}>Chưa có hình ảnh được chọn</span>
+                                            )}
+                                            {selectedFile && (
+                                                <img
+                                                    className={"mt-2"}
+                                                    src={URL.createObjectURL(selectedFile)}
+                                                    style={{width: "100%"}}
+                                                />
+                                            )}
+
                                         </div>
                                         <ErrorMessage name="imgEmployee" component='span'
-                                                      className='form-err'/>
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -96,22 +169,19 @@ export function CreateEmployee() {
                                                 className="fw-bold"
                                                 style={{marginRight: "2%"}}
                                             >
-                                                Tài khoản{" "}
-                                                <span className="warning">
-                <span className="warning">(*)</span>
-              </span>
+                                                Tài khoản
+                                                <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
                                         <div className="col-8">
                                             <Field
                                                 type="text"
                                                 style={{width: "100%"}}
-                                                name="nameAccount"
-                                                id="nameAccount"
+                                                name='accountUser.nameAccount'
                                             />
                                         </div>
-                                        <ErrorMessage name="accountUser" component='span'
-                                                      className='form-err'/>
+                                        <ErrorMessage name="accountUser.nameAccount" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -121,49 +191,48 @@ export function CreateEmployee() {
                                                 style={{marginRight: "2%"}}
                                             >
                                                 Mật khẩu{" "}
-                                                <span className="warning">
-                <span className="warning">(*)</span>
-              </span>
+                                                <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
                                         <div className="col-8">
                                             <Field
                                                 type="password"
                                                 style={{width: "100%"}}
-                                                name="passwordAccount"
-                                                id="passwordAccount"
+                                                name='accountUser.passwordAccount'
                                             />
                                         </div>
-                                        <ErrorMessage name="password" component='span'
-                                                      className='form-err'/>
+                                        <ErrorMessage name="accountUser.passwordAccount" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
+                                    {/*<div className="row" style={{marginBottom: "2%"}}>*/}
+                                    {/*    <div className="col-3" style={{textAlign: "right"}}>*/}
+                                    {/*        <label*/}
+                                    {/*            htmlFor="accountUser.againPasswordAccount"*/}
+                                    {/*            className="fw-bold"*/}
+                                    {/*            style={{marginRight: "2%"}}*/}
+                                    {/*        >*/}
+                                    {/*            Nhập lại mật khẩu <span className="warning">(*)</span>*/}
+                                    {/*        </label>*/}
+                                    {/*    </div>*/}
+                                    {/*    <div className="col-8">*/}
+                                    {/*        <input*/}
+                                    {/*            type="password"*/}
+                                    {/*            style={{width: "100%"}}*/}
+                                    {/*            id="accountUser.againPasswordAccount"*/}
+                                    {/*            name='accountUser.againPasswordAccount'*/}
+                                    {/*        />*/}
+                                    {/*    </div>*/}
+                                    {/*    <ErrorMessage name="accountUser.againPasswordAccount" component='span'*/}
+                                    {/*                  className='form-err text-center' style={{color: "red"}}/>*/}
+                                    {/*</div>*/}
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
                                             <label
-                                                htmlFor="againPassword"
+                                                htmlFor="nameEmployee"
                                                 className="fw-bold"
                                                 style={{marginRight: "2%"}}
                                             >
-                                                Nhập lại mật khẩu <span className="warning">(*)</span>
-                                            </label>
-                                        </div>
-                                        <div className="col-8">
-                                            <input
-                                                type="password"
-                                                style={{width: "100%"}}
-                                                name="againPassword"
-                                                id="againPassword"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="row" style={{marginBottom: "2%"}}>
-                                        <div className="col-3" style={{textAlign: "right"}}>
-                                            <label
-                                                htmlFor="name"
-                                                className="fw-bold"
-                                                style={{marginRight: "2%"}}
-                                            >
-                                                Họ tên <span className="warning">(*)</span>
+                                                Họ tên <span style={{color: "red"}}>(*)</span>
                                             </label>
 
                                         </div>
@@ -171,10 +240,12 @@ export function CreateEmployee() {
                                             <Field
                                                 type="text"
                                                 style={{width: "100%"}}
-                                                name="nameEmployee"
+                                                name='nameEmployee'
                                                 id="nameEmployee"
                                             />
                                         </div>
+                                        <ErrorMessage name="nameEmployee" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -183,7 +254,7 @@ export function CreateEmployee() {
                                                 className="fw-bold"
                                                 style={{marginRight: "2%"}}
                                             >
-                                                Ngày sinh <span className="warning">(*)</span>
+                                                Ngày sinh <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
                                         <div className="col-8">
@@ -194,23 +265,29 @@ export function CreateEmployee() {
                                                 id="dateOfBirth"
                                             />
                                         </div>
+                                        <ErrorMessage name="dateOfBirth" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
                                             <label className="fw-bold" style={{marginRight: "2%"}}>
-                                                Giới tính <span className="warning">(*)</span>
+                                                Giới tính <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
                                         <div className="col-8 row">
                                             <div className="col-3">
-                                                <Field type="radio" name="gender"/>
-                                                <span style={{marginRight: "5%"}}>Nam</span>
+                                                <Field type="radio" name="gender" value='Nam' id="inlineRadio1"
+                                                />
+                                                <label htmlFor='inlineRadio1' style={{marginRight: "5%"}}>Nam</label>
                                             </div>
                                             <div className="col-3">
-                                                <Field type="radio" name="gender"/>
-                                                <span style={{marginRight: "5%"}}>Nữ</span>
+                                                <Field type="radio" name="gender" value='Nữ' id="inlineRadio2"
+                                                />
+                                                <label htmlFor='inlineRadio2' style={{marginRight: "5%"}}>Nữ</label>
                                             </div>
                                         </div>
+                                        <ErrorMessage name="gender" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -219,7 +296,7 @@ export function CreateEmployee() {
                                                 className="fw-bold"
                                                 style={{marginRight: "2%"}}
                                             >
-                                                Email <span className="warning">(*)</span>
+                                                Email <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
                                         <div className="col-8">
@@ -230,7 +307,8 @@ export function CreateEmployee() {
                                                 id="email"
                                             />
                                         </div>
-                                        <div id="emailValid"/>
+                                        <ErrorMessage name="email" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -239,18 +317,19 @@ export function CreateEmployee() {
                                                 className="fw-bold"
                                                 style={{marginRight: "2%"}}
                                             >
-                                                CCCD <span className="warning">(*)</span>
+                                                CCCD <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
                                         <div className="col-8">
-                                            <input
+                                            <Field
                                                 type="number"
                                                 style={{width: "100%"}}
                                                 name="identityCard"
                                                 id="identityCard"
                                             />
                                         </div>
-                                        <div id="identityCardValid"/>
+                                        <ErrorMessage name="identityCard" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -259,7 +338,7 @@ export function CreateEmployee() {
                                                 className="fw-bold"
                                                 style={{marginRight: "2%"}}
                                             >
-                                                Số điện thoại <span className="warning">(*)</span>
+                                                Số điện thoại <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
                                         <div className="col-8">
@@ -270,7 +349,8 @@ export function CreateEmployee() {
                                                 id="phone"
                                             />
                                         </div>
-                                        <div id="phoneNumberValid"/>
+                                        <ErrorMessage name="phone" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -279,7 +359,7 @@ export function CreateEmployee() {
                                                 className="fw-bold"
                                                 style={{marginRight: "2%"}}
                                             >
-                                                Địa chỉ <span className="warning">(*)</span>
+                                                Địa chỉ <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
                                         <div className="col-8">
@@ -287,20 +367,20 @@ export function CreateEmployee() {
                                                 name="address"
                                                 id="address"
                                                 style={{width: "100%"}}
-                                                defaultValue={""}
                                             />
                                         </div>
-                                        <div id="addressValid"/>
+                                        <ErrorMessage name="address" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <span className="warning">(*)</span>
+                                            <span style={{color: "red"}}>(*)</span>
                                             <span>: Bắt buộc nhập</span>
                                         </div>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <input type="hidden"/>
+                                            <Field type="hidden"/>
                                         </div>
                                         <div className="col-8">
                                             <button
