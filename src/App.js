@@ -14,10 +14,10 @@ import { ListTicket } from "./components/ticket/ListTicket";
 function App() {
   return (
     <Routes>
-      <Route path="" element={<CommonLayout />}>
+      {/* <Route path="" element={<CommonLayout />}> */}
         <Route path="/" element={<ListTicket />} />
         
-      </Route>
+      {/* </Route> */}
     </Routes>
 
   );

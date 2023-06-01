@@ -41,12 +41,15 @@ export const getCustomer = async (nameAcc) => {
  * Phương thức sử dụng để tìm kiếm kết hợp danh sách vé đặt
  * @author DatLVP
  */
-export const findAllTicket = async ({ page, search }) => {
+export const findAllTicket = async ({ page, search }, auth) => {
+    const headers =  {
+        'Authorization': 'Bearer ' + auth
+    }
     try {
         const result = await axios.get(
             `http://localhost:8080/api/employee/ticket/list?page=${
                 page ? page : 0
-            }&search=${search}`
+            }&search=${search}`, {headers}
         );
         return result.data;
     } catch (error) {
@@ -59,10 +62,16 @@ export const findAllTicket = async ({ page, search }) => {
  * @author DatLVP
  */
 
-export const cancelTicket = async (id) => {
+export const cancelTicket = async (id, auth) => {
+    const headers = {
+        'Authorization': 'Bearer ' + auth
+    };
+
     try {
         await axios.put(
-            `http://localhost:8080/api/employee/ticket/cancelTicket/${id}`
+            `http://localhost:8080/api/employee/ticket/cancelTicket/${id}`,
+            null,
+            { headers: headers }
         );
     } catch (error) {
         console.log(error);

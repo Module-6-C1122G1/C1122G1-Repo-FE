@@ -3,18 +3,24 @@ import "../ticket/ticket.css";
 import { Field, Form, Formik } from "formik";
 import ReactPaginate from "react-paginate";
 import { cancelTicket, findAllTicket } from "../../service/TicketService";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function ListTicket() {
   const [listTicket, setListTicket] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [ticketData, setTicketData] = useState({ id: 0, nameFilm: "" });
+  const [time, setTime] = useState(0);
   const [searchAndPage, setSearchAndPage] = useState({
     page: 0,
     search: "",
   });
+  const auth = localStorage.getItem("token");
+
+
   useEffect(() => {
     const list = async () => {
-      const result = await findAllTicket(searchAndPage);
+      const result = await findAllTicket(searchAndPage, auth);
       try {
         setListTicket(result.content);
         setPageCount(result.totalPages);
@@ -24,19 +30,14 @@ export function ListTicket() {
     };
 
     list();
-  }, [searchAndPage]);
+  }, [searchAndPage, auth]);
 
-  const handleCancleTicket = (id) => {
+  const handleCancleTicket = () => {
     const cancel = async () => {
-      await cancelTicket(ticketData.id);
-      alert("Huỷ vé thành công");
-      const result = await findAllTicket(searchAndPage);
-      try {
-        setListTicket(result.content);
-        setPageCount(result.totalPages);
-      } catch {
-        setListTicket([]);
-      }
+      console.log(auth);
+      await cancelTicket(ticketData.id, auth);
+      setListTicket((state) => state.filter(ticket => ticket.idTicket != ticketData.id))
+      toast.success("Huỷ vé thành công");
     };
     cancel();
   };
@@ -75,9 +76,10 @@ export function ListTicket() {
                     });
                   }}
                 >
-                  <Form className="d-flex align-items-center">
+                  <Form className="form d-flex align-items-center">
                     <Field
                       name="search"
+                      style={{ height: "37.6px", width: "300px" }}
                       className="form-control mx-2"
                       type="text"
                       placeholder="Tìm kiếm theo mã vé, tên phim..."
@@ -125,7 +127,7 @@ export function ListTicket() {
                               <th>Phim</th>
                               <th>Ngày chiếu</th>
                               <th>Giờ chiếu</th>
-                              <th />
+                              <th>Tình trạng</th> <th />
                               <th />
                             </tr>
                           </thead>
@@ -133,14 +135,20 @@ export function ListTicket() {
                             {listTicket.map((ticket, index) => (
                               <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{ticket.id_ticket}</td>
-                                <td>{ticket.id_customer}</td>
-                                <td>{ticket.name_customer}</td>
+                                <td>{ticket.idTicket}</td>
+                                <td>{ticket.idCustomer}</td>
+                                <td>{ticket.nameCustomer}</td>
+                                <td>{ticket.identityCard}</td>
                                 <td>{ticket.phone}</td>
-                                <td>{ticket.identity_card}</td>
-                                <td>{ticket.name_film}</td>
-                                <td>{ticket.show_date}</td>
-                                <td>{ticket.show_time}</td>
+                              
+                                <td>{ticket.nameFilm}</td>
+                                <td>{ticket.showDate}</td>
+                                <td>{ticket.showTime}</td>
+                                <td>
+                                  {ticket.statusTicket
+                                    ? "Đã nhận"
+                                    : "Chưa nhận"}
+                                </td>
                                 <td>
                                   <button
                                     className="btn btn-outline-success"
@@ -161,17 +169,39 @@ export function ListTicket() {
                                 </td>
                                 <td>
                                   <button
+                                    key={ticket.idTicket}
                                     type="button"
                                     title="Huỷ vé"
                                     className="btn btn-outline-danger"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#deleteCustomer"
-                                    onClick={() =>
+                                    onClick={() => {
+                                      const currentDate = new Date();
+                                      const dateString =
+                                        ticket.showDate + " " + ticket.showTime;
+                                      var parts = dateString.split(/[- :]/);
+                                      var year = parseInt(parts[0]);
+                                      var month = parseInt(parts[1]) - 1;
+                                      var day = parseInt(parts[2]);
+                                      var hour = parseInt(parts[3]);
+                                      var minute = parseInt(parts[4]);
+
+                                      var date = new Date(
+                                        year,
+                                        month,
+                                        day,
+                                        hour,
+                                        minute
+                                      );
+                                      var timeDiff = date - currentDate;
+                                      var hoursDiff =
+                                        timeDiff / (1000 * 60 * 60);
+                                      setTime(hoursDiff);
                                       setTicketData({
-                                        id: ticket.id_ticket,
-                                        nameFilm: ticket.name_film,
-                                      })
-                                    }
+                                        id: ticket.idTicket,
+                                        nameFilm: ticket.nameFilm,
+                                      });
+                                    }}
+                                    data-bs-target="#cancelTicket"
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -185,6 +215,7 @@ export function ListTicket() {
                                       <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                     </svg>
                                   </button>
+                                  <ToastContainer />
                                 </td>
                               </tr>
                             ))}
@@ -217,50 +248,81 @@ export function ListTicket() {
       {/*Modal xoá*/}
       <div
         className="modal fade"
-        id="deleteCustomer"
+        id="cancelTicket"
         tabIndex="{-1}"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Xóa Phim
-              </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              />
-            </div>
-            <div className="modal-body">
-              Bạn có chắc chắn muốn huỷ vé phim
-              <span className="text-danger fw-bold">
-                {" "}
-                {ticketData.nameFilm}{" "}
-              </span>{" "}
-              không?
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Hủy
-              </button>
-              <button
-                className="btn btn-danger"
-                data-bs-dismiss="modal"
-                onClick={() => handleCancleTicket(ticketData.id)}
-              >
-                Huỷ vé
-              </button>
+        {time > 1 ? (
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h1 className="modal-title fs-5" id="exampleModalLabel">
+                  Huỷ vé
+                </h1>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                />
+              </div>
+              <div className="modal-body">
+                <span className="float-start mx-1 ">
+                  Bạn có chắc chắn muốn huỷ vé phim
+                </span>{" "}
+                <span className="text-danger fw-bold f-flex float-start mx-1">
+                  {ticketData.nameFilm}
+                </span>
+                không?
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Hủy
+                </button>
+                <button
+                  className="btn btn-danger"
+                  data-bs-dismiss="modal"
+                  onClick={() => handleCancleTicket()}
+                >
+                  Huỷ vé
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Huỷ vé
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                />
+              </div>
+              <div className="modal-body">
+                Vé chỉ có thể huỷ trước 1 giờ phim chiếu
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Huỷ
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

@@ -92,7 +92,7 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
-                                                value={token.name}
+                                                value={customer.name}
                                                 disabled
                                                 style={{width: "40%", height: 40}}
                                             />
@@ -103,7 +103,7 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
-                                                value={token.email}
+                                                value={customer.email}
                                                 style={{width: "40%"}}
                                             />
                                         </td>
@@ -113,7 +113,7 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
-                                                value={token.phone}
+                                                value={customer.phone}
                                                 style={{width: "40%"}}
                                             />
                                         </td>

@@ -45,18 +45,23 @@ table th {
 .pagination .page-num:hover,
 .pagination .page-previous,
 .pagination .page-next {
-    background-color: #5AB1BB;
+    background-color: orangered;
     color: white;
 }
 
 .pagination a {
     text-decoration: none;
+    color: orangered;
 }
 
 .pagination .active {
-    background-color: #5AB1BB;
+    background-color: orangered;
 }
 
 .pagination .active .page-num {
     color: #fff;
+}
+.form {
+    box-shadow:none;
+    padding: 0px;
 }
