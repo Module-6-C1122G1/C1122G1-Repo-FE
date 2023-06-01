@@ -4,6 +4,7 @@ import Header from "../common/header/Header";
 import React, {useEffect, useState} from "react";
 import {Formik, Form, Field} from "formik";
 import {checkDiscount, findByIdSeat, getCustomer, pay} from "../../service/TicketService";
+import token from "../discount/List";
 
 export function ConfirmTicket(props) {
     const {filmData, listSelectingData} = props;

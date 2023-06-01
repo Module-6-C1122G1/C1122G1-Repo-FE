@@ -1,5 +1,5 @@
 import React from "react";
-
+import './customer.css'
 
 export function UpdateCustomer() {
     return (
