@@ -11,7 +11,7 @@ export const findByName = async(value,currentPage) => {
 
 export const findAllDiscount = async () => {
     try {
-        const result = await axios.get(`http://localhost:8080/api/discount/list`);
+        const result = await axios.get(`http://localhost:8080/api/public/discount/list`);
         return result.data
     } catch (e) {
         console.log(e)
@@ -34,6 +34,16 @@ export const remove = async (id) => {
         console.log(e)
     }
 }
+
+export const findByIdDiscount=async (id)=>{
+    try {
+        const result=await axios.get(`http://localhost:8080/api/public/discount/`+id)
+        return result.data
+    }catch (e) {
+        console.log(e)
+    }
+}
+
 export const createDiscount=async (discount)=>{
     return await axios.post('http://localhost:8080/discount/create',{...discount})
 }
