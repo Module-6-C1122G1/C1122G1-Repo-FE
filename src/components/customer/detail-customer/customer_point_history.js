@@ -4,8 +4,10 @@ import '../detail-customer/style.css';
 import ReactPaginate from "react-paginate";
 import {Link} from "react-router-dom";
 import {findAllPlusPoint} from "../../../service/TicketManagementService";
+import {useNavigate} from "react-router";
 
 export function CustomerPointHistory() {
+    const navigate = useNavigate();
     const [pointHistory, setPointHistory] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(0);
@@ -16,7 +18,10 @@ export function CustomerPointHistory() {
     const handlePageClick = (event) => {
         setPage(+event.selected);
     };
-
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate("/")
+    }
     useEffect(() => {
         const fetchApi = async () => {
             try {
@@ -34,8 +39,13 @@ export function CustomerPointHistory() {
         const dateStart = document.getElementById("start").value;
         const dateEnd = document.getElementById("end").value;
         const result = await findAllPlusPoint(0,dateStart, dateEnd,token);
-        console.log(result)
-        setPointHistory(result.content);
+        try {
+            setPointHistory(result.data.content);
+            console.log(result)
+        } catch (error){
+            console.log(error)
+            setPointHistory([]);
+        }
     }
     return (
         <>
@@ -47,11 +57,10 @@ export function CustomerPointHistory() {
                             Quản lý tài khoản
                         </h2>
                         <p className="text-center flex-column">
-                            <img
-                                src="https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2022/05/hinh-avatar-doi-dep-2022-6-696x696.jpg?fit=700%2C20000&quality=95&ssl=1"
-                                className="rounded-circle"
-                                style={{width: 100 , margin : `0 auto`}}
-                                height="100px"
+                            <img src={pointHistory[0]?.imgCustomer}
+                                 className="rounded-circle"
+                                 style={{width: 100 , margin : `0 auto`}}
+                                 height="100px"
                             />
                         </p>
                         <p style={{fontSize: 25}} className="text-center mt-3">
@@ -66,6 +75,7 @@ export function CustomerPointHistory() {
                                 type="button"
                                 className="log-out btn btn-outline-danger"
                                 style={{display: "block"}}
+                                onClick={handleLogout}
                             >
                                 <i className="bi bi-arrow-right-circle"/>
                                 Đăng xuất
@@ -135,55 +145,59 @@ export function CustomerPointHistory() {
                                             </div>
                                         </form>
                                     </div>
-                                    <div className="col-md-12">
-                                        <div className="mt-3" style={{width: "100%"}}>
-                                            <div
-                                                className=" table-responsive px-5 py-3 d-flex justify-content-center flex-column">
-                                                <table className="table table-striped table-hover">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>STT</th>
-                                                        <th>Ngày Tạo</th>
-                                                        <th>Tên Phim</th>
-                                                        <th>Tổng Điểm</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {
-                                                        pointHistory.map((pointHistorys, index) => (
-                                                            <tr key={index}>
-                                                                <td>{stt++}</td>
-                                                                <td>{pointHistorys?.dateBooking}</td>
-                                                                <td>{pointHistorys?.nameFilm}</td>
-                                                                <td>{pointHistorys?.pointCustomer}</td>
+                                    {
+                                        pointHistory.length === 0 ?
+                                            <h3 className={'text-danger text-center my-3'}>Không tìm thấy kết quả </h3> :
+                                            <div className="col-md-12">
+                                                <div className="mt-3" style={{width: "100%"}}>
+                                                    <div
+                                                        className=" table-responsive px-5 py-3 d-flex justify-content-center flex-column">
+                                                        <table className="table table-striped table-hover">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>STT</th>
+                                                                <th>Ngày Tạo</th>
+                                                                <th>Tên Phim</th>
+                                                                <th>Tổng Điểm</th>
                                                             </tr>
-                                                        ))
-                                                    }
-                                                    </tbody>
-                                                </table>
-                                                <div className="d-grid">
-                                                    <ReactPaginate
-                                                        breakLabel="..."
-                                                        nextLabel=">"
-                                                        onPageChange={handlePageClick}
-                                                        pageCount={pageCount}
-                                                        pageRangeDisplayed={2}
-                                                        marginPagesDisplayed={1}
-                                                        previousLabel="<"
-                                                        containerClassName="pagination"
-                                                        pageClassName="page-item"
-                                                        pageLinkClassName="page-link"
-                                                        nextClassName="page-item"
-                                                        nextLinkClassName="page-link"
-                                                        previousClassName="page-item"
-                                                        previousLinkClassName="page-link"
-                                                        activeClassName="active"
-                                                        disabledClassName="d-none"
-                                                    />
+                                                            </thead>
+                                                            <tbody>
+                                                            {
+                                                                pointHistory.map((pointHistorys, index) => (
+                                                                    <tr key={index}>
+                                                                        <td>{stt++}</td>
+                                                                        <td>{pointHistorys?.dateBooking}</td>
+                                                                        <td>{pointHistorys?.nameFilm}</td>
+                                                                        <td>{pointHistorys?.pointCustomer}</td>
+                                                                    </tr>
+                                                                ))
+                                                            }
+                                                            </tbody>
+                                                        </table>
+                                                        <div className="d-grid">
+                                                            <ReactPaginate
+                                                                breakLabel="..."
+                                                                nextLabel=">"
+                                                                onPageChange={handlePageClick}
+                                                                pageCount={pageCount}
+                                                                pageRangeDisplayed={2}
+                                                                marginPagesDisplayed={1}
+                                                                previousLabel="<"
+                                                                containerClassName="pagination"
+                                                                pageClassName="page-item"
+                                                                pageLinkClassName="page-link"
+                                                                nextClassName="page-item"
+                                                                nextLinkClassName="page-link"
+                                                                previousClassName="page-item"
+                                                                previousLinkClassName="page-link"
+                                                                activeClassName="active"
+                                                                disabledClassName="d-none"
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -33,7 +33,7 @@ export const findAllPlusPoint = async (page,dateStart,dateEnd,auth) => {
         'Authorization': 'Bearer ' + auth
     }
     try {
-        return (await axios.get(`http://localhost:8080/api/user/ticket-customer/plus-point?dateStart=${dateStart}&dateEnd=${dateEnd}&page=${page ? page : 0}`,{headers})).data;
+        return (await axios.get(`http://localhost:8080/api/user/ticket-customer/plus-point?dateStart=${dateStart}&dateEnd=${dateEnd}&page=${page ? page : 0}`,{headers}));
     } catch (error) {
         console.log(error)
     }
