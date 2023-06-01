@@ -1,9 +1,6 @@
 import {Link, NavLink, useNavigate} from "react-router-dom";
 import * as discountService from "../../service/discount/DiscountService"
-import DiscountModalDelete from "../discount/Delete";
-
-import {toast} from "react-toastify"
-
+import DiscountModalDelete from "./DeleteDiscount";
 import ReactPaginate from "react-paginate";
 import {Field, Form, Formik} from "formik";
 import React, {useEffect, useState} from "react";
