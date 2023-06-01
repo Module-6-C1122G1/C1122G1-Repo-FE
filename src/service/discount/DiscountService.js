@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export const findByName = async(value,currentPage) => {
+export const findByName = async (value, currentPage) => {
     try {
         return (await axios.get(`http://localhost:8080/api/discount/list?name=${value}&_page=${currentPage}`)).data
     } catch (error) {
@@ -35,20 +35,21 @@ export const remove = async (id) => {
     }
 }
 
-export const findByIdDiscount=async (id)=>{
+export const findByIdDiscount = async (id) => {
     try {
-        const result=await axios.get(`http://localhost:8080/api/public/discount/`+id)
+        const result = await axios.get(`http://localhost:8080/api/public/discount/` + id)
         return result.data
-    }catch (e) {
+    } catch (e) {
         console.log(e)
     }
 }
 
-export const createDiscount=async (discount)=>{
-    return await axios.post('http://localhost:8080/discount/create',{...discount})
+export const createDiscount = async (discount) => {
+    return await axios.post('http://localhost:8080/discount/create', {...discount})
 }
-export const findDiscountById=async (id)=>{
+export const findDiscountById = async (id) => {
     return (await axios.get(`http://localhost:8080/discount/${id}`)).data
 }
-export const updateDiscount=async (discount)=>{
-    return await axios.put(`http://localhost:8080/discount/update/${discount.id}`,{...discount})}
+export const updateDiscount = async (discount) => {
+    return await axios.put(`http://localhost:8080/discount/update/${discount.id}`, {...discount})
+}
