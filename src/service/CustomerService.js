@@ -1,30 +1,73 @@
 import axios from "axios";
 
+
 export const saveCustomer = async (customer) => {
     try {
-        await axios.post(`http://localhost:8080/api/user/create` , customer)
+        await axios.post(`http://localhost:8080/api/public/create`,{...customer})
     }catch (e){
         console.log(e)
     }
 }
+export const findAllCustomerType = async () =>{
+    try{
+        const result = await axios.get(`http://localhost:8080/api/user/type`)
+        return result.data
+    }catch (error) {
+        console.log(error)
+    }
+}
+
 export const editCustomer = async (id , customer) => {
     try {
-        await axios.post(`http://localhost:8080/api/user/${id}` , {...customer})
+        await axios.put(`http://localhost:8080/api/user/${id}`, {...customer})
     }catch (e){
         console.log(e)
     }
 }
 export const findById = async (id) => {
     try {
-        await axios.post(`http://localhost:8080/api/user/${id}`)
+        await axios.get(`http://localhost:8080/api/user/${id}`)
     }catch (e){
         console.log(e)
     }
 }
-export const findAllCustomerType = async () => {
+
+export const checkUsernameExists = async (nameAccount) => {
     try {
-        await axios.post(`http://localhost:8080/api/user/type`)
-    }catch (e){
-        console.log(e)
+        return (await axios.get(`http://localhost:8080/api/check-account/${nameAccount}`)).data;
+    } catch (error) {
+        console.error(error);
+        // Xử lý lỗi nếu cần thiết
+        throw new Error('Đã xảy ra lỗi khi kiểm tra tài khoản');
+    }
+};
+
+export const checkEmailExists= async (email) =>{
+    try {
+        return (await axios.get(`http://localhost:8080/api/check-email/${email}`)).data;
+    } catch (error) {
+        console.error(error);
+        // Xử lý lỗi nếu cần thiết
+        throw new Error('Đã xảy ra lỗi khi kiểm tra email');
     }
 }
+
+export const checkIdentityCardExists = async (identity) => {
+    try {
+        return (await axios.get(`http://localhost:8080/api/check-identity/${identity}`)).data;
+    } catch (error) {
+        console.error(error);
+        // Xử lý lỗi nếu cần thiết
+        throw new Error('Đã xảy ra lỗi khi kiểm tra CCCD');
+    }
+}
+export const checkPhoneExists = async (phone) => {
+    try {
+        return (await axios.get(`http://localhost:8080/api/check-phone/${phone}`)).data;
+    } catch (error) {
+        console.error(error);
+        // Xử lý lỗi nếu cần thiết
+        throw new Error('Đã xảy ra lỗi khi kiểm tra số điên thoại');
+    }
+}
+
