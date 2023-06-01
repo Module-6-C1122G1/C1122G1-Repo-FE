@@ -30,7 +30,7 @@ export function ListFilm() {
             }
         };
         listFilm();
-    }, [films]);
+    }, [searchAndPage]);
 
     const handleDelete = async () => {
         await FilmService.deleteFilm(films.idFilm);
@@ -46,7 +46,7 @@ export function ListFilm() {
 
     const handlePageClick = (event) => {
         console.log(event.selected)
-        setSearchAndPage((prev) => ({...prev, page: event.selected}));
+       setSearchAndPage((pre)=> ({pre, page: event.selected}))
     };
 
     const handleSearch = async (e) => {
@@ -155,7 +155,7 @@ export function ListFilm() {
                                                             <td>{film.typeFilm.nameTypeFilm}</td>
                                                             <td className="d-flex justify-content-center">
                                                                 <Link to={`/admin/film/edit/${film.idFilm}`}>
-                                                                    <button type="submit" className="btn btn-outline-warning me-3">
+                                                                    <button type="button" className="btn btn-outline-warning me-3">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                              width="16" height="16" fill="currentColor"
                                                                              className="bi bi-pencil"
@@ -184,7 +184,7 @@ export function ListFilm() {
                                                     }
                                                     </tbody>
                                                 </table>
-                                                <div className="d-grid">
+                                                <div className="d-flex justify-content-center">
                                                     <ReactPaginate
                                                         breakLabel="..."
                                                         nextLabel=">"
@@ -200,7 +200,6 @@ export function ListFilm() {
                                                     />
                                                 </div>
                                             </div>
-
                                         )}
                                     </div>
                                 </div>
