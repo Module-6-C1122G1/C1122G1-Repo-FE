@@ -15,6 +15,7 @@ export function ListShowRoom() {
     useEffect(() => {
         const list = async () => {
             const result = await findAll(searchAndPage, auth);
+            console.log(result)
             try {
                 setShowRoomList(result.content);
                 setPageCount(result.totalPages);
@@ -39,7 +40,6 @@ export function ListShowRoom() {
                                 DANH SÁCH PHÒNG CHIẾU
                             </h2>
                         </div>
-
                         <div style={{marginTop: 20}}>
                             <div className="row">
                                 <div className="col-md-12">
@@ -57,7 +57,7 @@ export function ListShowRoom() {
                                                             });
                                                         }}
                                                     >
-                                                        <Form className="d-flex" style={{marginLeft:'600px',marginBottom:'20px'}}>
+                                                        <Form className="d-flex" style={{margin: "auto"}}>
                                                             <Field
                                                                 name="search"
                                                                 style={{width: "30%"}}

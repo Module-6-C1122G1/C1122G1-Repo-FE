@@ -7,7 +7,6 @@ export const findAll = async ({page,search}, auth) => {
     try {
         const result = await axios.get(`http://localhost:8080/api/admin/showroom/list?page=${page?page:0}
         &search=${search}`, {headers})
-        console.log(result)
         return result.data
     }catch (e) {
         console.log(e)

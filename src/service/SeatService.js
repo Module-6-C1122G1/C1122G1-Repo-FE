@@ -6,15 +6,15 @@ export const apiGetListSeatLanhNM = async (id,auth) => {
         'Authorization': 'Bearer ' + auth
     }
     try {
-        const result = await axios.get(`http://localhost:8080/api/admin/seat/list/${id}`, {headers});
-        console.log(result.data)
+        const result = await axios.get(`http://localhost:8080/api/admin/seat/list/${id}`, {headers})
+        return result.data
     } catch (e) {
         console.log(e);
     }
 }
 
 export const apiGetListSeat = async (id) => {
-    try {
+        try {
         const result = await axios.get(`http://localhost:8080/api/public/seat/${id}`);
 
         return result.data;
@@ -22,3 +22,62 @@ export const apiGetListSeat = async (id) => {
         console.log(e);
     }
 };
+
+export const apiUpdateTypeSeatVip = async (seat,auth) => {
+    const headers = {
+        'Authorization': 'Bearer ' + auth
+    }
+    try {
+        console.log("http://localhost:8080/api/admin/seat/update_type_vip/" + seat);
+        const result = await axios.put("http://localhost:8080/api/admin/seat/update_type_vip/" + seat,null,{
+            headers
+        })
+        return result.data;
+    }catch (e) {
+        console.log(e)
+    }
+}
+
+export const apiUpdateTypeSeatNormal = async (seat,auth) => {
+    const headers = {
+        'Authorization': 'Bearer ' + auth
+    }
+    try {
+        console.log("http://localhost:8080/api/admin/seat/update-type-normal/" + seat)
+        const result = await axios.put("http://localhost:8080/api/admin/seat/update_type_normal/" + seat,null,{
+            headers
+        })
+        return result.data;
+    }catch (e) {
+        console.log(e)
+    }
+}
+
+
+// export const apiUpdateTypeSeatNormal = async (seat,auth) => {
+//     const config = {
+//         headers: {
+//             'Authorization': 'Bearer ' + auth
+//         }
+//     }
+//     try {
+//         const result = await axios.put('http://localhost:8080/api/admin/seat/update-type-normal/', seat,config)
+//         return result.data;
+//     }catch (e) {
+//         console.log(e)
+//     }
+// }
+//
+// export const apiUpdateTypeSeatVip = async (seat,auth) => {
+//     const config = {
+//         headers: {
+//             'Authorization': 'Bearer ' + auth
+//         }
+//     }
+//     try {
+//         const result = await axios.put('http://localhost:8080/api/admin/seat/update-type-vip/', seat,config)
+//         return result.data;
+//     }catch (e) {
+//         console.log(e)
+//     }
+// }
