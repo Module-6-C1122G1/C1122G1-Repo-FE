@@ -7,7 +7,8 @@ export const findAll = async () => {
         return result.data
     } catch (error) {
         console.log(error)
-
+    }
+}
 export const findByName = async (value, currentPage) => {
     const result = await (axios.get(`http://localhost:8080/api/discount/list?name=${value}&page=${currentPage}`))
     return result;
@@ -30,7 +31,7 @@ export const save = async (discount) => {
         console.log(e)
     }
 
-
+}
 
 export const remove = async (id) => {
     try {
