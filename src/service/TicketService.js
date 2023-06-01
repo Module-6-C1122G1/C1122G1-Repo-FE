@@ -43,9 +43,9 @@ export const getCustomer = async (nameAcc, auth) => {
     }
 
 }
-export const cancelSeat = async (list) => {
+export const cancelSeat = async (listId) => {
     try {
-        await axios.put(`http://localhost:8080/api/public/seat/resest_status`, list);
+        await axios.put(`http://localhost:8080/api/public/seat/reset_status`, listId);
     } catch (e) {
         console.log(e)
     }

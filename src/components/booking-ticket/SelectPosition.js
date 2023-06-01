@@ -63,7 +63,7 @@ const SelectPosition = (props) => {
     };
     const calTotalPrice = () => {
         const selectectSeat = allSeat.filter(seat => listSelecting.includes(seat.idSeat));
-        const priceArray = selectectSeat.map(seat => seat.typeSeat.idTypeSeat === 2 ? filmData.film.normalSeatPrice : filmData.film.vipSeatPrice);
+        const priceArray = selectectSeat.map(seat => seat.typeSeat.idTypeSeat === 1 ? filmData.film.normalSeatPrice : filmData.film.vipSeatPrice);
         return priceArray.reduce((a, b) => a + b, 0);
     };
 
