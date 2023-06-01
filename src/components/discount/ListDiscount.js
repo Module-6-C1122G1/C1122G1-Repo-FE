@@ -16,6 +16,10 @@ function DiscountList() {
     const [page, setPage] = useState(0)
     const [size, setSize] = useState(0)
     let stt = page * size + 1;
+    const [showMessage, setShowMessage] = useState(false)
+    const [firstRecord, setFirstRecord] = useState(1);
+    const [lastRecord, setLastRecord] = useState(0);
+    const [totalRecords, setTotalRecords] = useState(0);
 
     const getPropsDeleteDiscount = (id, name) => {
         setDeleteId(id);
@@ -25,15 +29,23 @@ function DiscountList() {
     function handleUpdate(id) {
         navigate(`/discount-edit/${id}`)
     }
+
     const handlePageClick = (data) => {
-        setPage(+data.selected);
-    }
+        setPage(data.selected);
+    };
 
     const findAll = async () => {
         const rs = await discountService.findByName("", page)
         setDiscountList(rs.data.content)
         setPageCount(rs.data.totalPages)
         setSize(rs.data.size)
+        setTotalRecords(rs.data.totalElements);
+
+        const first = page * size + 1;
+        const last = (page + 1) * size;
+        setFirstRecord(first);
+        setLastRecord(Math.min(last, rs.data.totalElements));
+
     }
 
     useEffect(() => {
@@ -52,8 +64,8 @@ function DiscountList() {
                                 style={{padding: 16, backgroundColor: "#f26b38", color: "#fff"}}
                             >
                                 DANH SÁCH KHUYẾN MÃI
-                                <p id="empty"></p>
                             </h2>
+
                         </div>
                         <div className="row">
                             <div className="col-md-4">
@@ -70,14 +82,14 @@ function DiscountList() {
                                 }}
                                         onSubmit={(value) => {
                                             const search = async () => {
-                                                const rs = await discountService.findByName(value.name,0)
-                                                if (rs === "") {
-                                                    document.getElementById("empty").innerHTML = `Không Tìm Thấy Tên ${value.name}`
+                                                const rs = await discountService.findByName(value.name, 0)
+                                                if (rs.data.content.length === 0) {
+                                                    setShowMessage(true);
                                                 } else {
-                                                    document.getElementById("empty").innerHTML = ``
+                                                    setShowMessage(false);
+                                                    setDiscountList(rs.data.content);
+                                                    setPageCount(rs.data.totalPages);
                                                 }
-                                                setDiscountList(rs.data.content)
-                                                setPageCount(rs.data.totalPages)
                                             }
                                             search();
                                         }}
@@ -104,59 +116,87 @@ function DiscountList() {
                         <div style={{marginTop: 20}}>
                             <div className="row">
                                 <div className="col-md-12">
+                                    <div>
+                                        {showMessage && (
+                                            <div className="d-flex justify-content-center">
+                                                <span id="empty">Không tìm thấy tên khuyến mãi</span>
+                                                <div>
+                                                    <button
+                                                        className="btn btn-outline-primary ms-3"
+                                                        onClick={() => setShowMessage(false)}
+                                                    >
+                                                        Trở về danh sách khuyến mãi
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                     <div className="d-flex justify-content-center">
-                                        <table
-                                            className="table table-striped table-hover"
-                                            style={discountList === '' ? {display: 'none'} : {}}
-                                        >
-                                            <thead>
-                                            <tr>
-                                                <th style={{width: "2%"}}>STT</th>
-                                                <th style={{width: "15%"}}>Khuyến mãi</th>
-                                                <th>Hình ảnh</th>
-                                                <th style={{width: "10%"}}>Ngày bắt đầu</th>
-                                                <th style={{width: "10%"}}>Ngày kết thúc</th>
-                                                <th style={{width: "25%"}}>Nội dung</th>
-                                                <th>Mức ưu đãi</th>
-                                                <th>Sửa</th>
-                                                <th>Xoá</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {
-                                                discountList.map((discount, index) => {
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td scope="row">{stt++}</td>
-                                                            <td>{discount.nameDiscount}</td>
-                                                            <td>{discount.imageDiscount}</td>
-                                                            <td>{discount.dateStart}</td>
-                                                            <td>{discount.dateEnd}</td>
-                                                            <td>{discount.describeDiscount}</td>
-                                                            <td>{discount.percentDiscount}</td>
-                                                            <td>
-                                                                <button type="button"
-                                                                        className="btn btn-outline-warning">
-                                                                    <i className="bi bi-pencil"/>
-                                                                </button>
-                                                            </td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    data-bs-toggle="modal"
-                                                                    className="btn btn-outline-danger"
-                                                                    data-bs-target="#exampleModal"
-                                                                    onClick={() => getPropsDeleteDiscount(discount.idDiscount, discount.nameDiscount)}
-                                                                >
-                                                                    <i className="bi bi-trash"/>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
-                                            </tbody>
-                                        </table>
+
+                                        {!showMessage && discountList.length > 0 && (
+                                            <table
+                                                className="table table-striped table-hover"
+                                            >
+                                                <thead>
+                                                <tr>
+                                                    <th style={{width: "2%"}} className="text-center">STT</th>
+                                                    <th style={{width: "15%"}} className="text-center">Khuyến mãi</th>
+                                                    <th className="text-center">Hình ảnh</th>
+                                                    <th style={{width: "10%"}} className="text-center">Ngày bắt đầu</th>
+                                                    <th style={{width: "10%"}} className="text-center">Ngày kết thúc
+                                                    </th>
+                                                    <th style={{width: "25%"}} className="text-center">Nội dung</th>
+                                                    <th className="text-center">Mức ưu đãi (%)</th>
+                                                    <th className="text-center">Sửa</th>
+                                                    <th className="text-center">Xoá</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {
+                                                    discountList.map((discount, index) => {
+                                                        return (
+                                                            <tr key={index}>
+                                                                <td scope="row" className="text-center">{stt++}</td>
+                                                                <td>{discount.nameDiscount}</td>
+                                                                <td>{discount.imageDiscount}</td>
+                                                                <td className="text-center">{discount.dateStart}</td>
+                                                                <td className="text-center">{discount.dateEnd}</td>
+                                                                <td>{discount.describeDiscount}</td>
+                                                                <td className="text-center">{discount.percentDiscount}</td>
+                                                                <td>
+                                                                    <div className="d-flex justify-content-center">
+                                                                        <button type="button"
+                                                                                className="btn btn-outline-warning">
+                                                                            <i className="bi bi-pencil"/>
+                                                                        </button>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div className="d-flex justify-content-center">
+                                                                        <button
+                                                                            type="button"
+                                                                            data-bs-toggle="modal"
+                                                                            className="btn btn-outline-danger"
+                                                                            data-bs-target="#exampleModal"
+                                                                            onClick={() => getPropsDeleteDiscount(discount.idDiscount, discount.nameDiscount)}
+                                                                        >
+                                                                            <i className="bi bi-trash"/>
+                                                                        </button>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })
+                                                }
+                                                </tbody>
+                                            </table>
+                                        )}
+                                    </div>
+                                    <div className="d-flex justify-content-center">
+                                        <p>
+                                            Hiển thị <strong>{firstRecord} - {lastRecord} </strong> trong tổng
+                                            số <strong>{totalRecords}</strong> bản ghi
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -170,10 +210,10 @@ function DiscountList() {
                                 containerClassName="pagination"
                                 pageClassName="page-item"
                                 pageLinkClassName="page-link"
-                                nextClassName="page-item"
-                                nextLinkClassName="page-link"
                                 previousClassName="page-item"
                                 previousLinkClassName="page-link"
+                                nextClassName="page-item"
+                                nextLinkClassName="page-link"
                                 activeClassName="active"
                             />
                         </div>
@@ -190,7 +230,7 @@ function DiscountList() {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover
-                theme="dark" />
+                theme="dark"/>
 
             <DiscountModalDelete
                 id={deleteId}
