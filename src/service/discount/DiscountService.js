@@ -35,10 +35,10 @@ export const remove = async (id) => {
     }
 }
 export const createDiscount=async (discount)=>{
-    return await axios.post('http://localhost:8080/discount/create',{...discount})
+    return await axios.post('http://localhost:8080/api/public/discount/create',{...discount})
 }
 export const findDiscountById=async (id)=>{
-    return (await axios.get(`http://localhost:8080/discount/${id}`)).data
+    return (await axios.get(`http://localhost:8080/api/public/discount/${id}`)).data
 }
 export const updateDiscount=async (discount)=>{
-    return await axios.put(`http://localhost:8080/discount/update/${discount.id}`,{...discount})}
+    return await axios.put(`http://localhost:8080/api/public/discount/update/${discount.id}`,{...discount})}
