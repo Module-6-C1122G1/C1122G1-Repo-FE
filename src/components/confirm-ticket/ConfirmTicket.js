@@ -57,7 +57,8 @@ export function ConfirmTicket(props) {
             const result = await findByIdSeat(listSelectingData, filmData.film.idFilm, token)
             const customers = await getCustomer(useName, token)
             setCustomer(customers)
-            console.log(result)
+            console.log(customers)
+            console.log(result.listSeats)
             setSeat(result.listSeats)
             setPrice(result.priceTicket)
         }
