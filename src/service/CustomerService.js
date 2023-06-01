@@ -1,5 +1,5 @@
 import axios from "axios";
-import Swal from "sweetalert2";
+
 
 export const findAllAndSearch = async (nameSearch) => {
     try {
@@ -21,14 +21,11 @@ export const findAll = async () => {
     }
 }
 export const editCustomer = async (customer) => {
+
     try {
         await axios.patch(`http://localhost:8080/customer/update`, {...customer})
-        Swal.fire({
-            title: 'Thông báo!',
-            text: 'Thanh toán thành công',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
+
+        alert("thêm mới thành công !")
     } catch (error) {
         console.log(error)
 

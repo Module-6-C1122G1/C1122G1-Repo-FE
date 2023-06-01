@@ -45,8 +45,6 @@ function Update() {
             }
             }
         >
-
-
             <>
                 <div className="row">
                     <div className="col-1"></div>
