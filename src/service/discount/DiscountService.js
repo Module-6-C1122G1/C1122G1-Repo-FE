@@ -40,3 +40,11 @@ export const findDiscountById = async (id) => {
 export const updateDiscount = async (discount) => {
     return await axios.put(`http://localhost:8080/api/discount//update/${discount.id}`, {...discount})
 }
+export const findByIdDiscount = async (id) => {
+    try {
+        const result = await axios.get(`http://localhost:8080/api/public/discount/` + id)
+        return result.data
+    } catch (e) {
+        console.log(e)
+    }
+}

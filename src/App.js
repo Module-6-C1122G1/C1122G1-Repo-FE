@@ -1,19 +1,19 @@
 import "./App.css";
+
 import {Routes, Route} from "react-router-dom";
 import CommonLayout from "./layout/CommonLayout";
 import Home from "./pages/Home";
 import React from "react";
 import {CreateFilm} from "./components/film/CreateFilm";
-
 import List from "./components/film/List";
-
-
 import CreateDiscount from "./components/discount/CreateDiscount";
 import UpdateDiscount from "./components/discount/UpdateDiscount";
 import Login from "./pages/Login/Login";
 import ConfirmEmail from "./pages/Login/ConfirmEmail";
 import ResetPassword from "./pages/Login/ResetPassword";
+import {ConfirmTicket} from "./components/confirm-ticket/ConfirmTicket";
 import BookingTicket from "./pages/Booking/BookingTicket";
+
 import {DetailDiscount} from "./components/discount/DetailDiscount";
 
 
@@ -33,7 +33,6 @@ function App() {
                 <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>
             </Route>
         </Routes>
-
 
     );
 }
