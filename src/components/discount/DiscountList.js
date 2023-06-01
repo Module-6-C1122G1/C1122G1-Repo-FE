@@ -41,7 +41,7 @@ const DiscountList = () => {
                                                         <b>{discount.nameDiscount}</b>
                                                         <p>"Ngày bắt đầu:"{discount.dateStart}</p>
                                                         <p>Ngày kết thúc:"{discount.dateEnd}</p>
-                                                        <p>Giảm giá:{discount.percentDiscount}</p>
+                                                        <p>Giảm giá:{discount.percentDiscount}%</p>
                                                     </p>
                                                     <div className="text" style={{ marginTop: 200 }}>
                                                         Chi tiết
