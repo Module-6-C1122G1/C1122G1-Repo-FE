@@ -9,7 +9,7 @@ export const detail = async(id)=>{
 }
 export const deleteTicket = async(value)=>{
     try {
-        return (await axios.put(`http://localhost:8080/api/employee/ticket/update`,{...value})).data
+        return (await axios.put(`http://localhost:8080/api/employee/ticket/update`,{...value}))
     } catch (error) {
         console.log(error)
     }

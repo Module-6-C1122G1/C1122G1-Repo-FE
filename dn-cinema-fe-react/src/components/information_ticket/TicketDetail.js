@@ -1,21 +1,27 @@
 import React, {useEffect, useRef, useState} from "react"
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import * as ticketService from '../../service/InformationTicketService'
 import '../film/detailStyle.css';
-import {Form, Formik} from "formik";
-import {useReactToPrint} from "react-to-print";
+import { Form, Formik } from "formik";
+import { useReactToPrint } from "react-to-print";
 import {TicketPrint} from "./TicketPrint";
 import { format } from "date-fns";
-import {Link} from "react-router-dom";
-import {toast, ToastContainer} from "react-toastify";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function TicketDetail() {
     const param = useParams()
+    const navigate = useNavigate();
 
     const handlePrint = useReactToPrint({
         content: () => componentBRef.current,
         pageStyle: "@page { size: A4; margin: 0px; }",
+        onAfterPrint: () => {
+            toast.success("In vé thành công");
+            navigate("/listTicket");
+        }
     });
+
     const componentBRef = useRef(null);
 
     const [ticketDetail, setTicketDetail] = useState()
@@ -69,9 +75,11 @@ export default function TicketDetail() {
                                             initialValues={{
                                                 "idTicket": ticketDetail?.idTicket,
                                                 "idCustomer": ticketDetail?.customer.idCustomer,
-                                                "idSeat": ticketDetail?.seat.idSeat
+                                                "idSeat": ticketDetail?.seat.idSeat,
+                                                "nameTypeSeat": ticketDetail?.seat.typeSeat.nameTypeSeat
                                             }}
                                             onSubmit={(value) => {
+                                                console.log(value)
                                                 const deleteTicket = async () => {
                                                     try {
                                                         await ticketService.deleteTicket(value)
@@ -80,7 +88,7 @@ export default function TicketDetail() {
                                                     }
                                                 }
                                                 deleteTicket()
-                                                // toast("Hủy vé thành công");
+                                                toast("Hủy vé thành công");
                                             }}
                                         >
                                             <Form>
@@ -129,19 +137,18 @@ export default function TicketDetail() {
                                                             >
                                                                 Hủy vé
                                                             </button>
-                                                            {/*<ToastContainer />*/}
                                                         </td>
 
 
                                                         <td>
-                                                            <Link to={'/listTicket'}
+                                                            <button
                                                                 type="button"
                                                                 className="button-movie btn h-100 border border-0"
                                                                 style={{width: 120}}
                                                                 data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                                             >
                                                                 Xác nhận
-                                                            </Link>
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                     </tbody>
@@ -184,56 +191,6 @@ export default function TicketDetail() {
                                             </th>
                                             <td>{ticketDetail?.customer.pointCustomer}</td>
                                         </tr>
-                                        {/*<tr style={{height: 39}}>*/}
-                                        {/*    <th className="text-secondary">Đổi vé:</th>*/}
-                                        {/*    <td>*/}
-                                        {/*        <div className="form-check form-check-inline">*/}
-                                        {/*            <input*/}
-                                        {/*                className="form-check-input"*/}
-                                        {/*                type="radio"*/}
-                                        {/*                name="inlineRadioOptions"*/}
-                                        {/*                id="inlineRadio1"*/}
-                                        {/*                defaultValue="option1"*/}
-                                        {/*            />*/}
-                                        {/*            <label*/}
-                                        {/*                className="form-check-label"*/}
-                                        {/*                htmlFor="inlineRadio1"*/}
-                                        {/*            >*/}
-                                        {/*                0*/}
-                                        {/*            </label>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="form-check form-check-inline">*/}
-                                        {/*            <input*/}
-                                        {/*                className="form-check-input"*/}
-                                        {/*                type="radio"*/}
-                                        {/*                name="inlineRadioOptions"*/}
-                                        {/*                id="inlineRadio2"*/}
-                                        {/*                defaultValue="option2"*/}
-                                        {/*            />*/}
-                                        {/*            <label*/}
-                                        {/*                className="form-check-label"*/}
-                                        {/*                htmlFor="inlineRadio2"*/}
-                                        {/*            >*/}
-                                        {/*                1*/}
-                                        {/*            </label>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="form-check form-check-inline">*/}
-                                        {/*            <input*/}
-                                        {/*                className="form-check-input"*/}
-                                        {/*                type="radio"*/}
-                                        {/*                name="inlineRadioOptions"*/}
-                                        {/*                id="inlineRadio3"*/}
-                                        {/*                defaultValue="option3"*/}
-                                        {/*            />*/}
-                                        {/*            <label*/}
-                                        {/*                className="form-check-label"*/}
-                                        {/*                htmlFor="inlineRadio3"*/}
-                                        {/*            >*/}
-                                        {/*                2*/}
-                                        {/*            </label>*/}
-                                        {/*        </div>*/}
-                                        {/*    </td>*/}
-                                        {/*</tr>*/}
                                         <tr>
                                             <th className="text-secondary" style={{height: 39}}>Số điện thoại:</th>
                                             <td>{ticketDetail?.customer.phone}</td>
@@ -265,14 +222,15 @@ export default function TicketDetail() {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                            <button type="button"  className="button-movie btn h-100 border border-0" onClick={() => handlePrint()}
+                            <button type="button"  className="button-movie btn h-100 border border-0" onClick={() => {
+                                handlePrint();
+                            }}
                                     data-bs-dismiss="modal">In vé
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-
         </>
     )
 }
