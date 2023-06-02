@@ -20,6 +20,7 @@ export const apiGetShowTimesByDate = async (filmId, date) => {
 export const findAllShowTime = async () => {
     try {
         const result = await axios.get(`http://localhost:8080/api/public/showTime`);
+        return result.data;
     } catch (e) {
         console.log(e);
     }
