@@ -1,19 +1,15 @@
-import {Routes, Route} from "react-router-dom";
+import "./App.css";
+import {Route, Routes} from "react-router-dom";
 import CommonLayout from "./layout/CommonLayout";
 import Home from "./pages/Home";
 import React from "react";
-import DiscountList from "./components/discount/DiscountList"
 import {CreateFilm} from "./components/film/CreateFilm";
-
-import List from "./components/film/List";
 import CreateDiscount from "./components/discount/CreateDiscount";
 import UpdateDiscount from "./components/discount/UpdateDiscount";
 import Login from "./pages/Login/Login";
 import ConfirmEmail from "./pages/Login/ConfirmEmail";
 import ResetPassword from "./pages/Login/ResetPassword";
-// import {ConfirmTicket} from "./components/confirm-ticket/ConfirmTicket";
-// import BookingTicket from "./pages/Booking/BookingTicket";
-
+import BookingTicket from "./pages/Booking/BookingTicket";
 import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
 
@@ -32,6 +28,7 @@ function App() {
                 <Route path='/discount/create' element={<CreateDiscount/>}/>
                 <Route path='/discount/update/:id' element={<UpdateDiscount/>}/>
                 <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>
+                <Route path='/booking-ticket' element={<BookingTicket/>}/>
             </Route>
         </Routes>
     );

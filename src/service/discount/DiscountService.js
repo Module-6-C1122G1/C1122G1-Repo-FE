@@ -17,7 +17,7 @@ export const findByName = async (value, currentPage) => {
 
 export const findAllDiscount = async () => {
     try {
-        const result = await axios.get(`http://localhost:8080/api/discount/list`);
+        const result = await axios.get(`http://localhost:8080/api/public/discount/list`);
         return result.data
     } catch (e) {
         console.log(e)
