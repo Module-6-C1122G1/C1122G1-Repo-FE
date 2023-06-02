@@ -39,6 +39,7 @@ function App() {
         <Route path="/detail-discount/:id" element={<DetailDiscount />} />
         <Route path='/create-employee' element={<CreateEmployee/>}/>
         <Route path='/update-employee/:id' element={<UpdateEmployee/>}/>
+        <Route path='/employee' element={<EmployeeList/>}/>
       </Route>
     </Routes>
   );
