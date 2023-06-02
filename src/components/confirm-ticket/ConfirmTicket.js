@@ -3,7 +3,7 @@ import Footer from "../common/footer/Footer";
 import Header from "../common/header/Header";
 import React, {useEffect, useRef, useState} from "react";
 import {Field, Form, Formik} from "formik";
-import {cancelSeat, checkDiscount, findByIdSeat, getCustomer, pay} from "../../service/TicketService";
+import {cancelSeat, checkDiscount, checkSeat, findByIdSeat, getCustomer, pay} from "../../service/TicketService";
 import {useNavigate} from "react-router";
 
 
@@ -27,7 +27,8 @@ export function ConfirmTicket(props) {
     const [price, setPrice] = useState(0);
     const [discounts, setDiscount] = useState({});
     const [customer, setCustomer] = useState({});
-    const [countDown, setCountDown] = useState(1000)
+    const [countDown, setCountDown] = useState(1000);
+    const [statusPay, setStatusPay] = useState(false);
     const timerId = useRef()
     const navigate = useNavigate()
 
@@ -103,6 +104,7 @@ export function ConfirmTicket(props) {
                     const save = async () => {
                         window.location.href = await pay({...values, price: price, idDiscount: dis}, token)
                     }
+                    setStatusPay(true)
                     save();
                 }}
             >
@@ -245,7 +247,7 @@ export function ConfirmTicket(props) {
                                                                 chiếu: &nbsp;</b>{filmData.showTime.showTime}&nbsp; | {filmData.showTime.showDate}
                                                         </div>
                                                         <div className="dotted-line">
-                                                            <b style={{display:"block"}}>Ghế: &nbsp;</b>
+                                                            <b style={{display: "block"}}>Ghế: &nbsp;</b>
                                                             <galaxy-summary-seats
                                                                 ng-model="bookingTickets"
                                                                 ng-seat-label="seatLabel"
@@ -253,11 +255,12 @@ export function ConfirmTicket(props) {
                                                             >
                                                                 {seats.map((seat, index) => {
                                                                     if (index === 0) {
-                                                                        return (<span style={{display:"inline"}}
-                                                                            className="select-seat ng-binding">{seat} &nbsp; |</span>)
-                                                                    } else {
-                                                                        return (<span style={{float: "left",display:"inline"}}
+                                                                        return (<span style={{display: "inline"}}
                                                                                       className="select-seat ng-binding">{seat} &nbsp; |</span>)
+                                                                    } else {
+                                                                        return (<span
+                                                                            style={{float: "left", display: "inline"}}
+                                                                            className="select-seat ng-binding">{seat} &nbsp; |</span>)
                                                                     }
                                                                 })}
                                                             </galaxy-summary-seats>
@@ -274,7 +277,8 @@ export function ConfirmTicket(props) {
                                                                 ng-loyayty-discount="loyaltyDiscount"
                                                                 className="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty"
                                                             >
-                                                                <p><span className="ng-binding" id="ok">{price} VNĐ</span></p>
+                                                                <p><span className="ng-binding"
+                                                                         id="ok">{price}</span> VNĐ</p>
                                                             </galaxy-summary-ticket>
                                                         </p>
                                                     </div>

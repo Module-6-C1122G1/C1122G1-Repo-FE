@@ -12,6 +12,7 @@ import ResetPassword from "./pages/Login/ResetPassword";
 import BookingTicket from "./pages/Booking/BookingTicket";
 import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
+import {FetchApi} from "./components/confirm/FetchApi";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
                 <Route path='/discount/update/:id' element={<UpdateDiscount/>}/>
                 <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>
                 <Route path='/booking-ticket' element={<BookingTicket/>}/>
+                <Route path='/confirm' element={<FetchApi/>}/>
             </Route>
         </Routes>
     );

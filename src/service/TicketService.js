@@ -48,3 +48,20 @@ export const cancelSeat = async (listId) => {
         console.log(e)
     }
 }
+export const checkSeat=async (idSeat)=>{
+    try {
+        const result=await axios.get(`http://localhost:8080/api/public/seat/check-seat/`+idSeat)
+        return result.data
+    }catch (e) {
+        console.log(e)
+    }
+}
+export const saveTicket=async (idCus,idFilm,idDiscount,seat,price,vnp_ResponseCode,auth)=>{
+    const headers = {'Authorization': 'Bearer ' + auth};
+    try {
+        await axios.get(`http://localhost:8080/api/user/ticket/create?idCus=${idCus}&idFilm=${idFilm}&idDiscount=${idDiscount}&seat=${seat}&price=${price}&vnp_ResponseCode=${vnp_ResponseCode}`,headers)
+    }catch (e) {
+        console.log(e)
+    }
+
+}
