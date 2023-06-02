@@ -12,15 +12,16 @@ export const apiGetAllFilms = async () => {
 
 export const findFilmById = async (idFilm) => {
     try {
-        const result = await axios.get(`http://localhost:8080/api/public/movie/${idFilm}}`)
+        const result = await axios.get(`http://localhost:8080/api/public/movie/${idFilm}`)
         return result.data
     }catch (e){
         console.log(e)
     }
 }
 export const updateFilm = async (film) => {
+    console.log(film)
     try {
-        await axios.put(`http://localhost:8080/api/public/movie/${film.idFilm}}`, {...film})
+        await axios.put("http://localhost:8080/api/public/movie/"+film.idFilm, {...film})
     }catch (e){
         console.log(e)
     }
@@ -32,9 +33,10 @@ export const createFilm = async (film) => {
         console.log(e)
     }
 }
-export const listFilm = async () => {
+export const listFilm = async ({page,search}) => {
     try {
-        const result = await axios.get("http://localhost:8080/api/public/movie?_sort=idFilm&_order=desc")
+        const result = await axios.get(`http://localhost:8080/api/public/movie?page=${page?page:0}
+        &search=${search}`)
         return result.data;
     }catch (e){
         console.log(e);

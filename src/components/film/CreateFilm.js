@@ -6,9 +6,10 @@ import * as Yup from "yup";
 import * as FilmService from "../../service/FilmService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {ColorRing} from "react-loader-spinner";
-import {storage} from "../../config/firebase";
 import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
 import {toast} from "react-toastify";
+import {storage} from "../../firebase";
+
 
 export function CreateFilm() {
     const navigate = useNavigate();
@@ -156,13 +157,13 @@ export function CreateFilm() {
                                     Thêm mới phim
                                 </h1>
                                 <Form>
-                                    <div className="row" style={{marginBottom: "2%"}}>
+                                    <div className="row" style={{marginBottom: "2%", display:"flex"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Ảnh <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
-                                        <div className="col-md-3 col-xs-12 col-sm-12 col-lg-3">
+                                        <div className="col-3" style={{width:"67%"}}>
                                             <Field
                                                 type="file"
                                                 onChange={(e) => handleFileSelect(e)}
@@ -172,10 +173,10 @@ export function CreateFilm() {
                                             />
                                             <p>
                                                 <label htmlFor="imgFilm" style={{
-                                                    display: "inline-block",
+                                                    display: "flex",
                                                     padding: "6px 12px",
                                                     border: "1px solid",
-                                                    borderRadius: "4px"
+                                                    borderRadius: "4px",
                                                 }}>
                                                     Chọn hình ảnh
                                                 </label></p>
@@ -196,7 +197,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Tên phim <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -212,7 +213,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Quốc gia <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -227,7 +228,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Từ ngày <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -244,7 +245,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Đến ngày <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -260,7 +261,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Diễn viên <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -275,7 +276,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Hãng phim <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -290,7 +291,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Đạo diễn <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -305,7 +306,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Thời lượng <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -320,7 +321,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Nhãn phim <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -335,7 +336,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Trailer <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -350,12 +351,12 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row kind-movie" style={{marginBottom: "2%"}}>
                                         <div className="title-kind col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Thể loại <span className="warning">(*)</span>
                                             </label>
                                         </div>
                                         <div className="col-8">
-                                            <Field as='select' name="idTypeFilm">
+                                            <Field as='select' name="idTypeFilm" style={{width:"100%", border:"1px solid #ced0da"}}>
                                                 {listTypeFilm.map((listType, index) => (
                                                     <option
                                                         value={listType.idTypeFilm}>{listType.nameTypeFilm}</option>
@@ -365,7 +366,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Giá ghế thường <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -381,7 +382,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Giá ghế vip <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -396,7 +397,7 @@ export function CreateFilm() {
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
-                                            <label className="fw-bold" style={{marginRight: "2%"}}>
+                                            <label className="fw-bold" style={{marginRight: "2%", display: "flex" , float: "right", marginTop: "3%"}}>
                                                 Nội dung <span className="warning">(*)</span>
                                             </label>
                                         </div>
@@ -410,27 +411,9 @@ export function CreateFilm() {
                                                 style={{maxWidth:"100%"}}
                                                 name="describeFilm"
                                             />
-                                                {/*<textArea name="describeFilm" rows={4} cols={86}*/}
-                                                {/*          placeholder="Nội dung phim"*/}
-                                                {/*          style={{maxWidth: "100%"}}/>*/}
                                             <ErrorMessage name="describeFilm" component={"p"} style={{color: "red"}}/>
                                         </div>
                                     </div>
-                                    {/*<div className="row" style={{marginBottom: "2%"}}>*/}
-                                    {/*    <div className="col-3" style={{textAlign: "right"}}>*/}
-                                    {/*        <label className="fw-bold" style={{marginRight: "2%"}}>*/}
-                                    {/*            Nội dung <span className="warning">(*)</span>*/}
-                                    {/*        </label>*/}
-                                    {/*    </div>*/}
-                                    {/*    <div className="col-8">*/}
-                                    {/*        <Field*/}
-                                    {/*            type="text"*/}
-                                    {/*            style={{width: "100%"}}*/}
-                                    {/*            name="describeFilm"*/}
-                                    {/*        />*/}
-                                    {/*        <ErrorMessage name="describeFilm" component={"p"} style={{color: "red"}}/>*/}
-                                    {/*    </div>*/}
-                                    {/*</div>*/}
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
                                             <Field type="hidden"/>
@@ -456,13 +439,13 @@ export function CreateFilm() {
                                                         Thêm mới
                                                     </button>
                                             }
-                                            <button
-                                                type="reset"
-                                                className="btn btn-primary"
-                                                style={{background: "black", color: "white", marginLeft: "2%"}}
-                                            >
-                                                Quay lại
-                                            </button>
+                                            {/*<button*/}
+                                            {/*    type="reset"*/}
+                                            {/*    className="btn btn-primary"*/}
+                                            {/*    style={{background: "black", color: "white", marginLeft: "0%"}}*/}
+                                            {/*>*/}
+                                            {/*    Quay lại*/}
+                                            {/*</button>*/}
                                         </div>
                                     </div>
                                 </Form>
