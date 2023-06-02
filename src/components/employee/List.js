@@ -30,7 +30,7 @@ export default function EmployeeList() {
             const totalPages = res.totalPages;
             setPageCount(totalPages);
             setEmployeeList(res.content);
-            setCount(Math.ceil(res.content.size * res.content.number + 1));
+            // setCount(Math.ceil(res.content.size * res.content.number + 1));
             showTable.style.display = "block";
             errMsg.style.display = "none";
         } catch (e) {
@@ -69,7 +69,7 @@ export default function EmployeeList() {
         setCount(Math.ceil(res.size * page.selected + 1));
     };
 
-    const getPropsDeleteEmployee = (id, name) => {
+    const getPropsDeleteEmployee = (id, name) => {  
         setDeleteId(id);
         setDeleteName(name);
     };
@@ -204,7 +204,7 @@ export default function EmployeeList() {
                                                                 </td>
                                                                 <td>
                                                                     <NavLink
-                                                                        to={`/employee/edit/${employee.id}`}
+                                                                        to={`/employee/update/${employee.idEmployee}`}
                                                                         className="btn btn-outline-primary"
                                                                     >
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">

@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import './index.css';
+import './BookingTicket.css';
 import SelectPosition from "../../components/booking-ticket/SelectPosition";
 import SelectShowTime from "../../components/booking-ticket/SelectShowTime";
 import {apiBookingTicket} from '../../service/BookingTicketService';
+import {ConfirmTicket} from "../../components/confirm-ticket/ConfirmTicket";
 import Payment from "../../components/booking-ticket/Payment";
 
 const BookingTicket = () => {
@@ -11,14 +12,12 @@ const BookingTicket = () => {
     const [listSelecting, setListSelecting] = useState([]);
 
     const handleDataShowTimeData = (film, showTime) => {
-        console.log({film, showTime});
         setData({film, showTime});
         setStep(2);
     };
 
     const handleBuyTicket = async (listSeat) => {
         setListSelecting(listSeat)
-        console.log(data);
         const res = await apiBookingTicket(listSeat);
         if (res.status === 200) {
             setStep(3);
@@ -29,7 +28,7 @@ const BookingTicket = () => {
         <>
             {step === 1 && <SelectShowTime onFinish={handleDataShowTimeData}/>}
             {step === 2 && <SelectPosition filmData={data} onFinish={handleBuyTicket} onBack={() => setStep(1)}/>}
-            {step === 3 && <Payment filmData={data} listSelectingData={listSelecting}/>}
+            {step === 3 && <ConfirmTicket filmData={data} listSelectingData={listSelecting}/>}
         </>
     );
 };
