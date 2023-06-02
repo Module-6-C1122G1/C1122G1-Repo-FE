@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './index.css';
+import './BookingTicket.css';
 import SelectPosition from "../../components/booking-ticket/SelectPosition";
 import SelectShowTime from "../../components/booking-ticket/SelectShowTime";
 import {apiBookingTicket} from '../../service/BookingTicketService';
