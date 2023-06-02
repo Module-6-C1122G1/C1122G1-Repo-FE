@@ -4,7 +4,9 @@ import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import {storage} from "../../firebase";
-import * as Yup from "yup";
+import "react-toastify/dist/ReactToastify.css"
+import {ToastContainer, toast} from "react-toastify"
+import * as Yup from 'yup';
 
 export function UpdateEmployee() {
     const navigate = useNavigate();
@@ -84,16 +86,16 @@ export function UpdateEmployee() {
             }}
                     validationSchema={Yup.object({
                         accountUser: Yup.object().shape({
-                            passwordAccount: Yup.string().min(8, 'Mật khẩu ít nhất 8 ký tự').max(28, 'Mật khẩu tối đa 28 ký tự')
+                            passwordAccount: Yup.string().trim().min(8, 'Mật khẩu ít nhất 8 ký tự').max(28, 'Mật khẩu tối đa 28 ký tự')
                                 .matches(/^[^\s!#$%^&*()]+$/, "Mật khẩu không chứa khoảng cách , dấu và các kí tự đặc biệt trừ @")
                                 .required('Vui lòng nhập mật khẩu tài khoản'),
                             againPasswordAccount: Yup.string()
                                 .oneOf([Yup.ref('passwordAccount'), null], 'Mật khẩu không khớp')
                                 .required('Vui lòng nhập lại mật khẩu'),
                         }),
-                        nameEmployee: Yup.string().trim().matches(/^(([a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)([a-zA-Z\\s\\'ÀÁÂÃÈÉÊÌÍÒÓ ÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)([a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]))*$/, "Tên không bao gồm kí tự đặc biệt")
+                        nameEmployee: Yup.string().trim().matches(/^[^!@#$%^&*()+=\[\]{};':"\\|.<>?`~/]+$/, "Tên không bao gồm kí tự đặc biệt")
                             .max(100, 'Họ tên tối đa 100 ký tự').required('Vui lòng nhập tên nhân viên'),
-                        dateOfBirth: Yup.date().required('Vui lòng nhập ngày sinh').test('is-over-18', 'Bạn phải trên 18 tuổi', function (value) {
+                        dateOfBirth: Yup.date().required('Vui lòng chọn ngày sinh').test('is-over-18', 'Bạn phải trên 18 tuổi', function (value) {
                             const currentDate = new Date();
                             const selectedDate = new Date(value);
                             const ageDiff = currentDate.getFullYear() - selectedDate.getFullYear();
@@ -103,7 +105,7 @@ export function UpdateEmployee() {
                             return true;
                         }),
                         gender: Yup.string().required('Vui lòng chọn giới tính'),
-                        email: Yup.string().min(12, 'Email ít nhất 12 ký tự').max(32, 'Email tối đa 32 ký tự')
+                        email: Yup.string().trim().min(12, 'Email ít nhất 12 ký tự').max(32, 'Email tối đa 32 ký tự')
                             .matches(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, "Email phải đúng định dạng xxx@gmail.com")
                             .required('Vui lòng nhập địa chỉ email')
                             .test('check-email', 'Email đã tồn tại', async function (value) {
@@ -116,7 +118,7 @@ export function UpdateEmployee() {
                                 const isUsernameExists = await employeeService.checkEmailExists(value);
                                 return !isUsernameExists;
                             }),
-                        identityCard: Yup.string().matches(/^[0-9]{12}$/, "CCCD phải là 12 kí tự số").required('Vui lòng nhập số CMND')
+                        identityCard: Yup.string().trim().matches(/^[0-9]{12}$/, "CCCD phải là 12 kí tự số").required('Vui lòng nhập số CMND')
                             .test('check-identityCard', 'CCCD đã tồn tại', async function (value) {
                                 if (value == employee?.identityCard) {
                                     return true;
@@ -128,8 +130,8 @@ export function UpdateEmployee() {
                                 const isUsernameExists = await employeeService.checkIdentityCardExists(value);
                                 return !isUsernameExists;
                             }),
-                        phone: Yup.string().matches(/^[+]?[0-9]{1,3}[-\\s]?[(]?[0-9]{1,4}[)]?[-\\s]?[0-9]{1,4}[-\\s]?[0-9]{1,9}$/, "Số điện thoại phải là kí tự số")
-                            .min(9, 'Số điện thoại phải từ 10 đến 11 kí tự số').max(10, 'Số điện thoại phải từ 10 đến 11 kí tự số')
+                        phone: Yup.string().trim().matches(/^0[0-9]{9,10}$/, "Số điện thoại phải là kí tự số và chỉ có 10 hoặc 11 số")
+                            .min(10, 'Số điện thoại phải từ 10 đến 11 kí tự số').max(11, 'Số điện thoại phải từ 10 đến 11 kí tự số')
                             .required('Vui lòng nhập số điện thoại')
                             .test('check-phone', 'Số điện thoại đã tồn tại', async function (value) {
                                 if (value == employee?.phone) {
@@ -141,7 +143,7 @@ export function UpdateEmployee() {
                                 const isUsernameExists = await employeeService.checkPhoneExists(value);
                                 return !isUsernameExists;
                             }),
-                        address: Yup.string().max(100, 'Địa chỉ tối đa 100 ký tự')
+                        address: Yup.string().trim().max(100, 'Địa chỉ tối đa 100 ký tự')
                             .matches(/^[^!@#$%^&*()+=\[\]{};':"\\|.<>?`~]+$/, "Địa chỉ không chứa kí tự đặc biệt trừ /")
                             .required('Vui lòng nhập địa chỉ'),
                     })}
@@ -159,7 +161,8 @@ export function UpdateEmployee() {
                                     await employeeService.editEmployee(values);
                                     console.log(values)
                                 }
-                                // toast(`Chỉnh sửa khuyến mãi thành công! `)
+                                toast(`Cập nhật nhân viên thành công! `)
+                                // navigate(`/employee`);
                                 setSubmitting(false)
                             } catch (error) {
                                 console.log(error);
@@ -384,7 +387,7 @@ export function UpdateEmployee() {
                                         </div>
                                         <div className="col-8">
                                             <Field
-                                                type="number"
+                                                type="text"
                                                 style={{width: "100%"}}
                                                 name="identityCard"
                                                 id="identityCard"
@@ -405,7 +408,7 @@ export function UpdateEmployee() {
                                         </div>
                                         <div className="col-8">
                                             <Field
-                                                type="number"
+                                                type="text"
                                                 style={{width: "100%"}}
                                                 name="phone"
                                                 id="phone"
