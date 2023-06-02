@@ -48,14 +48,15 @@ export function CreateEmployee() {
             <Formik initialValues={{
                 imgEmployee: "", accountUser: {
                     nameAccount: "", passwordAccount: ""
-                }, nameEmployee: "", dateOfBirth: "", gender: "",
+                },
+                nameEmployee: "", dateOfBirth: "", gender: "",
                 email: "", identityCard: "", phone: "", address: ""
             }}
                     validationSchema={Yup.object({
                         accountUser: Yup.object().shape({
-                            nameAccount: Yup.string().required('Vui lòng nhập tên tài khoản')
+                            nameAccount: Yup.string().matches(/^[a-zA-Z0-9]+$/, "Tên tài khoản không chứa dấu , kí tự đặc biệt và khoảng cách")
+                                .min(8, 'Tài khoản ít nhất 8 ký tự').max(28, 'Tài khoản tối đa 28 ký tự').required('Vui lòng nhập tên tài khoản')
                                 .test('check-username', 'Tài khoản đã tồn tại', async function (value) {
-                                    // debugger;
                                     try {
                                         if (!value) {
                                             return true;
@@ -66,44 +67,63 @@ export function CreateEmployee() {
                                     } catch (error) {
                                         console.log(error);
                                     }
-
                                 }),
-                            passwordAccount: Yup.string().required('Vui lòng nhập mật khẩu tài khoản')
+                            passwordAccount: Yup.string().min(8, 'Mật khẩu ít nhất 8 ký tự').max(28, 'Mật khẩu tối đa 28 ký tự')
+                                .matches(/^[^\s!#$%^&*()]+$/, "Mật khẩu không chứa khoảng cách , dấu và các kí tự đặc biệt trừ @")
+                                .required('Vui lòng nhập mật khẩu tài khoản'),
+                            againPasswordAccount: Yup.string().required('Vui lòng nhập lại mật khẩu')
+                                .oneOf([Yup.ref('passwordAccount'), null], 'Mật khẩu không khớp')
                         }),
-                        nameEmployee: Yup.string().required('Vui lòng nhập tên nhân viên'),
-                        dateOfBirth: Yup.date().required('Vui lòng nhập ngày sinh'),
+                        nameEmployee: Yup.string().trim().matches(/^(([a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)([a-zA-Z\\s\\'ÀÁÂÃÈÉÊÌÍÒÓ ÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)([a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]))*$/, "Tên không bao gồm kí tự đặc biệt")
+                            .max(100, 'Họ tên tối đa 100 ký tự').required('Vui lòng nhập tên nhân viên'),
+                        dateOfBirth: Yup.date().required('Vui lòng nhập ngày sinh').test('is-over-18', 'Bạn phải trên 18 tuổi', function (value) {
+                            const currentDate = new Date();
+                            const selectedDate = new Date(value);
+                            const ageDiff = currentDate.getFullYear() - selectedDate.getFullYear();
+                            if (ageDiff < 18) {
+                                return false;
+                            }
+                            return true;
+                        }),
                         gender: Yup.string().required('Vui lòng chọn giới tính'),
-                        email: Yup.string().required('Vui lòng nhập địa chỉ email')
+                        email: Yup.string().min(12, 'Email ít nhất 12 ký tự').max(32, 'Email tối đa 32 ký tự')
+                            .matches(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, "Email phải đúng định dạng xxx@gmail.com")
+                            .required('Vui lòng nhập địa chỉ email')
                             .test('check-email', 'Email đã tồn tại', async function (value) {
                                 if (!value) {
-                                    return true; // Không kiểm tra nếu không có giá trị
+                                    return true;
                                 }
 
                                 const isUsernameExists = await employeeService.checkEmailExists(value);
                                 return !isUsernameExists;
                             }),
-                        identityCard: Yup.string().required('Vui lòng nhập số CMND')
+                        identityCard: Yup.string().matches(/^[0-9]{12}$/, "CCCD phải là 12 kí tự số").required('Vui lòng nhập số CMND')
                             .test('check-identityCard', 'CCCD đã tồn tại', async function (value) {
                                 if (!value) {
-                                    return true; // Không kiểm tra nếu không có giá trị
+                                    return true;
                                 }
 
                                 const isUsernameExists = await employeeService.checkIdentityCardExists(value);
                                 return !isUsernameExists;
                             }),
-                        phone: Yup.string().required('Vui lòng nhập số điện thoại')
+                        phone: Yup.string().matches(/^[+]?[0-9]{1,3}[-\\s]?[(]?[0-9]{1,4}[)]?[-\\s]?[0-9]{1,4}[-\\s]?[0-9]{1,9}$/, "Số điện thoại phải là kí tự số")
+                            .min(9, 'Số điện thoại phải từ 10 đến 11 kí tự số').max(10, 'Số điện thoại phải từ 10 đến 11 kí tự số')
+                            .required('Vui lòng nhập số điện thoại')
                             .test('check-phone', 'Số điện thoại đã tồn tại', async function (value) {
                                 if (!value) {
-                                    return true; // Không kiểm tra nếu không có giá trị
+                                    return true;
                                 }
 
                                 const isUsernameExists = await employeeService.checkPhoneExists(value);
                                 return !isUsernameExists;
                             }),
-                        address: Yup.string().required('Vui lòng nhập địa chỉ'),
+                        address: Yup.string().max(100, 'Địa chỉ tối đa 100 ký tự')
+                            .matches(/^[^!@#$%^&*()+=\[\]{};':"\\|.<>?`~]+$/, "Địa chỉ không chứa kí tự đặc biệt trừ /")
+                            .required('Vui lòng nhập địa chỉ'),
                     })}
                     onSubmit={(values, {resetForm}) => {
                         const create = async () => {
+                            debugger;
                             const newValue = {
                                 ...values,
                                 imgEmployee: firebaseImg,
@@ -204,27 +224,25 @@ export function CreateEmployee() {
                                         <ErrorMessage name="accountUser.passwordAccount" component='span'
                                                       className='form-err text-center' style={{color: "red"}}/>
                                     </div>
-                                    {/*<div className="row" style={{marginBottom: "2%"}}>*/}
-                                    {/*    <div className="col-3" style={{textAlign: "right"}}>*/}
-                                    {/*        <label*/}
-                                    {/*            htmlFor="accountUser.againPasswordAccount"*/}
-                                    {/*            className="fw-bold"*/}
-                                    {/*            style={{marginRight: "2%"}}*/}
-                                    {/*        >*/}
-                                    {/*            Nhập lại mật khẩu <span className="warning">(*)</span>*/}
-                                    {/*        </label>*/}
-                                    {/*    </div>*/}
-                                    {/*    <div className="col-8">*/}
-                                    {/*        <input*/}
-                                    {/*            type="password"*/}
-                                    {/*            style={{width: "100%"}}*/}
-                                    {/*            id="accountUser.againPasswordAccount"*/}
-                                    {/*            name='accountUser.againPasswordAccount'*/}
-                                    {/*        />*/}
-                                    {/*    </div>*/}
-                                    {/*    <ErrorMessage name="accountUser.againPasswordAccount" component='span'*/}
-                                    {/*                  className='form-err text-center' style={{color: "red"}}/>*/}
-                                    {/*</div>*/}
+                                    <div className="row" style={{marginBottom: "2%"}}>
+                                        <div className="col-3" style={{textAlign: "right"}}>
+                                            <label
+                                                className="fw-bold"
+                                                style={{marginRight: "2%"}}
+                                            >
+                                                Nhập lại mật khẩu <span style={{color: "red"}}>(*)</span>
+                                            </label>
+                                        </div>
+                                        <div className="col-8">
+                                            <Field
+                                                type="password"
+                                                style={{width: "100%"}}
+                                                name='accountUser.againPasswordAccount'
+                                            />
+                                        </div>
+                                        <ErrorMessage name="accountUser.againPasswordAccount" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
+                                    </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
                                             <label
