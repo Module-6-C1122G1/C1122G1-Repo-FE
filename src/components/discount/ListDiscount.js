@@ -141,7 +141,7 @@ function DiscountList() {
                                                 <tr>
                                                     <th style={{width: "2%"}} className="text-center">STT</th>
                                                     <th style={{width: "15%"}} className="text-center">Khuyến mãi</th>
-                                                    <th className="text-center">Hình ảnh</th>
+                                                    <th style={{width: "10%"}} className="text-center">Hình ảnh</th>
                                                     <th style={{width: "10%"}} className="text-center">Ngày bắt đầu</th>
                                                     <th style={{width: "10%"}} className="text-center">Ngày kết thúc
                                                     </th>
@@ -158,7 +158,13 @@ function DiscountList() {
                                                             <tr key={index}>
                                                                 <td scope="row" className="text-center">{stt++}</td>
                                                                 <td>{discount.nameDiscount}</td>
-                                                                <td>{discount.imageDiscount}</td>
+                                                                <td className="text-center align-middle">
+                                                                    <div className="d-flex justify-content-center">
+                                                                        <a href={discount.imageDiscount} target="_blank" rel="noopener noreferrer">
+                                                                        <img src={discount.imageDiscount} alt="Hình ảnh khuyến mãi" style={{ width: 70, height: 100 }} />
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
                                                                 <td className="text-center">{discount.dateStart}</td>
                                                                 <td className="text-center">{discount.dateEnd}</td>
                                                                 <td>{discount.describeDiscount}</td>
