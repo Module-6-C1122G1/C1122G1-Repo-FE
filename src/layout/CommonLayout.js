@@ -8,7 +8,7 @@ const CommonLayout = () => {
             <div  className="page-container" >
                 <Outlet/>
             </div>
-            <Footer/>
+            {/*<Footer/>*/}
         </>
     )
 };
