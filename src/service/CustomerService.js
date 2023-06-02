@@ -17,16 +17,16 @@ export const findAllCustomerType = async () =>{
     }
 }
 
-export const editCustomer = async (id , customer) => {
+export const editCustomer = async (customer) => {
     try {
-        await axios.put(`http://localhost:8080/api/user/${id}`, {...customer})
+        await axios.patch(`http://localhost:8080/api/user/update/${customer.idCustomer}`, {...customer})
     }catch (e){
         console.log(e)
     }
 }
 export const findById = async (id) => {
     try {
-        await axios.get(`http://localhost:8080/api/user/${id}`)
+       return (await axios.get(`http://localhost:8080/api/${id}`)).data
     }catch (e){
         console.log(e)
     }

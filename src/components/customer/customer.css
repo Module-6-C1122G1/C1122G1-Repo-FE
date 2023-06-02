@@ -1,22 +1,13 @@
-.color-span{
+.color-span-customer{
   color: red;
 }
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  margin: 0 auto;
-  width: 700px;
-}
+/*table {*/
+/*  border-collapse: collapse;*/
+/*  border-spacing: 0;*/
+/*  margin: 0 auto;*/
+/*  width: 700px;*/
+/*}*/
 
-table th,
-table td {
-  /*border: 1px solid #ccc;*/
-  padding: 10px;
-}
-
-table th {
-  background-color: #f3f3f3;
-}
 
 @media only screen and (max-width: 700px) {
   /* Table full chiều rộng màn hình, cách đều trái phải 10px */
@@ -44,10 +35,29 @@ table th {
   }
 }
 
-.border-form{
+.border-form-customer{
   border: 2px groove #f26b38;
 }
 
 .error{
   color: red;
+}
+.input-customer {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ced0da;
+  font-size: 14px;
+}
+.input-customer-radio {
+  width: 100%;
+  height: 14px;
+}
+
+.text-name {
+ width: 100%;
+}
+.avatar-left{
+  flex: 0 0 auto;
+  width: 20%;
+  margin-top: 7%;
 }
