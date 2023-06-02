@@ -1,5 +1,5 @@
 import {apiGetAllFilms} from '../../service/FilmService';
-import './index.css';
+import './booking-ticket.css';
 import React, {useEffect, useState} from "react";
 import {apiGetShowTimesByDate, apiGetShowTimesByFilm} from '../../service/ShowTimeService';
 import {useNavigate} from "react-router";
@@ -59,14 +59,17 @@ const SelectShowTime = (props) => {
 
     useEffect(() => {
        setSelectedDate(0)
+        setSelectedTime(0)
     }, [selectedFilm]);
 
     useEffect(() => {
         if (selectedDate) {
             fetchShowTimeByDate()
-        } else {
-            setShowTimesFilters([])
+            setSelectedTime(0)
         }
+        // } else {
+        //     setShowTimesFilters([])
+        // }
     }, [selectedDate]);
     return (
         <div className="container-lg">
@@ -132,7 +135,7 @@ const SelectShowTime = (props) => {
             </div>
             <button disabled={!selectedTime}
                     onClick={handleCLickSetTicket}
-                    className=" d-flex m-auto mt-4 mb-4 btn btn-primary">
+                    className="d-flex m-auto mt-4 mb-4 btn btn-primary" style={{borderRadius: 10, height: 40}}>
                 Đặt vé
             </button>
         </div>
