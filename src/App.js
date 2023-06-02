@@ -6,7 +6,6 @@ import CommonLayout from "./layout/CommonLayout";
 import Login from "./pages/Login/Login";
 import ConfirmEmail from "./pages/Login/ConfirmEmail";
 // import ResetPassword from "./pages/Login/ResetPassword";
-
 import {ConfirmTicket} from "./components/confirm-ticket/ConfirmTicket";
 import Home from "./pages/Home";
 import { CreateFilm } from "./components/film/CreateFilm";
