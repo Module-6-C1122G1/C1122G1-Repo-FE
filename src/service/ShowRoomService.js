@@ -45,4 +45,32 @@ export const getShowRoom = async (id,auth) => {
     }catch (e) {
         console.log(e)
     }
+
+}
+export const findAllStatusSeat = async () => {
+    try{
+        const data = await axios.get('http://localhost:8080/api/admin/status-seat/list')
+        return data.data
+    }catch (e) {
+        console.log(e)
+    }
+
+}
+export const findAllTypeSeat = async () => {
+    try{
+        const data = await axios.get('http://localhost:8080/api/admin/type-seat/list')
+        return data.data
+    }catch (e) {
+        console.log(e)
+    }
+}
+
+export const getAll = async () => {
+    try {
+        const result = await axios.get("http://localhost:8080/api/admin/showroom/getAll")
+        return result.data;
+    }catch (e){
+        console.log(e)
+    }
+
 }

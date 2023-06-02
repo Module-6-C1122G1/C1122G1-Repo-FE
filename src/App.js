@@ -12,17 +12,16 @@ import ResetPassword from "./pages/Login/ResetPassword";
 import EmployeeList from "./components/employee/List";
 import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
-import { CreateEmployee } from "./components/employee/Create";
-import { UpdateEmployee } from "./components/employee/Update";
 import { ListTicket } from "./components/ticket/ListTicket";
-
-
-import {CreateEmployee} from "./components/employee/Create";
-import {UpdateEmployee} from "./components/employee/Update";
 import { ConfirmTicket } from "./components/confirm-ticket/ConfirmTicket";
 import BookingTicket from "./pages/Booking/BookingTicket";
 import DiscountList from "./components/discount/ListDiscount";
 import DiscountListPublic from "./components/discount/DiscountList";
+import {ListFilm} from "./components/film/ListFilm";
+import {CreateEmployee} from "./components/employee/Create";
+import {UpdateEmployee} from "./components/employee/Update";
+import {UpdateFilm} from "./components/film/UpdateFilm";
+
 function App() {
 
 
@@ -45,9 +44,10 @@ function App() {
         <Route path='/create-employee' element={<CreateEmployee/>}/>
         <Route path='/update-employee/:id' element={<UpdateEmployee/>}/>
         <Route path='/employee' element={<EmployeeList/>}/>
+        <Route path='/discount/list' element={<ListDiscount/>}/>
       </Route>
     </Routes>
-    );
+  );
 
 }
 export default App;
