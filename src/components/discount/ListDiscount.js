@@ -70,13 +70,13 @@ function DiscountList() {
                         <div className="row">
                             <div className="col-md-4">
                                 <NavLink to='/discount-create'>
-                                    <button
-                                        style={{marginLeft: 85}}
-                                        className="btn btn-outline-primary text-dark"
-                                    >
-                                        <i className="bi bi-plus-circle" /> Thêm mới khuyến mãi
-                                    </button>
-                                </NavLink>
+                                <button
+                                    style={{marginLeft: 85}}
+                                    className="btn btn-outline-primary text-dark"
+                                >
+                                    <i className="bi bi-plus-circle" /> Thêm mới khuyến mãi
+                                </button>
+                                    </NavLink>
                             </div>
                             <div className="row col-md-8">
                                 <Formik initialValues={{
@@ -166,7 +166,7 @@ function DiscountList() {
                                                                 <td className="text-center align-middle">
                                                                     <div className="d-flex justify-content-center">
                                                                         <a href={discount.imageDiscount} target="_blank" rel="noopener noreferrer">
-                                                                            <img src={discount.imageDiscount} alt="Hình ảnh khuyến mãi" style={{ width: 70, height: 100 }} />
+                                                                        <img src={discount.imageDiscount} alt="Hình ảnh khuyến mãi" style={{ width: 70, height: 100 }} />
                                                                         </a>
                                                                     </div>
                                                                 </td>

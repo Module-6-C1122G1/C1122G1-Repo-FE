@@ -7,7 +7,7 @@ const Payment = (props) => {
     }, [listSelectingData]);
     return(
         <>
-
+            <div className="font-weight-normal mb-1">Tên Phim: {filmData?.film.nameFilm}</div>
             <div className="font-weight-normal mb-1">Ngày chiếu: {filmData?.showTime.showDate}</div>
             <div className="font-weight-normal mb-1">Lịch chiếu phim: {filmData.showTime.showTime}</div>
             <div className="font-weight-normal mb-1">Thời lượng: {filmData.film.timeFilm} phút</div>
