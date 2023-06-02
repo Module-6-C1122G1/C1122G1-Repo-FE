@@ -64,6 +64,7 @@ table {
   color: #3b5998 !important;
 }
 .login:hover {
+  text-decoration: none !important;
   background-color: transparent;
   color: #f26b38;
   border: 1px solid #f26b38;

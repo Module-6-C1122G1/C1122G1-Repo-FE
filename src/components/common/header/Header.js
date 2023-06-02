@@ -2,23 +2,20 @@ import { Link, useLocation } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import { Avatar } from "@mui/material";
 import "./index.css";
+import Dropdown from "react-bootstrap/Dropdown";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
 const Header = () => {
-  const [username, setUsername] = useState(null);
-  const name = useSelector((state) => state.api.account);
+  const username = localStorage.getItem("username");
   const location = useLocation();
-
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/";
+  };
   useEffect(() => {
-    if (name) {
-      setUsername(name);
-    } else {
-      setUsername(null);
-    }
-  }, [name]);
-  useEffect(() => {
+    console.log(location);
     if (location.pathname !== "/") {
       let header = document.querySelector(".header");
       header.style.padding = "0px";
@@ -59,7 +56,45 @@ const Header = () => {
               />
             </div>
             {username ? (
-              <Avatar>H</Avatar>
+              <Dropdown>
+                <Dropdown.Toggle variant="transparent">
+                  <Avatar>H</Avatar>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item className="text-decoration-none">
+                    <Link className="text-dark text-decoration-none">
+                      Quản lý phim
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item className="text-decoration-none">
+                    <Link className="text-dark text-decoration-none">
+                      Quản lý nhân viên
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item className="text-decoration-none">
+                    <Link className="text-dark text-decoration-none">
+                      Danh sách khách hàng
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item className="text-decoration-none">
+                    <Link className="text-dark text-decoration-none">
+                      Quản lý vé
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item className="text-decoration-none">
+                    <Link className="text-dark text-decoration-none">
+                      Quản lý khuyến mãi
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={handleLogout}
+                    className="text-decoration-none"
+                  >
+                    Đăng xuất
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             ) : (
               <Link to="/login" className="login-btn text-decoration-none">
                 ĐĂNG NHẬP

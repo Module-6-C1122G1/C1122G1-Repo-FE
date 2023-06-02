@@ -2,6 +2,8 @@ import React from "react";
 import "./index.css";
 import ListFilm from "../../components/film/List";
 import Slider from "react-slick";
+import Header from "../../components/common/header/Header";
+import Footer from "../../components/common/footer/Footer";
 
 const Home = () => {
   const settings = {
@@ -36,6 +38,7 @@ const Home = () => {
 
   return (
     <>
+      <Header />
       <main>
         <article>
           <section>
@@ -69,6 +72,7 @@ const Home = () => {
           <ListFilm />
         </article>
       </main>
+      <Footer />
     </>
   );
 };

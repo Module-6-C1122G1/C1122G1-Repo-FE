@@ -197,38 +197,6 @@ body.active {
   color: #f26b38;
 }
 
-/**
-   * BUTTONS
-   */
-
-.btn {
-  color: var(--white);
-  font-size: var(--fs-11);
-  font-weight: var(--fw-700);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 16px 30px;
-  border: 2px solid #f26b38;
-  border-radius: 50px;
-  transition: var(--transition-1);
-}
-
-.btn > ion-icon {
-  font-size: 18px;
-}
-
-.btn-primary {
-  background: var(--rich-black-fogra-29);
-}
-
-.btn-primary:is(:hover, :focus) {
-  background: #f26b38;
-  color: white;
-}
-
 .movies-list {
   display: grid;
   gap: 50px;
@@ -419,7 +387,10 @@ body.active {
   background-color: #f26b38 !important;
 }
 .login-btn:hover {
-  text-decoration: none;
+  text-decoration: none !important;
+  border: #f26b38 1px solid !important;
+  color: #f26b38 !important;
+  background-color: transparent !important;
 }
 .menu-close-btn {
   color: var(--white);
