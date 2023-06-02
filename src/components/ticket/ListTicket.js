@@ -5,6 +5,7 @@ import ReactPaginate from "react-paginate";
 import { cancelTicket, findAllTicket } from "../../service/TicketService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
 
 export function ListTicket() {
   const [listTicket, setListTicket] = useState([]);
@@ -16,7 +17,6 @@ export function ListTicket() {
     search: "",
   });
   const auth = localStorage.getItem("token");
-
 
   useEffect(() => {
     const list = async () => {
@@ -34,9 +34,10 @@ export function ListTicket() {
 
   const handleCancleTicket = () => {
     const cancel = async () => {
-      console.log(auth);
       await cancelTicket(ticketData.id, auth);
-      setListTicket((state) => state.filter(ticket => ticket.idTicket != ticketData.id))
+      setListTicket((state) =>
+        state.filter((ticket) => ticket.idTicket != ticketData.id)
+      );
       toast.success("Huỷ vé thành công");
     };
     cancel();
@@ -140,7 +141,7 @@ export function ListTicket() {
                                 <td>{ticket.nameCustomer}</td>
                                 <td>{ticket.identityCard}</td>
                                 <td>{ticket.phone}</td>
-                              
+
                                 <td>{ticket.nameFilm}</td>
                                 <td>{ticket.showDate}</td>
                                 <td>{ticket.showTime}</td>
@@ -150,7 +151,8 @@ export function ListTicket() {
                                     : "Chưa nhận"}
                                 </td>
                                 <td>
-                                  <button
+                                  <Link
+                                    to='/'
                                     className="btn btn-outline-success"
                                     title="Nhận vé"
                                   >
@@ -164,8 +166,8 @@ export function ListTicket() {
                                     >
                                       <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z" />
                                       <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z" />
-                                    </svg>
-                                  </button>
+                                      </svg>
+                                  </Link>
                                 </td>
                                 <td>
                                   <button
