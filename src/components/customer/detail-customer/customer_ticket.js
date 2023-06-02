@@ -12,7 +12,6 @@ export function TickBookingList(effect, deps) {
     const [size, setSize] = useState(0);
     const [deleteTicket, setDeleteTicket] = useState();
     const token =localStorage.getItem("token");
-    const username =localStorage.getItem("username");
 
         let stt = page * size + 1
 
@@ -34,7 +33,7 @@ export function TickBookingList(effect, deps) {
     useEffect(() => {
         const fetchApi = async () => {
             try {
-                const result = await customerService.findAllTicketBooking(page,username,token);
+                const result = await customerService.findAllTicketBooking(page,token);
                 setTicketBooking(result.data.content);
                 setPageCount(result.data.totalPages);
                 setSize(result.data.size)
