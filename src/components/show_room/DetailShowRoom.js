@@ -24,7 +24,6 @@ const DetailShowRoom = () => {
     const [listSelecting, setListSelecting] = useState([]);
     const param = useParams();
     const token= localStorage.getItem("token")
-    console.log(token)
     const fetchListPosition = async () => {
         const res = await apiGetListSeatLanhNM(param.id,token);
         const resShowRoom = await getShowRoom(param.id,token);
@@ -121,7 +120,7 @@ const DetailShowRoom = () => {
 
             </div>
             <div className="d-flex justify-content-center mt-4 mb-4 gap-2">
-                <button className="d-flex" style={{borderRadius: 10, height: 40}} type="button" >
+                <button style={{borderRadius: 10, height: 40}} type="button" >
                     <Link style={{textDecoration:"none"}} to={`/admin/showroom/list`}>
                         Quay lại
                     </Link>

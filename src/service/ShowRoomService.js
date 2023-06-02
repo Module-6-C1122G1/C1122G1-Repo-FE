@@ -1,5 +1,24 @@
 import axios from "axios";
 
+export const findAllStatusSeat = async () => {
+    try{
+        const data = await axios.get('http://localhost:8080/api/admin/status-seat/list')
+        return data.data
+    }catch (e) {
+        console.log(e)
+    }
+
+}
+export const findAllTypeSeat = async () => {
+    try{
+        const data = await axios.get('http://localhost:8080/api/admin/type-seat/list')
+        return data.data
+    }catch (e) {
+        console.log(e)
+    }
+
+}
+
 export const findAll = async ({page,search}, auth) => {
     const headers =  {
         'Authorization': 'Bearer ' + auth
@@ -26,22 +45,4 @@ export const getShowRoom = async (id,auth) => {
     }catch (e) {
         console.log(e)
     }
-}
-export const findAllStatusSeat = async () => {
-    try{
-        const data = await axios.get('http://localhost:8080/api/admin/status-seat/list')
-        return data.data
-    }catch (e) {
-        console.log(e)
-    }
-
-}
-export const findAllTypeSeat = async () => {
-    try{
-        const data = await axios.get('http://localhost:8080/api/admin/type-seat/list')
-        return data.data
-    }catch (e) {
-        console.log(e)
-    }
-
 }

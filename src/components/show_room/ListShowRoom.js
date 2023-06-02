@@ -14,7 +14,7 @@ export function ListShowRoom() {
     const auth = localStorage.getItem("token");
     useEffect(() => {
         const list = async () => {
-            const result = await findAll(searchAndPage, auth);
+            const result = await findAll(searchAndPage,auth);
             console.log(result)
             try {
                 setShowRoomList(result.content);
@@ -109,7 +109,7 @@ export function ListShowRoom() {
                                                                     to={'/admin/showroom/detail/' + showRoom.idShowRoom}
 
                                                                 >
-                                                                    >
+                                                                    Chi tiết
                                                                 </Link></button>
                                                             </td>
                                                         </tr>

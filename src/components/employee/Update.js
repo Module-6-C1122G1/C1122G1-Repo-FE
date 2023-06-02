@@ -1,17 +1,21 @@
 import * as employeeService from "../../service/employee/employeeService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import {storage} from "../../firebase";
 import * as Yup from "yup";
 
 export function UpdateEmployee() {
+    const navigate = useNavigate();
     const [employee, setEmployee] = useState();
     const param = useParams();
     const [selectedFile, setSelectedFile] = useState(null);
     const [firebaseImg, setImg] = useState("");
+    const [flag, setFlag] = useState(false)
     const [progress, setProgress] = useState(0);
+    const [imgErr, setImgErr] = useState('')
+
     useEffect(() => {
         const fetchApi = async () => {
             const result = await employeeService.findById(param.id)
@@ -19,13 +23,15 @@ export function UpdateEmployee() {
         };
         fetchApi();
     }, []);
+
+
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
-        console.log(file)
+        setFlag(true)
         if (file) {
-            setSelectedFile(file);
+            setSelectedFile(file)
         }
-    };
+    }
 
     const handleSubmitAsync = async () => {
         return new Promise((resolve, reject) => {
@@ -47,13 +53,14 @@ export function UpdateEmployee() {
                             setImg(downloadUrl);
                             resolve(downloadUrl);
                         } catch (e) {
-                            console.log(e)
+                            setImgErr(e.response.data[0].defaultMessage)
                         }
                     }
                 )
             )
         })
     };
+
     if (!employee) {
         return null;
     }
@@ -61,11 +68,11 @@ export function UpdateEmployee() {
         <>
             <Formik initialValues={{
                 idEmployee: employee?.idEmployee,
-                // imgEmployee: employee?.imgEmployee,
+                imgEmployee: employee?.imgEmployee,
                 accountUser: {
                     id: employee?.accountUser?.id,
                     nameAccount: employee?.accountUser?.nameAccount,
-                    passwordAccount: employee?.accountUser?.passwordAccount
+                    passwordAccount: ""
                 },
                 nameEmployee: employee?.nameEmployee,
                 dateOfBirth: employee?.dateOfBirth,
@@ -77,72 +84,85 @@ export function UpdateEmployee() {
             }}
                     validationSchema={Yup.object({
                         accountUser: Yup.object().shape({
-                            nameAccount: Yup.string().required('Vui lòng nhập tên tài khoản')
-                                .test('check-username', 'Tài khoản đã tồn tại', async function (value) {
-                                    // debugger;
-                                    try {
-                                        if (!value) {
-                                            return true;
-                                        }
-                                        const isUsernameExists = await employeeService.checkUsernameExists(value);
-                                        console.log(isUsernameExists)
-                                        return !isUsernameExists;
-                                    } catch (error) {
-                                        console.log(error);
-                                    }
-
-                                }),
-                            passwordAccount: Yup.string().required('Vui lòng nhập mật khẩu tài khoản'),
-                            againPasswordAccount: Yup.string().required('Vui lòng nhập lại mật khẩu')
-                                .test('password-match', 'Mật khẩu nhập lại không khớp', function (value) {
-                                    debugger;
-                                    return value === this.resolve(Yup.ref('accountUser.passwordAccount'));
-                                })
+                            passwordAccount: Yup.string().min(8, 'Mật khẩu ít nhất 8 ký tự').max(28, 'Mật khẩu tối đa 28 ký tự')
+                                .matches(/^[^\s!#$%^&*()]+$/, "Mật khẩu không chứa khoảng cách , dấu và các kí tự đặc biệt trừ @")
+                                .required('Vui lòng nhập mật khẩu tài khoản'),
+                            againPasswordAccount: Yup.string()
+                                .oneOf([Yup.ref('passwordAccount'), null], 'Mật khẩu không khớp')
+                                .required('Vui lòng nhập lại mật khẩu'),
                         }),
-                        nameEmployee: Yup.string().required('Vui lòng nhập tên nhân viên'),
-                        dateOfBirth: Yup.date().required('Vui lòng nhập ngày sinh'),
+                        nameEmployee: Yup.string().trim().matches(/^(([a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)([a-zA-Z\\s\\'ÀÁÂÃÈÉÊÌÍÒÓ ÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)([a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]))*$/, "Tên không bao gồm kí tự đặc biệt")
+                            .max(100, 'Họ tên tối đa 100 ký tự').required('Vui lòng nhập tên nhân viên'),
+                        dateOfBirth: Yup.date().required('Vui lòng nhập ngày sinh').test('is-over-18', 'Bạn phải trên 18 tuổi', function (value) {
+                            const currentDate = new Date();
+                            const selectedDate = new Date(value);
+                            const ageDiff = currentDate.getFullYear() - selectedDate.getFullYear();
+                            if (ageDiff < 18) {
+                                return false;
+                            }
+                            return true;
+                        }),
                         gender: Yup.string().required('Vui lòng chọn giới tính'),
-                        email: Yup.string().required('Vui lòng nhập địa chỉ email')
+                        email: Yup.string().min(12, 'Email ít nhất 12 ký tự').max(32, 'Email tối đa 32 ký tự')
+                            .matches(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, "Email phải đúng định dạng xxx@gmail.com")
+                            .required('Vui lòng nhập địa chỉ email')
                             .test('check-email', 'Email đã tồn tại', async function (value) {
-                                if (!value) {
-                                    return true; // Không kiểm tra nếu không có giá trị
+                                if (value == employee?.email) {
+                                    return true;
                                 }
-
+                                if (!value) {
+                                    return true;
+                                }
                                 const isUsernameExists = await employeeService.checkEmailExists(value);
                                 return !isUsernameExists;
                             }),
-                        identityCard: Yup.string().required('Vui lòng nhập số CMND')
+                        identityCard: Yup.string().matches(/^[0-9]{12}$/, "CCCD phải là 12 kí tự số").required('Vui lòng nhập số CMND')
                             .test('check-identityCard', 'CCCD đã tồn tại', async function (value) {
+                                if (value == employee?.identityCard) {
+                                    return true;
+                                }
                                 if (!value) {
-                                    return true; // Không kiểm tra nếu không có giá trị
+                                    return true;
                                 }
 
                                 const isUsernameExists = await employeeService.checkIdentityCardExists(value);
                                 return !isUsernameExists;
                             }),
-                        phone: Yup.string().required('Vui lòng nhập số điện thoại')
+                        phone: Yup.string().matches(/^[+]?[0-9]{1,3}[-\\s]?[(]?[0-9]{1,4}[)]?[-\\s]?[0-9]{1,4}[-\\s]?[0-9]{1,9}$/, "Số điện thoại phải là kí tự số")
+                            .min(9, 'Số điện thoại phải từ 10 đến 11 kí tự số').max(10, 'Số điện thoại phải từ 10 đến 11 kí tự số')
+                            .required('Vui lòng nhập số điện thoại')
                             .test('check-phone', 'Số điện thoại đã tồn tại', async function (value) {
-                                if (!value) {
-                                    return true; // Không kiểm tra nếu không có giá trị
+                                if (value == employee?.phone) {
+                                    return true;
                                 }
-
+                                if (!value) {
+                                    return true;
+                                }
                                 const isUsernameExists = await employeeService.checkPhoneExists(value);
                                 return !isUsernameExists;
                             }),
-                        address: Yup.string().required('Vui lòng nhập địa chỉ'),
+                        address: Yup.string().max(100, 'Địa chỉ tối đa 100 ký tự')
+                            .matches(/^[^!@#$%^&*()+=\[\]{};':"\\|.<>?`~]+$/, "Địa chỉ không chứa kí tự đặc biệt trừ /")
+                            .required('Vui lòng nhập địa chỉ'),
                     })}
-                    onSubmit={(values) => {
+                    onSubmit={(values, {setSubmitting}) => {
                         const edit = async () => {
                             const newValue = {
                                 ...values,
                                 imgEmployee: firebaseImg,
                             };
                             try {
-                                newValue.imgEmployee = await handleSubmitAsync();
-                                await employeeService.editEmployee(newValue);
-                                console.log(values)
-                            } catch (e) {
-                                console.log(e);
+                                if (flag) {
+                                    newValue.imgEmployee = await handleSubmitAsync();
+                                    await employeeService.editEmployee(newValue);
+                                } else {
+                                    await employeeService.editEmployee(values);
+                                    console.log(values)
+                                }
+                                // toast(`Chỉnh sửa khuyến mãi thành công! `)
+                                setSubmitting(false)
+                            } catch (error) {
+                                console.log(error);
                             }
 
                         }
@@ -174,7 +194,7 @@ export function UpdateEmployee() {
                                                 type="file"
                                                 onChange={(e) => handleFileSelect(e)}
                                                 id="imgEmployee"
-                                                name={"imgEmployee"}
+                                                name={"firebaseImg"}
                                                 className="form-control-plaintext d-none "
                                             />
                                             <p>
@@ -197,13 +217,13 @@ export function UpdateEmployee() {
                                                 <img
                                                     className={"mt-2"}
                                                     src={URL.createObjectURL(selectedFile)}
-                                                    style={{width: "100%"}}
+                                                    style={{width: "50%"}}
                                                 />
                                             )}
 
                                         </div>
                                         <ErrorMessage name="imgEmployee" component='span'
-                                                      className='form-err'/>
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -224,8 +244,6 @@ export function UpdateEmployee() {
                                                 disabled={true}
                                             />
                                         </div>
-                                        {/*<ErrorMessage name="accountUser" component='span'*/}
-                                        {/*              className='form-err'/>*/}
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -234,7 +252,7 @@ export function UpdateEmployee() {
                                                 className="fw-bold"
                                                 style={{marginRight: "2%"}}
                                             >
-                                                Mật khẩu{" "}
+                                                Mật khẩu
                                                 <span style={{color: "red"}}>(*)</span>
                                             </label>
                                         </div>
@@ -245,28 +263,30 @@ export function UpdateEmployee() {
                                                 name='accountUser.passwordAccount'
                                             />
                                         </div>
-                                        <ErrorMessage name="password" component='span'
-                                                      className='form-err'/>
+                                        <ErrorMessage name="accountUser.passwordAccount" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
-                                    {/*<div className="row" style={{marginBottom: "2%"}}>*/}
-                                    {/*    <div className="col-3" style={{textAlign: "right"}}>*/}
-                                    {/*        <label*/}
-                                    {/*            htmlFor="againPassword"*/}
-                                    {/*            className="fw-bold"*/}
-                                    {/*            style={{marginRight: "2%"}}*/}
-                                    {/*        >*/}
-                                    {/*            Nhập lại mật khẩu <span className="warning">(*)</span>*/}
-                                    {/*        </label>*/}
-                                    {/*    </div>*/}
-                                    {/*    <div className="col-8">*/}
-                                    {/*        <input*/}
-                                    {/*            type="password"*/}
-                                    {/*            style={{width: "100%"}}*/}
-                                    {/*            name="againPassword"*/}
-                                    {/*            id="againPassword"*/}
-                                    {/*        />*/}
-                                    {/*    </div>*/}
-                                    {/*</div>*/}
+                                    <div className="row" style={{marginBottom: "2%"}}>
+                                        <div className="col-3" style={{textAlign: "right"}}>
+                                            <label
+                                                htmlFor="accountUser.againPasswordAccount"
+                                                className="fw-bold"
+                                                style={{marginRight: "2%"}}
+                                            >
+                                                Nhập lại mật khẩu <span style={{color: "red"}}>(*)</span>
+                                            </label>
+                                        </div>
+                                        <div className="col-8">
+                                            <Field
+                                                type="password"
+                                                style={{width: "100%"}}
+                                                name="accountUser.againPasswordAccount"
+                                                id="accountUser.againPasswordAccount"
+                                            />
+                                        </div>
+                                        <ErrorMessage name="accountUser.againPasswordAccount" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
+                                    </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
                                             <label
@@ -286,6 +306,8 @@ export function UpdateEmployee() {
                                                 id="nameEmployee"
                                             />
                                         </div>
+                                        <ErrorMessage name="nameEmployee" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -305,6 +327,8 @@ export function UpdateEmployee() {
                                                 id="dateOfBirth"
                                             />
                                         </div>
+                                        <ErrorMessage name="dateOfBirth" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -324,6 +348,8 @@ export function UpdateEmployee() {
                                                 <label htmlFor='inlineRadio2' style={{marginRight: "5%"}}>Nữ</label>
                                             </div>
                                         </div>
+                                        <ErrorMessage name="gender" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -343,6 +369,8 @@ export function UpdateEmployee() {
                                                 id="email"
                                             />
                                         </div>
+                                        <ErrorMessage name="email" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -362,6 +390,8 @@ export function UpdateEmployee() {
                                                 id="identityCard"
                                             />
                                         </div>
+                                        <ErrorMessage name="identityCard" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -381,6 +411,8 @@ export function UpdateEmployee() {
                                                 id="phone"
                                             />
                                         </div>
+                                        <ErrorMessage name="phone" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -399,6 +431,8 @@ export function UpdateEmployee() {
                                                 style={{width: "100%"}}
                                             />
                                         </div>
+                                        <ErrorMessage name="address" component='span'
+                                                      className='form-err text-center' style={{color: "red"}}/>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>

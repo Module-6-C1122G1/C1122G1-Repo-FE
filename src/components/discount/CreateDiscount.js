@@ -4,11 +4,11 @@ import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage"
-import {storage} from "../../firebase"
 import "./DiscountFormCss.css";
 import {ColorRing} from "react-loader-spinner"
 import "react-toastify/dist/ReactToastify.css"
 import {ToastContainer, toast} from "react-toastify"
+import {storage} from "../../firebase";
 
 export default function DiscountCreate() {
     useEffect(() => {
@@ -23,6 +23,7 @@ export default function DiscountCreate() {
         if (file) {
             setSelectedFile(file)
         }
+
     }
     const handleSubmitImg = async () => {
         return new Promise((resolve, reject) => {
@@ -67,7 +68,7 @@ export default function DiscountCreate() {
                 }
             }
             validationSchema={Yup.object({
-                nameDiscount: Yup.string().trim().required("Tên khuyến mãi không được để trống"),
+                nameDiscount: Yup.string().trim().required("Tên khuyến mãi không được để trống").max(255,"Tên khuyến mãi không được quá 255 từ"),
                 dateStart: Yup.date()
                     .required('Ngày bắt đầu không được để trống')
                     .min(
@@ -84,7 +85,7 @@ export default function DiscountCreate() {
                         Yup.ref('dateStart'),
                         'Ngày kết thúc phải lớn hơn ngày bắt đầu'
                     ),
-                describeDiscount: Yup.string().trim().required("Chi tiết khuyến mãi không được để trống"),
+                describeDiscount: Yup.string().trim().required("Chi tiết khuyến mãi không được để trống").max(1000,"Chi tiết khuyến mãi không được quá 1000 từ"),
                 percentDiscount: Yup.number().required("Phần trăm giảm giá không được để trống").
                 min(0.01,"Phần trăm giảm giá không được nhỏ hơn hoặc bằng 0").
                 max(100,"Phần trăm giảm giá không được lớn hơn 100")
@@ -99,7 +100,7 @@ export default function DiscountCreate() {
                     newValue.imageDiscount = await handleSubmitImg();
                     await DiscountService.createDiscount(newValue);
                     toast(`Thêm khuyến mãi thành công! `)
-                    navigate('/discount/create');
+                    navigate('/discount-list');
                     setSubmitting(false)
                 }
             }
@@ -155,7 +156,7 @@ export default function DiscountCreate() {
                                         <td className="">
                                             <Field name="dateStart" className="form-control" id="startTime"
                                                    type="date"
-                                                   />
+                                            />
                                             <ErrorMessage name='dateStart' component='span' className='text-danger'/>
                                         </td>
                                     </tr>
@@ -233,6 +234,7 @@ export default function DiscountCreate() {
                                             {!selectedFile && (
                                                 <span className={"mt-2 text-danger"} >Chưa có hình ảnh được chọn</span>
                                             )}
+
                                             {selectedFile && (
                                                 <img
                                                     className={"mt-2"}
@@ -269,11 +271,11 @@ export default function DiscountCreate() {
                                     <tr style={{height: 120}}>
                                         <td colSpan={2}>
                                             <button onClick={event => {
-                                                navigate('/discount')
+                                                navigate('/discount-list')
                                             }}
                                                     className="btn btn-secondary float-end"
                                                     style={{
-                                                        width: "20%",
+                                                        width: "120px",
                                                         background: "black",
                                                         color: "white",
                                                         marginLeft: "3%"

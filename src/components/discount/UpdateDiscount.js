@@ -4,9 +4,10 @@ import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {storage} from "../../firebase";
+
 import "react-toastify/dist/ReactToastify.css"
 import {ToastContainer, toast} from "react-toastify"
+import {storage} from "../../firebase";
 export default function DiscountUpdate() {
     useEffect(() => {
         document.title = "Chỉnh sửa khuyến mãi"
@@ -81,7 +82,7 @@ export default function DiscountUpdate() {
                 }
             }
             validationSchema={Yup.object({
-                nameDiscount: Yup.string().trim().required("Tên khuyến mãi không được để trống"),
+                nameDiscount: Yup.string().trim().required("Tên khuyến mãi không được để trống").max(255,"Tên khuyến mãi không được quá 255 từ"),
                 dateStart: Yup.date()
                     .required('Ngày bắt đầu không được để trống')
                     .min(
@@ -98,7 +99,7 @@ export default function DiscountUpdate() {
                         Yup.ref('dateStart'),
                         'Ngày kết thúc phải lớn hơn ngày bắt đầu'
                     ),
-                describeDiscount: Yup.string().trim().required("Chi tiết khuyến mãi không được để trống"),
+                describeDiscount: Yup.string().trim().required("Chi tiết khuyến mãi không được để trống").max(255,"Chi tiết khuyến mãi không được quá 255 từ"),
                 percentDiscount: Yup.number().required("Phần trăm giảm giá không được để trống").
                 min(0.01,"Phần trăm giảm giá không được nhỏ hơn hoặc bằng 0").
                 max(100,"Phần trăm giảm giá không được lớn hơn 100")
@@ -114,7 +115,7 @@ export default function DiscountUpdate() {
                         newValue.imageDiscount = await handleSubmitImg();
                         await DiscountService.updateDiscount(newValue);
                         toast(`Thêm khuyến mãi thành công! `)
-                        navigate(`/discount/update/${param.id}`);
+                        navigate(`/discount-list`);
                         setSubmitting(false)
                     } catch (e) {
                         console.log(e)
@@ -135,7 +136,7 @@ export default function DiscountUpdate() {
                                     >
                                         <th className="title-font" style={{fontSize: 35, textAlign: 'center'}}
                                             colSpan={2}>
-                                            Thêm mới khuyến mãi
+                                            Chỉnh sửa khuyến mãi
                                         </th>
                                     </tr>
                                     </thead>
@@ -238,14 +239,14 @@ export default function DiscountUpdate() {
                                                 id="img"
                                                 name={"img"} />
                                             <ErrorMessage name='img' component='span' className='text-danger'/>
-                                                <label htmlFor="img" style={{
-                                                    padding: "6px 12px",
-                                                    marginTop: "12px",
-                                                    border: "1px solid",
-                                                    borderRadius: "4px"
-                                                }}>
-                                                    Chọn hình ảnh
-                                                </label>
+                                            <label htmlFor="img" style={{
+                                                padding: "6px 12px",
+                                                marginTop: "12px",
+                                                border: "1px solid",
+                                                borderRadius: "4px"
+                                            }}>
+                                                Chọn hình ảnh
+                                            </label>
                                             <br />
 
                                             {!selectedFile && (
@@ -291,14 +292,14 @@ export default function DiscountUpdate() {
                                     <tr style={{height: 120}}>
                                         <td colSpan={2}>
                                             <button onClick={event => {
-                                                navigate('/discount')
+                                                navigate('/discount-list')
                                             }}
                                                     className="btn btn-secondary float-end"
                                                     style={{
-                                                        width: 95,
+                                                        width: "20%",
                                                         background: "black",
                                                         color: "white",
-                                                        marginLeft: 7
+                                                        marginLeft: "3%"
                                                     }}
                                             >
                                                 Quay lại

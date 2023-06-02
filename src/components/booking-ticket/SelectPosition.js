@@ -1,6 +1,6 @@
 import {toast} from 'react-toastify';
 import {apiGetListSeat} from '../../service/SeatService';
-import './index.css';
+import './booking-ticket.css';
 import React, {useEffect, useState} from "react";
 import {format} from "date-fns";
 const positionStatus = {
@@ -174,11 +174,11 @@ const SelectPosition = (props) => {
                     <span className="notice d-inline-flex" style={{fontSize:15}}>
                       (*) Phim chỉ dành cho khán giả từ 16 tuổi trở lên
                     </span>
-                        <div className="font-weight-normal mb-1"> <b>Ngày chiếu:</b> {format(new Date(filmData?.showTime.showDate),"dd/MM/yyyy")}</div>
-                        <div className="font-weight-normal mb-1"><b>Lịch chiếu phim:</b> {filmData.showTime.showTime}</div>
-                        <div className="font-weight-normal mb-1"><b>Thời lượng:</b> {filmData.film.timeFilm} phút</div>
+                        <div className="font-weight-normal mb-1" ><b style={{fontWeight: "bold"}}> Ngày chiếu: </b> {format(new Date(filmData?.showTime.showDate),"dd/MM/yyyy")}</div>
+                        <div className="font-weight-normal mb-1"><b style={{fontWeight: "bold"}}>Lịch chiếu phim:</b> {filmData.showTime.showTime}</div>
+                        <div className="font-weight-normal mb-1"><b style={{fontWeight: "bold"}}>Thời lượng:</b> {filmData.film.timeFilm} phút</div>
                         <div className="font-weight-normal mb-1 d-flex">
-                            <b>Ghế chọn :</b> &nbsp;
+                            <b style={{fontWeight: "bold"}}>Ghế chọn :</b> &nbsp;
                             <div className='d-flex gap-2 flex-wrap'>
                                 {allSeat.filter(seat => listSelecting.includes(seat.idSeat)).map(item =>
                                         <span key={item.idSeat} className='position-item available selecting'>
@@ -188,7 +188,7 @@ const SelectPosition = (props) => {
                             </div>
                         </div>
                         <div className="font-weight-normal mb-1 d-flex align-items-baseline">
-                            <span><b>Tổng:</b></span> &nbsp;
+                            <span><b style={{fontWeight: "bold"}}>Tổng:</b></span> &nbsp;
                             <span className='total-price'>
                                 {calTotalPrice()}
                             </span>&nbsp;
@@ -198,8 +198,8 @@ const SelectPosition = (props) => {
                 </div>
             </div>
             <div className="d-flex justify-content-center mt-4 mb-4 gap-2">
-                <button onClick={() => onBack()} className="d-flex btn btn-secondary" type="button">Quay lại</button>
-                <button disabled={!listSelecting.length} onClick={handleContinue} className="d-flex btn btn-primary"
+                <button onClick={() => onBack()} className="d-flex btn btn-secondary" type="button" style={{borderRadius: 10, height: 40}}>Quay lại</button>
+                <button disabled={!listSelecting.length} onClick={handleContinue} className="btn btn-primary d-flex" style={{borderRadius: 10, height: 40}}
                         type="button">Tiếp tục
                 </button>
             </div>

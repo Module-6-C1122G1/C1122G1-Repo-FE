@@ -27,7 +27,7 @@ function DiscountList() {
     }
 
     function handleUpdate(id) {
-        navigate(`/discount-edit/${id}`)
+        navigate(`/discount-update/${id}`)
     }
 
     const handlePageClick = (data) => {
@@ -65,7 +65,10 @@ function DiscountList() {
                             >
                                 DANH SÁCH KHUYẾN MÃI
                             </h2>
-
+                            <div>
+                                <NavLink className="btn btn-light" to='/discount-create'>
+                                </NavLink>
+                            </div>
                         </div>
                         <div className="row">
                             <div className="col-md-4">
@@ -141,7 +144,7 @@ function DiscountList() {
                                                 <tr>
                                                     <th style={{width: "2%"}} className="text-center">STT</th>
                                                     <th style={{width: "15%"}} className="text-center">Khuyến mãi</th>
-                                                    <th className="text-center">Hình ảnh</th>
+                                                    <th style={{width: "10%"}} className="text-center">Hình ảnh</th>
                                                     <th style={{width: "10%"}} className="text-center">Ngày bắt đầu</th>
                                                     <th style={{width: "10%"}} className="text-center">Ngày kết thúc
                                                     </th>
@@ -156,22 +159,33 @@ function DiscountList() {
                                                     discountList.map((discount, index) => {
                                                         return (
                                                             <tr key={index}>
-                                                                <td scope="row" className="text-center">{stt++}</td>
-                                                                <td>{discount.nameDiscount}</td>
-                                                                <td>{discount.imageDiscount}</td>
-                                                                <td className="text-center">{discount.dateStart}</td>
-                                                                <td className="text-center">{discount.dateEnd}</td>
-                                                                <td>{discount.describeDiscount}</td>
-                                                                <td className="text-center">{discount.percentDiscount}</td>
-                                                                <td>
+                                                                <td scope="row" className="text-center align-middle "> <strong>{stt++}</strong></td>
+                                                                <td style={{ width: "15%" }} className="align-middle text-start">
+                                                                    {discount.nameDiscount}
+                                                                </td>
+                                                                <td className="text-center align-middle">
+                                                                    <div className="d-flex justify-content-center">
+                                                                        <a href={discount.imageDiscount} target="_blank" rel="noopener noreferrer">
+                                                                        <img src={discount.imageDiscount} alt="Hình ảnh khuyến mãi" style={{ width: 70, height: 100 }} />
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                                <td className="text-center align-middle">{discount.dateStart}</td>
+                                                                <td className="text-center align-middle">{discount.dateEnd}</td>
+                                                                <td className="align-middle text-start">{discount.describeDiscount}</td>
+                                                                <td className="text-center align-middle">
+                                                                    <strong>{discount.percentDiscount}</strong>
+                                                                </td>
+                                                                <td className="text-center align-middle">
                                                                     <div className="d-flex justify-content-center">
                                                                         <button type="button"
-                                                                                className="btn btn-outline-warning">
+                                                                                className="btn btn-outline-warning"
+                                                                                onClick={() => handleUpdate(discount.idDiscount)}>
                                                                             <i className="bi bi-pencil"/>
                                                                         </button>
                                                                     </div>
                                                                 </td>
-                                                                <td>
+                                                                <td className="text-center align-middle">
                                                                     <div className="d-flex justify-content-center">
                                                                         <button
                                                                             type="button"
@@ -244,5 +258,3 @@ function DiscountList() {
 }
 
 export default DiscountList;
-
-
