@@ -12,7 +12,12 @@ import ResetPassword from "./pages/Login/ResetPassword";
 
 import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
+
 import { ListTicket } from "./components/ticket/ListTicket";
+
+import {CreateEmployee} from "./components/employee/Create";
+import {UpdateEmployee} from "./components/employee/Update";
+
 
 
 function App() {
@@ -26,12 +31,18 @@ function App() {
                 <Route path="/confirm-email" element={<ConfirmEmail/>}/>
                 <Route path="/reset-password" element={<ResetPassword/>}/>
                 <Route path='/discount-list' element={<ListDiscount/>}/>
-                <Route path='/discount/create' element={<CreateDiscount/>}/>
-                <Route path='/discount/update/:id' element={<UpdateDiscount/>}/>
+                <Route path='/discount-create' element={<CreateDiscount/>}/>
+                <Route path='/discount-update/:id' element={<UpdateDiscount/>}/>
                 <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>
+
                 <Route path='/list-ticket' element={<ListTicket/>}/>
+
+                <Route path='/create-employee' element={<CreateEmployee/>}/>
+                <Route path='/update-employee/:id' element={<UpdateEmployee/>}/>
+
             </Route>
         </Routes>
     );
 }
+
 export default App;

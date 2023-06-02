@@ -115,7 +115,7 @@ export default function DiscountUpdate() {
                         newValue.imageDiscount = await handleSubmitImg();
                         await DiscountService.updateDiscount(newValue);
                         toast(`Thêm khuyến mãi thành công! `)
-                        navigate(`/discount/update/${param.id}`);
+                        navigate(`/discount-list`);
                         setSubmitting(false)
                     } catch (e) {
                         console.log(e)
@@ -292,7 +292,7 @@ export default function DiscountUpdate() {
                                     <tr style={{height: 120}}>
                                         <td colSpan={2}>
                                             <button onClick={event => {
-                                                navigate('/discount')
+                                                navigate('/discount-list')
                                             }}
                                                     className="btn btn-secondary float-end"
                                                     style={{

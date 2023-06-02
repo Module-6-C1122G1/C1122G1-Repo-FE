@@ -4,7 +4,9 @@ import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import {storage} from "../../firebase";
-import * as Yup from "yup";
+import "react-toastify/dist/ReactToastify.css"
+import {ToastContainer, toast} from "react-toastify"
+import * as Yup from 'yup';
 
 export function UpdateEmployee() {
     const navigate = useNavigate();
@@ -93,7 +95,7 @@ export function UpdateEmployee() {
                         }),
                         nameEmployee: Yup.string().trim().matches(/^(([a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)([a-zA-Z\\s\\'ÀÁÂÃÈÉÊÌÍÒÓ ÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)([a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]))*$/, "Tên không bao gồm kí tự đặc biệt")
                             .max(100, 'Họ tên tối đa 100 ký tự').required('Vui lòng nhập tên nhân viên'),
-                        dateOfBirth: Yup.date().required('Vui lòng nhập ngày sinh').test('is-over-18', 'Bạn phải trên 18 tuổi', function (value) {
+                        dateOfBirth: Yup.date().required('Vui lòng chọn ngày sinh').test('is-over-18', 'Bạn phải trên 18 tuổi', function (value) {
                             const currentDate = new Date();
                             const selectedDate = new Date(value);
                             const ageDiff = currentDate.getFullYear() - selectedDate.getFullYear();
@@ -159,7 +161,8 @@ export function UpdateEmployee() {
                                     await employeeService.editEmployee(values);
                                     console.log(values)
                                 }
-                                // toast(`Chỉnh sửa khuyến mãi thành công! `)
+                                toast(`Cập nhật nhân viên thành công! `)
+                                // navigate(`/employee`);
                                 setSubmitting(false)
                             } catch (error) {
                                 console.log(error);
