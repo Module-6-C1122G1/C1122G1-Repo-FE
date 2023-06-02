@@ -27,7 +27,7 @@ function DiscountList() {
     }
 
     function handleUpdate(id) {
-        navigate(`/discount-edit/${id}`)
+        navigate(`/discount-update/${id}`)
     }
 
     const handlePageClick = (data) => {
@@ -65,7 +65,10 @@ function DiscountList() {
                             >
                                 DANH SÁCH KHUYẾN MÃI
                             </h2>
-
+                            <div>
+                                <NavLink className="btn btn-light" to='/discount-create'>
+                                </NavLink>
+                            </div>
                         </div>
                         <div className="row">
                             <div className="col-md-4">
@@ -176,7 +179,8 @@ function DiscountList() {
                                                                 <td className="text-center align-middle">
                                                                     <div className="d-flex justify-content-center">
                                                                         <button type="button"
-                                                                                className="btn btn-outline-warning">
+                                                                                className="btn btn-outline-warning"
+                                                                                onClick={() => handleUpdate(discount.idDiscount)}>
                                                                             <i className="bi bi-pencil"/>
                                                                         </button>
                                                                     </div>

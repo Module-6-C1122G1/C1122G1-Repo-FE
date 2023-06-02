@@ -100,7 +100,7 @@ export default function DiscountCreate() {
                     newValue.imageDiscount = await handleSubmitImg();
                     await DiscountService.createDiscount(newValue);
                     toast(`Thêm khuyến mãi thành công! `)
-                    navigate('/discount/create');
+                    navigate('/discount-list');
                     setSubmitting(false)
                 }
             }
@@ -271,7 +271,7 @@ export default function DiscountCreate() {
                                     <tr style={{height: 120}}>
                                         <td colSpan={2}>
                                             <button onClick={event => {
-                                                navigate('/discount')
+                                                navigate('/discount-list')
                                             }}
                                                     className="btn btn-secondary float-end"
                                                     style={{

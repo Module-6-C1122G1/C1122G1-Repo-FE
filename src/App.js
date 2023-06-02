@@ -25,8 +25,8 @@ function App() {
                 <Route path="/confirm-email" element={<ConfirmEmail/>}/>
                 <Route path="/reset-password" element={<ResetPassword/>}/>
                 <Route path='/discount-list' element={<ListDiscount/>}/>
-                <Route path='/discount/create' element={<CreateDiscount/>}/>
-                <Route path='/discount/update/:id' element={<UpdateDiscount/>}/>
+                <Route path='/discount-create' element={<CreateDiscount/>}/>
+                <Route path='/discount-update/:id' element={<UpdateDiscount/>}/>
                 <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>
             </Route>
         </Routes>
