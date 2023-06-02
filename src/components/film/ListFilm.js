@@ -5,7 +5,6 @@ import {Field, Form, Formik} from "formik";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
-import {AiOutlineAim, AiOutlineClose} from "react-icons/ai";
 
 export function ListFilm() {
     const [filmList, setFilmList] = useState([]);
@@ -21,6 +20,7 @@ export function ListFilm() {
     useEffect(() => {
         const listFilm = async () => {
             const result = await FilmService.listFilm(searchAndPage);
+            console.log(result)
             try {
                 setFilmList(result.content);
                 setPageCount(result.totalPages);
@@ -45,7 +45,7 @@ export function ListFilm() {
 
     const handlePageClick = (event) => {
         console.log(event.selected)
-       setSearchAndPage((pre)=> ({pre, page: event.selected}))
+        setSearchAndPage((prev) => ({...prev, page: event.selected}));
     };
 
     const handleSearch = async (e) => {
@@ -165,11 +165,18 @@ export function ListFilm() {
                                                                         </svg>
                                                                     </button>
                                                                 </Link>
-                                                                <button type="submit" className="btn btn-outline-warning me-3" data-bs-toggle="modal"
+                                                                <button type="submit" className="btn btn-danger" data-bs-toggle="modal"
                                                                         data-bs-target="#exampleModal"
                                                                         onClick={() => getData(film.idFilm)}
-                                                                        style={{height: "70%",color: "red"}}
-                                                                ><AiOutlineClose/>
+                                                                >
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                         height="16" fill="currentColor"
+                                                                         className="bi bi-trash" viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                                                        <path
+                                                                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                                                    </svg>
                                                                 </button>
                                                             </td>
                                                         </tr>

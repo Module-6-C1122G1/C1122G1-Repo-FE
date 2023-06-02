@@ -132,6 +132,7 @@ export function CreateFilm() {
                     newValue.imgFilm = await handleSubmitAsync();
                     newValue.typeFilm.idTypeFilm = parseInt(values.idTypeFilm);
                     delete values.idTypeFilm;
+                    console.log(newValue)
                     await FilmService.createFilm(newValue);
                     toast("Thêm mới phim " + values.nameFilm + " thành công")
                     navigate('/admin/film/list')

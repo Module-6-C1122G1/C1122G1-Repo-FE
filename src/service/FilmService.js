@@ -35,12 +35,13 @@ export const createFilm = async (film) => {
     }
 }
 export const listFilm = async ({page,search}) => {
+
     try {
-        const result = await axios.get(`http://localhost:8080/api/public/movie?page=${page?page:0}
+        const result = await axios.get(`http://localhost:8080/api/public/movie/list-film?page=${page?page:0}
         &search=${search}`)
-        return result.data;
-    }catch (e){
-        console.log(e);
+        return result.data
+    }catch (e) {
+        console.log(e)
     }
 }
 export const deleteFilm = async (idFilm) => {
