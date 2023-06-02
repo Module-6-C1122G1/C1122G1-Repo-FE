@@ -4,9 +4,11 @@ import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage"
-import "./DiscountFormCss.css";
+
+
 import "react-toastify/dist/ReactToastify.css"
 import {ToastContainer, toast} from "react-toastify"
+import discountStyle from "./DiscountFormCss.module.css"
 import {storage} from "../../firebase";
 
 export default function DiscountCreate() {
@@ -19,11 +21,13 @@ export default function DiscountCreate() {
     const navigate = useNavigate()
     const handleSelectFile = (event) => {
         const file = event.target.files[0];
+        setImgErr("")
         if (file) {
             setSelectedFile(file)
         }
 
     }
+    const [imgErr,setImgErr] = useState('')
     const handleSubmitImg = async () => {
         return new Promise((resolve, reject) => {
 
@@ -88,21 +92,29 @@ export default function DiscountCreate() {
                 percentDiscount: Yup.number().required("Phần trăm giảm giá không được để trống").min(0.01, "Phần trăm giảm giá không được nhỏ hơn hoặc bằng 0").max(100, "Phần trăm giảm giá không được lớn hơn 100")
             })}
             onSubmit={
-                async (values, {setSubmitting}) => {
+
+                async (values,{setSubmitting}) => {
+
 
                     const newValue = {
                         ...values,
                         imageDiscount: img
                     }
-                    newValue.imageDiscount = await handleSubmitImg();
-                    await DiscountService.createDiscount(newValue);
-                    toast(`Thêm khuyến mãi thành công! `)
-                    navigate('/discount-list');
-                    setSubmitting(false)
+
+                    try {
+                        newValue.imageDiscount = await handleSubmitImg();
+                        await DiscountService.createDiscount(newValue);
+                        toast(`Thêm khuyến mãi thành công! `)
+                        navigate('/discount');
+                        setSubmitting(false)
+                    }catch (e) {
+                        setImgErr(e.response.data[0].defaultMessage)
+                    }
+
                 }
             }
         >
-            <Form>
+            <Form >
                 <div className="container">
                     <div className="row mx-0">
                         <div className="col-md-7 m-auto shadow border border-1 mt-5 px-0 col-12">
@@ -112,7 +124,7 @@ export default function DiscountCreate() {
                                     <tr
                                         style={{background: "#f26b38", paddingRight: 0, marginLeft: 0}}
                                     >
-                                        <th className="title-font" style={{fontSize: 35, textAlign: 'center'}}
+                                        <th className={`${discountStyle.titleFont}`} style={{fontSize: 35, textAlign: 'center'}}
                                             colSpan={2}>
                                             Thêm mới khuyến mãi
                                         </th>
@@ -122,14 +134,15 @@ export default function DiscountCreate() {
                                     <tr className="">
                                         <td className="row" style={{alignItems: "end"}}>
                                             <label
-                                                className="normal-font col-11"
+                                                className={`${discountStyle.normalFont} col-11 float-end`}
                                                 htmlFor="name"
-                                                style={{marginRight: 15}}
+                                                // style={{marginRight: 15,  fontFamily: "'Roboto', 'sans-serif'",fontSize: '16px',
+                                                //     fontWeight: 'bold'}}
                                             >
                                                 Tiêu đề <span style={{color: "red", fontSize: 20,}}>*</span>
                                             </label>
                                         </td>
-                                        <td className="">
+                                        <td style={{width:'60%'}}>
                                             <Field
                                                 name='nameDiscount'
                                                 className="form-control"
@@ -241,6 +254,7 @@ export default function DiscountCreate() {
                                                     style={{width: "50%"}}
                                                 />
                                             )}
+                                            <span className={'text-danger'}>{imgErr}</span>
                                         </td>
                                     </tr>
                                     <tr className="">

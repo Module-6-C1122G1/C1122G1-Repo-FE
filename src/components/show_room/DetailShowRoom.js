@@ -1,4 +1,8 @@
-import {apiGetListSeat, apiGetListSeatLanhNM} from '../../service/SeatService';
+import {
+    apiGetListSeatLanhNM,
+    apiUpdateTypeSeatNormal,
+    apiUpdateTypeSeatVip
+} from '../../service/SeatService';
 
 import React, {useEffect, useState} from "react";
 import './show-room.css';
@@ -15,27 +19,33 @@ const positionStatus = {
 const seatRows = ['G', 'F', 'E', 'D', 'C', 'B', 'A'];
 
 const DetailShowRoom = () => {
-
-    const [allSeat, setAllSeat] = useState(null);
     const [showRoom, setShowRoom] = useState(null);
-    const [listStatus, setListStatus] = useState([]);
-    const [listType, setListType] = useState([]);
-    const [listShowRoom, setListShowARoom] = useState([]);
     const [allSeatByRow, setAllSeatByRow] = useState([]);
     const [listSelecting, setListSelecting] = useState([]);
-    const [numberOfSeat, setNumberOfSeat] = useState(1);
     const param = useParams();
     const token= localStorage.getItem("token")
-
     const fetchListPosition = async () => {
         const res = await apiGetListSeatLanhNM(param.id,token);
-        setAllSeat(res);
-        console.log(res);
         const resShowRoom = await getShowRoom(param.id,token);
         setShowRoom(resShowRoom);
         const positionsByRow = orderSeatByRow(res);
         setAllSeatByRow(positionsByRow);
     };
+
+    const handlerSelecting = async (seatId, seatType) => {
+        if(seatType===2){
+            await apiUpdateTypeSeatVip(seatId,token)
+            const res = await apiGetListSeatLanhNM(param.id,token);
+            const positionsByRow = orderSeatByRow(res);
+            setAllSeatByRow(positionsByRow);
+        }else {
+            await apiUpdateTypeSeatNormal(seatId,token)
+            const res = await apiGetListSeatLanhNM(param.id,token);
+            const positionsByRow = orderSeatByRow(res);
+            setAllSeatByRow(positionsByRow);
+        }
+    };
+
     useEffect(() => {
         fetchListPosition()
     }, [])
@@ -57,7 +67,7 @@ const DetailShowRoom = () => {
     };
 
     return (
-        <>
+        allSeatByRow &&  <>
             <div className="container-lg">
                 <div className='row mt-4'>
                     <div className=' row col-12 col-md-12'>
@@ -76,6 +86,7 @@ const DetailShowRoom = () => {
                                                     <div
                                                         key={p.seatId}
                                                         className={`position-item ${positionStatus[p.type]} ${listSelecting.includes(p.seatId) ? 'selecting' : ''}`}
+                                                        onClick={() => handlerSelecting(p.seatId, p.type)}
                                                     >{p.name.slice(1)}
 
                                                     </div>)
@@ -109,7 +120,7 @@ const DetailShowRoom = () => {
 
             </div>
             <div className="d-flex justify-content-center mt-4 mb-4 gap-2">
-                <button className="d-flex btn btn-dark" type="button" >
+                <button style={{borderRadius: 10, height: 40}} type="button" >
                     <Link style={{textDecoration:"none"}} to={`/admin/showroom/list`}>
                         Quay lại
                     </Link>

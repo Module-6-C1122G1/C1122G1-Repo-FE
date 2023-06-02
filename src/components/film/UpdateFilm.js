@@ -98,10 +98,13 @@ export function UpdateFilm() {
                 timeFilm: films?.timeFilm,
                 movieLabel: films?.movieLabel,
                 trailer: films?.trailer,
-                idTypeFilm: films.typeFilm?.idTypeFilm,
+                typeFilm: {
+                    idTypeFilm: films?.typeFilm.idTypeFilm,
+                },
                 normalSeatPrice: films?.normalSeatPrice,
                 vipSeatPrice: films?.vipSeatPrice,
-                describeFilm: films?.describeFilm
+                describeFilm: films?.describeFilm,
+                nameTypeFilm: films?.typeFilm.nameTypeFilm
 
             }}
             validationSchema={Yup.object({
@@ -110,15 +113,17 @@ export function UpdateFilm() {
                 nation: Yup.string()
                     .required("Nhập quốc gia"),
                 dateStartFilm: Yup.date()
-                    .required("Nhập ngày khởi chiếu"),
+                    .required('Ngày bắt đầu không được để trống'),
                 dateEndFilm: Yup.date()
-                    .required("Nhập ngày kết thúc"),
+                    .required('Ngày kết thúc không được để trống')
+                    .min(
+                        Yup.ref('dateStartFilm'),
+                        'Ngày kết thúc phải lớn hơn ngày bắt đầu'
+                    ),
                 actor: Yup.string()
                     .required("Nhập diễn viên"),
                 studioFilm: Yup.string()
                     .required("Nhập hãng phim"),
-                idTypeFilm: Yup.number()
-                    .required("Chọn loại phim"),
                 director: Yup.string()
                     .required("Nhập đạo diễn"),
                 timeFilm: Yup.number()
@@ -144,13 +149,13 @@ export function UpdateFilm() {
             onSubmit={(values, {setSubmitting}) => {
                 console.log(values)
                 const edit = async () => {
-                    const newValue = {
-                        ...values,
-                        imgFilm: firebaseImg,
-                    };
+                    // const newValue = {
+                    //     ...values,
+                    //     imgFilm: firebaseImg,
+                    // };
                     // newValue.imgFilm = await handleSubmitAsync();
-                    values.typeFilm.idTypeFilm = parseInt(values.idTypeFilm);
-                    // delete values.idTypeFilm;
+                    values.typeFilm.idTypeFilm = parseInt(values.typeFilm.idTypeFilm);
+                    delete values.idTypeFilm;
                     console.log(values)
                     await FilmService.updateFilm(values);
                     setSubmitting(false)
@@ -376,10 +381,10 @@ export function UpdateFilm() {
                                         </label>
                                     </div>
                                     <div className="col-8">
-                                        <Field as='select' name="idTypeFilm" style={{width:"100%", border:"1px solid #ced0da"}}>
+                                        <Field as='select' name="typeFilm.idTypeFilm" style={{width:"100%", border:"1px solid #ced0da"}}>
                                             {listTypeFilm.map((listType, index) => (
                                                 <option
-                                                    value={listType.idTypeFilm}>{listType.nameTypeFilm}</option>
+                                                    value={parseInt(listType.idTypeFilm)}>{listType.nameTypeFilm}</option>
                                             ))}
                                         </Field>
                                     </div>

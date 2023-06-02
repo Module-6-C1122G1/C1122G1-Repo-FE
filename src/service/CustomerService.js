@@ -1,9 +1,9 @@
 import axios from "axios";
-import Swal from "sweetalert2";
+
 
 export const findAllAndSearch = async (nameSearch) => {
     try {
-        const result = await axios.get(`http://localhost:8080/customer?nameSearch=${nameSearch}`)
+        const result = await axios.get(`http://localhost:8080/api/employee/customer?nameSearch=${nameSearch}`)
         console.log(result.data)
         return result.data
     } catch (error) {
@@ -13,7 +13,7 @@ export const findAllAndSearch = async (nameSearch) => {
 
 export const findAll = async () => {
     try {
-        const result = await axios.get(`http://localhost:8080/customer`)
+        const result = await axios.get(`http://localhost:8080/api/employee/customer`)
         console.log(result.data)
         return result.data
     } catch (error) {
@@ -21,14 +21,11 @@ export const findAll = async () => {
     }
 }
 export const editCustomer = async (customer) => {
+
     try {
         await axios.patch(`http://localhost:8080/customer/update`, {...customer})
-        Swal.fire({
-            title: 'Thông báo!',
-            text: 'Thanh toán thành công',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
+
+        alert("Chỉnh sửa thành công !")
     } catch (error) {
         console.log(error)
 
