@@ -11,18 +11,20 @@ import ConfirmEmail from "./pages/Login/ConfirmEmail";
 import ResetPassword from "./pages/Login/ResetPassword";
 import { DetailDiscount } from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
+import { ListTicket } from "./components/ticket/ListTicket";
+
+import {CreateEmployee} from "./components/employee/Create";
+import {UpdateEmployee} from "./components/employee/Update";
 import { ConfirmTicket } from "./components/confirm-ticket/ConfirmTicket";
-import ListAllFilm from "./components/film/ListAllFilm";
 import BookingTicket from "./pages/Booking/BookingTicket";
 import DiscountList from "./components/discount/ListDiscount";
 import DiscountListPublic from "./components/discount/DiscountList";
-
 function App() {
   return (
     <Routes>
       <Route path="" element={<CommonLayout />}>
+      <Route path='/list-ticket' element={<ListTicket/>}/>
         <Route path="/" element={<Home />} />
-        <Route path="/film" element={<ListAllFilm />} />
         <Route path="/admin/film/create" element={<CreateFilm />} />
         <Route path="/booking-ticket" element={<BookingTicket />} />
         <Route path="/login" element={<Login />} />
