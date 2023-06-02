@@ -1,4 +1,5 @@
-import {BrowserRouter} from 'react-router-dom';
+
+import { BrowserRouter } from 'react-router-dom';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -20,14 +21,14 @@ import {store} from "./store";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
-        {/*<Provider store={store}>*/}
-        <BrowserRouter>
-            <App/>
-            <ToastContainer/>
-        </BrowserRouter>
-        {/*</Provider>*/}
+        <Provider store={store}>
+            <BrowserRouter>
+                <App/>
+                <ToastContainer/>
+            </BrowserRouter>
+        </Provider>
 
-    </React.StrictMode>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
