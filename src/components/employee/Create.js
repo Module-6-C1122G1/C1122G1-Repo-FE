@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {storage} from "../../config/firebase";
+import {storage} from "../../firebase";
 import * as employeeService from "../../service/employee/employeeService"
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import "react-toastify/dist/ReactToastify.css"

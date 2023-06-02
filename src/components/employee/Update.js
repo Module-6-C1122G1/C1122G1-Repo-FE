@@ -3,7 +3,7 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {storage} from "../../config/firebase";
+import {storage} from "../../firebase";
 import "react-toastify/dist/ReactToastify.css"
 import {ToastContainer, toast} from "react-toastify"
 import * as Yup from 'yup';
