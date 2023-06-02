@@ -14,7 +14,8 @@ export function ListShowRoom() {
     const auth = localStorage.getItem("token");
     useEffect(() => {
         const list = async () => {
-            const result = await findAll(searchAndPage, auth);
+            const result = await findAll(searchAndPage,auth);
+            console.log(result)
             try {
                 setShowRoomList(result.content);
                 setPageCount(result.totalPages);
@@ -39,7 +40,6 @@ export function ListShowRoom() {
                                 DANH SÁCH PHÒNG CHIẾU
                             </h2>
                         </div>
-
                         <div style={{marginTop: 20}}>
                             <div className="row">
                                 <div className="col-md-12">
@@ -57,17 +57,17 @@ export function ListShowRoom() {
                                                             });
                                                         }}
                                                     >
-                                                        <Form className="d-flex" style={{marginLeft:'600px',marginBottom:'20px'}}>
+                                                        <Form style={{boxShadow: "none",padding:"0"}}>
                                                             <Field
                                                                 name="search"
-                                                                style={{width: "30%"}}
+                                                                style={{width: "30%", display: "inline-block", float: "left"}}
                                                                 className="form-control"
                                                                 type="text"
                                                                 placeholder="Tìm kiếm theo tên phòng chiếu..."
                                                             />
                                                             <button
                                                                 type="submit"
-                                                                className="btn btn-outline-primary"
+                                                                className="btn btn-primary"
                                                                 title="Tìm kiếm"
                                                             >
                                                                 <svg
@@ -94,6 +94,7 @@ export function ListShowRoom() {
                                                         <th>Mã phòng chiếu</th>
                                                         <th>Tên phòng chiếu</th>
                                                         <th>Số lượng ghế</th>
+                                                        <th>Chi tiết phòng chiếu</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -101,15 +102,16 @@ export function ListShowRoom() {
                                                         <tr key={index}>
                                                             <td>{index + 1}</td>
                                                             <td>{showRoom.idShowRoom}</td>
-                                                            <td>
+                                                            <td>{showRoom.nameShowRoom}</td>
+                                                            <td>{showRoom.quantitySeat}</td>
+                                                            <td><button>
                                                                 <Link
                                                                     to={'/admin/showroom/detail/' + showRoom.idShowRoom}
 
                                                                 >
-                                                                    {showRoom.nameShowRoom}
-                                                                </Link>
+                                                                    Chi tiết
+                                                                </Link></button>
                                                             </td>
-                                                            <td>{showRoom.quantitySeat}</td>
                                                         </tr>
                                                     ))
                                                     }
