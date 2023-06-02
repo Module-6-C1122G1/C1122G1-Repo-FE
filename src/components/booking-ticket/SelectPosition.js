@@ -1,15 +1,15 @@
 import {toast} from 'react-toastify';
 import {apiGetListSeat} from '../../service/SeatService';
-import './index.css';
-import {useEffect, useState} from "react";
-
+import './booking-ticket.css';
+import React, {useEffect, useState} from "react";
+import {format} from "date-fns";
 const positionStatus = {
     1: 'sell',
     2: 'available',
     3: 'unavailable',
 };
 
-const seatRows = ['G', 'F', 'E', 'D', 'C', 'B', 'A'];
+const seatRows = ['I', 'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'];
 
 const SelectPosition = (props) => {
     const {onFinish, onBack, filmData} = props;
@@ -42,7 +42,6 @@ const SelectPosition = (props) => {
     };
 
     const handlerSelecting = async (seatId, seatStatus) => {
-        // chỉ áp dụng với ghế có status là unavailable
         if (seatStatus === 2) {
             if (!listSelecting.includes(seatId)) {
                 setListSelecting([...listSelecting, seatId]);
@@ -63,7 +62,7 @@ const SelectPosition = (props) => {
     };
     const calTotalPrice = () => {
         const selectectSeat = allSeat.filter(seat => listSelecting.includes(seat.idSeat));
-        const priceArray = selectectSeat.map(seat => seat.typeSeat.idTypeSeat === 2 ? filmData.film.normalSeatPrice : filmData.film.vipSeatPrice);
+        const priceArray = selectectSeat.map(seat => seat.typeSeat.idTypeSeat === 1 ? filmData.film.normalSeatPrice : filmData.film.vipSeatPrice);
         return priceArray.reduce((a, b) => a + b, 0);
     };
 
@@ -102,7 +101,8 @@ const SelectPosition = (props) => {
                                 <path
                                     d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
                             </svg>
-                            <input type="number" value={numberOfSeat} onChange={handleChange}  className="hideNumberArrows"/>
+                            <input type="number" value={numberOfSeat} onChange={handleChange}
+                                   className="hideNumberArrows"/>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                  className="bi bi-plus-circle-fill" viewBox="0 0 16 16" onClick={() => {
                                 increaseQuantity();
@@ -164,17 +164,21 @@ const SelectPosition = (props) => {
                 </div>
                 <div className='col-12 col-md-4'>
                     <div className='film-info'>
-                        <h4 className="title text-center">Phim đã chọn</h4>
-                        <img className='w-100'
-                             src="https://cdn.galaxycine.vn/media/2023/5/26/450x300-tien-ca_1685071817669.jpg"/>
+                        {/*<h4 className="title text-center">Phim đã chọn</h4>*/}
+                        <img className='w-100 text-center px-4'
+                             src={filmData?.film?.imgFilm} style={{height: 300}}/>
                         <h5 className='film-title text-center mt-2'>
                             {filmData?.film?.nameFilm}
                         </h5>
-                        <div className="font-weight-normal mb-1">Ngày chiếu: {filmData?.showTime.showDate}</div>
-                        <div className="font-weight-normal mb-1">Lịch chiếu phim: {filmData.showTime.showTime}</div>
-                        <div className="font-weight-normal mb-1">Thời lượng: {filmData.film.timeFilm} phút</div>
+                    <span className="age-rating">T16</span>
+                    <span className="notice d-inline-flex" style={{fontSize:15}}>
+                      (*) Phim chỉ dành cho khán giả từ 16 tuổi trở lên
+                    </span>
+                        <div className="font-weight-normal mb-1" ><b style={{fontWeight: "bold"}}> Ngày chiếu: </b> {format(new Date(filmData?.showTime.showDate),"dd/MM/yyyy")}</div>
+                        <div className="font-weight-normal mb-1"><b style={{fontWeight: "bold"}}>Lịch chiếu phim:</b> {filmData.showTime.showTime}</div>
+                        <div className="font-weight-normal mb-1"><b style={{fontWeight: "bold"}}>Thời lượng:</b> {filmData.film.timeFilm} phút</div>
                         <div className="font-weight-normal mb-1 d-flex">
-                            Ghế chọn : &nbsp;
+                            <b style={{fontWeight: "bold"}}>Ghế chọn :</b> &nbsp;
                             <div className='d-flex gap-2 flex-wrap'>
                                 {allSeat.filter(seat => listSelecting.includes(seat.idSeat)).map(item =>
                                         <span key={item.idSeat} className='position-item available selecting'>
@@ -184,7 +188,7 @@ const SelectPosition = (props) => {
                             </div>
                         </div>
                         <div className="font-weight-normal mb-1 d-flex align-items-baseline">
-                            <span>Tổng:</span> &nbsp;
+                            <span><b style={{fontWeight: "bold"}}>Tổng:</b></span> &nbsp;
                             <span className='total-price'>
                                 {calTotalPrice()}
                             </span>&nbsp;
@@ -194,12 +198,12 @@ const SelectPosition = (props) => {
                 </div>
             </div>
             <div className="d-flex justify-content-center mt-4 mb-4 gap-2">
-                <button onClick={() => onBack()} className="d-flex btn btn-secondary" type="button">Quay lại</button>
-                <button disabled={!listSelecting.length} onClick={handleContinue} className="d-flex btn btn-primary"
+                <button onClick={() => onBack()} className="d-flex btn btn-secondary" type="button" style={{borderRadius: 10, height: 40}}>Quay lại</button>
+                <button disabled={!listSelecting.length} onClick={handleContinue} className="btn btn-primary d-flex" style={{borderRadius: 10, height: 40}}
                         type="button">Tiếp tục
                 </button>
             </div>
         </div>
-    );
+);
 };
 export default SelectPosition;
