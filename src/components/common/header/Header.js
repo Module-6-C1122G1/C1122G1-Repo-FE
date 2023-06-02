@@ -1,4 +1,5 @@
 import "./index.css";
+import React from "react";
 
 const Header = () => {
   window.addEventListener('scroll', function() {
@@ -15,11 +16,7 @@ const Header = () => {
         <div className="container">
           <div className="overlay" data-overlay="" />
           <a href="./index.html" className="logo">
-            <img
-              src="assets\img\home\logo.png"
-              alt="Filmlane logo"
-              style={{ height: 80, width: 150 }}
-            />
+            <img src={`${process.env.PUBLIC_URL}/assets/img/home/logo.png`} alt="Filmlane logo" height='80' width='160'/>
           </a>
           <div className="header-actions">
             <div className="search-box">

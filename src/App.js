@@ -25,6 +25,8 @@ import {ListFilm} from "./components/film/ListFilm";
 import {CreateEmployee} from "./components/employee/Create";
 import {UpdateEmployee} from "./components/employee/Update";
 import {UpdateFilm} from "./components/film/UpdateFilm";
+import {TickBookingList} from "./components/customer/detail-customer/customer_ticket";
+import {CustomerPointHistory} from "./components/customer/detail-customer/customer_point_history";
 
 
 
@@ -49,6 +51,8 @@ function App() {
         <Route path='/update-employee/:id' element={<UpdateEmployee/>}/>
         <Route path='/employee' element={<EmployeeList/>}/>
         <Route path='/discount/list' element={<ListDiscount/>}/>
+        <Route path='/ticket-customer' element={<TickBookingList />} />
+        <Route path='/ticket-customer/history' element={<CustomerPointHistory />} />
       </Route>
     </Routes>
   );
