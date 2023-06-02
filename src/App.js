@@ -9,9 +9,13 @@ import UpdateDiscount from "./components/discount/UpdateDiscount";
 import Login from "./pages/Login/Login";
 import ConfirmEmail from "./pages/Login/ConfirmEmail";
 import ResetPassword from "./pages/Login/ResetPassword";
-import { DetailDiscount } from "./components/discount/DetailDiscount";
+import EmployeeList from "./components/employee/List";
+import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
+import { CreateEmployee } from "./components/employee/Create";
+import { UpdateEmployee } from "./components/employee/Update";
 import { ListTicket } from "./components/ticket/ListTicket";
+
 
 import {CreateEmployee} from "./components/employee/Create";
 import {UpdateEmployee} from "./components/employee/Update";
@@ -20,12 +24,16 @@ import BookingTicket from "./pages/Booking/BookingTicket";
 import DiscountList from "./components/discount/ListDiscount";
 import DiscountListPublic from "./components/discount/DiscountList";
 function App() {
-  return (
-    <Routes>
+
+
+    return (
+        <Routes>
       <Route path="" element={<CommonLayout />}>
-      <Route path='/list-ticket' element={<ListTicket/>}/>
         <Route path="/" element={<Home />} />
+        {/*<Route path="/film" element={<ListAllFilm />} />*/}
         <Route path="/admin/film/create" element={<CreateFilm />} />
+        <Route path="/admin/film/edit/:id" element={<UpdateFilm />} />
+        <Route path="/admin/film/list" element={<ListFilm />} />
         <Route path="/booking-ticket" element={<BookingTicket />} />
         <Route path="/login" element={<Login />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />
@@ -34,9 +42,13 @@ function App() {
         <Route path="/discount/create" element={<CreateDiscount />} />
         <Route path="/discount/update/:id" element={<UpdateDiscount />} />
         <Route path="/detail-discount/:id" element={<DetailDiscount />} />
+        <Route path='/create-employee' element={<CreateEmployee/>}/>
+        <Route path='/update-employee/:id' element={<UpdateEmployee/>}/>
+        <Route path='/employee' element={<EmployeeList/>}/>
       </Route>
     </Routes>
-  );
+    );
+
 }
 export default App;
 
