@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const findAllAndSearch = async (nameSearch) => {
     try {
-        const result = await axios.get(`http://localhost:8080/customer?nameSearch=${nameSearch}`)
+        const result = await axios.get(`http://localhost:8080/api/employee/customer?nameSearch=${nameSearch}`)
         console.log(result.data)
         return result.data
     } catch (error) {
@@ -13,7 +13,7 @@ export const findAllAndSearch = async (nameSearch) => {
 
 export const findAll = async () => {
     try {
-        const result = await axios.get(`http://localhost:8080/customer`)
+        const result = await axios.get(`http://localhost:8080/api/employee/customer`)
         console.log(result.data)
         return result.data
     } catch (error) {

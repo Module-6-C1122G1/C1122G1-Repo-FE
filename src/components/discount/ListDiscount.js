@@ -6,6 +6,7 @@ import {Field, Form, Formik} from "formik";
 import React, {useEffect, useState} from "react";
 import "react-toastify/dist/ReactToastify.css"
 import {toast, ToastContainer} from "react-toastify";
+import {color} from "chart.js/helpers";
 
 function DiscountList() {
     const [discountList, setDiscountList] = useState([]);
@@ -20,6 +21,7 @@ function DiscountList() {
     const [firstRecord, setFirstRecord] = useState(1);
     const [lastRecord, setLastRecord] = useState(0);
     const [totalRecords, setTotalRecords] = useState(0);
+    const [showRecords, setShowRecords] = useState(true);
 
     const getPropsDeleteDiscount = (id, name) => {
         setDeleteId(id);
@@ -27,7 +29,7 @@ function DiscountList() {
     }
 
     function handleUpdate(id) {
-        navigate(`/discount-edit/${id}`)
+        navigate(`/discount-update/${id}`)
     }
 
     const handlePageClick = (data) => {
@@ -35,22 +37,20 @@ function DiscountList() {
     };
 
     const findAll = async () => {
-        const rs = await discountService.findByName("", page)
-        setDiscountList(rs.data.content)
-        setPageCount(rs.data.totalPages)
-        setSize(rs.data.size)
+        const rs = await discountService.findByName("", page);
+        setDiscountList(rs.data.content);
+        setPageCount(rs.data.totalPages);
+        setSize(rs.data.size);
         setTotalRecords(rs.data.totalElements);
-
-        const first = page * size + 1;
-        const last = (page + 1) * size;
-        setFirstRecord(first);
-        setLastRecord(Math.min(last, rs.data.totalElements));
-
-    }
+    };
 
     useEffect(() => {
-        findAll()
-    }, [page])
+        findAll();
+        const first = page * size + 1;
+        const last = Math.min((page + 1) * size, totalRecords);
+        setFirstRecord(first);
+        setLastRecord(last);
+    }, [page, size, totalRecords]);
 
 
     return (
@@ -69,12 +69,14 @@ function DiscountList() {
                         </div>
                         <div className="row">
                             <div className="col-md-4">
+                                <NavLink to='/discount-create'>
                                 <button
                                     style={{marginLeft: 85}}
-                                    className="btn btn-outline-primary"
+                                    className="btn btn-outline-primary text-dark"
                                 >
-                                    <i className="bi bi-plus-circle"/> Thêm mới khuyến mãi
+                                    <i className="bi bi-plus-circle" /> Thêm mới khuyến mãi
                                 </button>
+                                    </NavLink>
                             </div>
                             <div className="row col-md-8">
                                 <Formik initialValues={{
@@ -124,6 +126,7 @@ function DiscountList() {
                                                     <button
                                                         className="btn btn-outline-primary ms-3"
                                                         onClick={() => setShowMessage(false)}
+
                                                     >
                                                         Trở về danh sách khuyến mãi
                                                     </button>
@@ -176,7 +179,8 @@ function DiscountList() {
                                                                 <td className="text-center align-middle">
                                                                     <div className="d-flex justify-content-center">
                                                                         <button type="button"
-                                                                                className="btn btn-outline-warning">
+                                                                                className="btn btn-outline-warning"
+                                                                                onClick={() => handleUpdate(discount.idDiscount)}>
                                                                             <i className="bi bi-pencil"/>
                                                                         </button>
                                                                     </div>
