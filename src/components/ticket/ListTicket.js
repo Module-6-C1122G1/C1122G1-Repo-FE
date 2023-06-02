@@ -152,7 +152,7 @@ export function ListTicket() {
                                 </td>
                                 <td>
                                   <Link
-                                    to='/'
+                                    to={`/ticket/detail/${ticket.idTicket}`}
                                     className="btn btn-outline-success"
                                     title="Nhận vé"
                                   >

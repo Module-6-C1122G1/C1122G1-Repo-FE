@@ -29,7 +29,7 @@ function App() {
                 <Route path='/discount/create' element={<CreateDiscount/>}/>
                 <Route path='/discount/update/:id' element={<UpdateDiscount/>}/>
                 <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>
-                <Route path='/listTicket' element={<ListTicket/>}/>
+                <Route path='/list-ticket' element={<ListTicket/>}/>
             </Route>
         </Routes>
     );
