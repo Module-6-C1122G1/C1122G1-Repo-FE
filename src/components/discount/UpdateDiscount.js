@@ -126,7 +126,7 @@ export default function DiscountUpdate() {
                             console.log(values)
                         }
                         toast(`Chỉnh sửa khuyến mãi thành công! `)
-                        navigate(`/discount/update/${param.id}`);
+                        navigate(`/discount`);
                         setSubmitting(false)
                     } catch (e) {
                         setImgErr(e.response.data[0].defaultMessage)
@@ -304,7 +304,7 @@ export default function DiscountUpdate() {
                                     <tr style={{height: 120}}>
                                         <td colSpan={2}>
                                             <button onClick={event => {
-                                                navigate('/discount')
+                                                navigate('/discount-list')
                                             }}
                                                     className="btn btn-secondary float-end"
                                                     style={{

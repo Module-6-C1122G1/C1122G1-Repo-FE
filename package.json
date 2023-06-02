@@ -1,5 +1,5 @@
 {
-  "name": "fashion_shop",
+  "name": "dn-cinema-fe-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,6 +16,7 @@
     "firebase": "^9.22.1",
     "formik": "^2.2.9",
     "history": "^5.3.0",
+    "jquery": "^3.7.0",
     "json-server": "^0.17.3",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
@@ -24,6 +25,7 @@
     "react-loader-spinner": "^5.3.4",
     "react-paginate": "^8.2.0",
     "react-redux": "^8.0.5",
+    "react-router": "^6.11.2",
     "react-router-dom": "^6.10.0",
     "react-script": "^2.0.5",
     "react-scripts": "^5.0.1",

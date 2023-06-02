@@ -31,8 +31,8 @@ export const save = async (discount) => {
     } catch (e) {
         console.log(e)
     }
-
 }
+
 
 export const remove = async (id) => {
     try {
