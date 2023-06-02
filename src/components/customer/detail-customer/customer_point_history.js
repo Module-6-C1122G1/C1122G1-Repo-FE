@@ -29,6 +29,7 @@ export function CustomerPointHistory() {
                 setPointHistory(result.data.content);
                 setPageCount(result.data.totalPages);
                 setSize(result.data.size)
+                console.log(result)
                 } catch (error) {
                 console.log(error)
             }
