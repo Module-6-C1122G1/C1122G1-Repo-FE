@@ -28,14 +28,14 @@ const SelectShowTime = (props) => {
     };
     const fetchShowTimesByFilm = async (id) => {
         const res = await apiGetShowTimesByFilm(id);
-        const datesByFilm =  [...new Set(res.map(item => format(new Date(item.showDate),"dd/MM/yyyy")))];
-        // const datesByFilm =  [...new Set(res.map(item => item.showDate))];
+        // const datesByFilm =  [...new Set(res.map(item => format(new Date(item.showDate),"dd/MM/yyyy")))];
+        const datesByFilm =  [...new Set(res.map(item => item.showDate))];
         console.log(datesByFilm)
         setAllDates(datesByFilm)
     }
     const onSelectDate = (date) => {
-        setSelectedDate(format(new Date(date),'yyyy-dd-MM'));
-        // setSelectedDate(date);
+        // setSelectedDate(format(new Date(date),'yyyy-dd-MM'));
+        setSelectedDate(date);
         console.log(date)
     };
 
@@ -96,8 +96,8 @@ const SelectShowTime = (props) => {
                                 {allDates.map(it =>
                                     <div
                                         key={it}
-                                        className={`item ${format(new Date(selectedDate),'dd/MM/yyyy') === it ? 'selected' : ''}`}
-                                        // className={`item ${selectedDate === it ? 'selected' : ''}`}
+                                        // className={`item ${format(new Date(selectedDate),'dd/MM/yyyy') === it ? 'selected' : ''}`}
+                                        className={`item ${selectedDate === it ? 'selected' : ''}`}
                                         onClick={() => onSelectDate(it)}
                                     >
                                         {it}

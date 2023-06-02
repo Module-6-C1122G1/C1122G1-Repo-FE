@@ -71,17 +71,16 @@ export function ConfirmTicket(props) {
         if (discount.trim !== null) {
             const result = await checkDiscount(discount, token);
             console.log(result)
-            if (discounts.idDiscount==null){
-                if (result===undefined){
-                    document.getElementById('error').innerText='Mã giảm giá không tồn tại'
-                }else {
+            if (discounts.idDiscount == null) {
+                if (result === undefined) {
+                    document.getElementById('error').innerText = 'Mã giảm giá không tồn tại'
+                } else {
                     const prices = -result.percentDiscount * price / 100 + price;
                     setPrice(prices);
                     setDiscount(result);
                 }
-            }
-            else {
-                document.getElementById('error').innerText='Bạn chỉ được áp dụng 1 mã giảm giá'
+            } else {
+                document.getElementById('error').innerText = 'Bạn chỉ được áp dụng 1 mã giảm giá'
             }
         }
     }
@@ -100,9 +99,7 @@ export function ConfirmTicket(props) {
 
                     let price = +document.getElementById('ok').innerText;
                     let dis = +document.getElementById('dis').value;
-                    debugger
                     console.log(values)
-                    debugger
                     const save = async () => {
                         window.location.href = await pay({...values, price: price, idDiscount: dis}, token)
                     }
@@ -203,7 +200,7 @@ export function ConfirmTicket(props) {
                                             <button type="button" style={{width: "18%", marginRight: "4%"}}>
                                                 Quay lại
                                             </button>
-                                            <button type="submit">Thanh toán</button>
+                                            <button style={{width: "20%"}} type="submit">Thanh toán</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -248,19 +245,23 @@ export function ConfirmTicket(props) {
                                                                 chiếu: &nbsp;</b>{filmData.showTime.showTime}&nbsp; | {filmData.showTime.showDate}
                                                         </div>
                                                         <div className="dotted-line">
-                                                            <b>Ghế: &nbsp;</b>
+                                                            <b style={{display:"block"}}>Ghế: &nbsp;</b>
                                                             <galaxy-summary-seats
                                                                 ng-model="bookingTickets"
                                                                 ng-seat-label="seatLabel"
                                                                 className="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty"
                                                             >
-                                                                {seats.map((seat,index) => (
-                                                                    <span className="select-seat ng-binding"  >{seat} &nbsp; |</span>
-                                                                ))}
-                                                                {/* ngIf: items.length */}
+                                                                {seats.map((seat, index) => {
+                                                                    if (index === 0) {
+                                                                        return (<span style={{display:"inline"}}
+                                                                            className="select-seat ng-binding">{seat} &nbsp; |</span>)
+                                                                    } else {
+                                                                        return (<span style={{float: "left",display:"inline"}}
+                                                                                      className="select-seat ng-binding">{seat} &nbsp; |</span>)
+                                                                    }
+                                                                })}
                                                             </galaxy-summary-seats>
                                                         </div>
-                                                        {/* ngIf: appliedVouchers.length */}
                                                     </div>
                                                     <div className="ticket-price-total">
                                                         <p>
@@ -273,9 +274,7 @@ export function ConfirmTicket(props) {
                                                                 ng-loyayty-discount="loyaltyDiscount"
                                                                 className="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty"
                                                             >
-                                                                <p><span className="ng-binding"
-                                                                         id="ok">{price}</span>
-                                                                    VNĐ</p>
+                                                                <p><span className="ng-binding" id="ok">{price} VNĐ</span></p>
                                                             </galaxy-summary-ticket>
                                                         </p>
                                                     </div>
