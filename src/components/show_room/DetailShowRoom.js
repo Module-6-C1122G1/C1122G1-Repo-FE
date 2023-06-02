@@ -1,5 +1,4 @@
 import {
-    apiGetListSeat,
     apiGetListSeatLanhNM,
     apiUpdateTypeSeatNormal,
     apiUpdateTypeSeatVip
@@ -10,7 +9,6 @@ import './show-room.css';
 import {useParams} from "react-router";
 import {getShowRoom} from "../../service/ShowRoomService";
 import {Link} from "react-router-dom";
-import * as toast from "react-toastify";
 
 
 const positionStatus = {
@@ -123,7 +121,7 @@ const DetailShowRoom = () => {
 
             </div>
             <div className="d-flex justify-content-center mt-4 mb-4 gap-2">
-                <button className="d-flex btn btn-dark" type="button" >
+                <button className="d-flex" style={{borderRadius: 10, height: 40}} type="button" >
                     <Link style={{textDecoration:"none"}} to={`/admin/showroom/list`}>
                         Quay lại
                     </Link>

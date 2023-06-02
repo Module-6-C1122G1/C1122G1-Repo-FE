@@ -27,9 +27,10 @@ export function ConfirmTicket(props) {
     const [price, setPrice] = useState(0);
     const [discounts, setDiscount] = useState({});
     const [customer, setCustomer] = useState({});
-    const [countDown, setCountDown] = useState(900)
+    const [countDown, setCountDown] = useState(1000)
     const timerId = useRef()
     const navigate = useNavigate()
+
 
     useEffect(() => {
         timerId.current = setInterval(() => {
@@ -37,6 +38,7 @@ export function ConfirmTicket(props) {
         }, 1000)
         return () => clearInterval(timerId.current)
     }, [])
+
 
     useEffect(() => {
         if (countDown <= 0) {
@@ -49,25 +51,38 @@ export function ConfirmTicket(props) {
         }
     }, [countDown])
 
+
     useEffect(() => {
         const fetchApi = async () => {
             const result = await findByIdSeat(listSelectingData, filmData.film.idFilm, token)
             const customers = await getCustomer(useName, token)
             setCustomer(customers)
-            console.log(result)
+            console.log(customers)
+            console.log(result.listSeats)
             setSeat(result.listSeats)
             setPrice(result.priceTicket)
         }
         fetchApi();
     }, [])
+
+
     const handleDiscount = async () => {
         const discount = await document.getElementById("nameDiscount").value;
         if (discount.trim !== null) {
             const result = await checkDiscount(discount, token);
-            const prices = -result.percentDiscount * price / 100 + price;
-            debugger
-            setPrice(prices);
-            setDiscount(result);
+            console.log(result)
+            if (discounts.idDiscount==null){
+                if (result===undefined){
+                    document.getElementById('error').innerText='Mã giảm giá không tồn tại'
+                }else {
+                    const prices = -result.percentDiscount * price / 100 + price;
+                    setPrice(prices);
+                    setDiscount(result);
+                }
+            }
+            else {
+                document.getElementById('error').innerText='Bạn chỉ được áp dụng 1 mã giảm giá'
+            }
         }
     }
     return (
@@ -122,6 +137,7 @@ export function ConfirmTicket(props) {
                                         <td>
                                             <input
                                                 type="text"
+                                                disabled
                                                 value={customer.nameCustomer}
                                                 style={{width: "40%", height: 40}}
                                             />
@@ -158,6 +174,10 @@ export function ConfirmTicket(props) {
                                                 id="nameDiscount"
                                             />
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><p id='error'></p></td>
                                     </tr>
                                     <tr>
                                         <td/>
@@ -234,10 +254,8 @@ export function ConfirmTicket(props) {
                                                                 ng-seat-label="seatLabel"
                                                                 className="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty"
                                                             >
-                                                                {seats.map((seat) => (
-                                                                    <span
-                                                                        className="select-seat ng-binding">{seat} &nbsp; |</span>
-
+                                                                {seats.map((seat,index) => (
+                                                                    <span className="select-seat ng-binding"  >{seat} &nbsp; |</span>
                                                                 ))}
                                                                 {/* ngIf: items.length */}
                                                             </galaxy-summary-seats>
@@ -295,7 +313,6 @@ export function ConfirmTicket(props) {
                     </div>
                 </Form>
             </Formik>
-            <Footer/>
         </>
     )
 }

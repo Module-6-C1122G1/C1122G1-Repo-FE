@@ -16,7 +16,6 @@ export const apiGetListSeatLanhNM = async (id,auth) => {
 export const apiGetListSeat = async (id) => {
         try {
         const result = await axios.get(`http://localhost:8080/api/public/seat/${id}`);
-
         return result.data;
     } catch (e) {
         console.log(e);
@@ -52,32 +51,3 @@ export const apiUpdateTypeSeatNormal = async (seat,auth) => {
         console.log(e)
     }
 }
-
-
-// export const apiUpdateTypeSeatNormal = async (seat,auth) => {
-//     const config = {
-//         headers: {
-//             'Authorization': 'Bearer ' + auth
-//         }
-//     }
-//     try {
-//         const result = await axios.put('http://localhost:8080/api/admin/seat/update-type-normal/', seat,config)
-//         return result.data;
-//     }catch (e) {
-//         console.log(e)
-//     }
-// }
-//
-// export const apiUpdateTypeSeatVip = async (seat,auth) => {
-//     const config = {
-//         headers: {
-//             'Authorization': 'Bearer ' + auth
-//         }
-//     }
-//     try {
-//         const result = await axios.put('http://localhost:8080/api/admin/seat/update-type-vip/', seat,config)
-//         return result.data;
-//     }catch (e) {
-//         console.log(e)
-//     }
-// }
