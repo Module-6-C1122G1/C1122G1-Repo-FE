@@ -1,22 +1,22 @@
 import axios from "axios";
 
-export const findAllTicketBooking = async (page,auth) => {
+export const findAllTicketBooking = async (page,username,auth) => {
     const headers= {
         'Authorization': 'Bearer ' + auth
     }
     try {
-        const result = await axios.get(`http://localhost:8080/api/user/ticket-customer?page=${page?page:0}`,{headers})
+        const result = await axios.get(`http://localhost:8080/api/user/ticket-customer?page=${page?page:0}&&username=${username}`,{headers})
         return result
     } catch (error) {
         console.log(error)
     }
 }
-export const findAllTicketBookingPoint = async (page,auth) => {
+export const findAllTicketBookingPoint = async (page,username,auth) => {
     const headers= {
         'Authorization': 'Bearer ' + auth
     }
     try {
-        return axios.get(`http://localhost:8080/api/user/ticket-customer/history?page=${page?page:0}`,{headers});
+        return axios.get(`http://localhost:8080/api/user/ticket-customer/history?page=${page?page:0}&&username=${username}`,{headers});
     } catch (error) {
         console.log(error)
     }

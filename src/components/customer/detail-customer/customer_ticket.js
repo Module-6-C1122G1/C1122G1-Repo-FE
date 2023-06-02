@@ -12,6 +12,7 @@ export function TickBookingList(effect, deps) {
     const [size, setSize] = useState(0);
     const [deleteTicket, setDeleteTicket] = useState();
     const token =localStorage.getItem("token");
+    const username =localStorage.getItem("username");
 
         let stt = page * size + 1
 
@@ -33,7 +34,7 @@ export function TickBookingList(effect, deps) {
     useEffect(() => {
         const fetchApi = async () => {
             try {
-                const result = await customerService.findAllTicketBooking(page,token);
+                const result = await customerService.findAllTicketBooking(page,username,token);
                 setTicketBooking(result.data.content);
                 setPageCount(result.data.totalPages);
                 setSize(result.data.size)
@@ -64,17 +65,11 @@ export function TickBookingList(effect, deps) {
                             Quản lý tài khoản
                         </h2>
                         <p className="text-center flex-column">
-                            <img src={ticketBooking[0]?.imgCustomer}
+                            <img src={ticketBooking?.imgCustomer}
                                  className="rounded-circle"
                                  style={{width: 100 , margin : `0 auto`}}
                                  height="100px"
                             />
-                            {/*<img*/}
-                            {/*    src="https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2022/05/hinh-avatar-doi-dep-2022-6-696x696.jpg?fit=700%2C20000&quality=95&ssl=1"*/}
-                            {/*    className="rounded-circle"*/}
-                            {/*    style={{width: 100 , margin : `0 auto`}}*/}
-                            {/*    height="100px"*/}
-                            {/*/>*/}
                         </p>
                         <p style={{fontSize: 25}} className="text-center mt-3">
                             {localStorage.getItem("username")}
