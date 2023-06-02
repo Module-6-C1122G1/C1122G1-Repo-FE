@@ -5,7 +5,6 @@ import {useNavigate} from "react-router";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage"
 import "./DiscountFormCss.css";
-import {ColorRing} from "react-loader-spinner"
 import "react-toastify/dist/ReactToastify.css"
 import {ToastContainer, toast} from "react-toastify"
 import {storage} from "../../firebase";
@@ -68,7 +67,7 @@ export default function DiscountCreate() {
                 }
             }
             validationSchema={Yup.object({
-                nameDiscount: Yup.string().trim().required("Tên khuyến mãi không được để trống").max(255,"Tên khuyến mãi không được quá 255 từ"),
+                nameDiscount: Yup.string().trim().required("Tên khuyến mãi không được để trống").max(255, "Tên khuyến mãi không được quá 255 từ"),
                 dateStart: Yup.date()
                     .required('Ngày bắt đầu không được để trống')
                     .min(
@@ -85,13 +84,11 @@ export default function DiscountCreate() {
                         Yup.ref('dateStart'),
                         'Ngày kết thúc phải lớn hơn ngày bắt đầu'
                     ),
-                describeDiscount: Yup.string().trim().required("Chi tiết khuyến mãi không được để trống").max(1000,"Chi tiết khuyến mãi không được quá 1000 từ"),
-                percentDiscount: Yup.number().required("Phần trăm giảm giá không được để trống").
-                min(0.01,"Phần trăm giảm giá không được nhỏ hơn hoặc bằng 0").
-                max(100,"Phần trăm giảm giá không được lớn hơn 100")
+                describeDiscount: Yup.string().trim().required("Chi tiết khuyến mãi không được để trống").max(1000, "Chi tiết khuyến mãi không được quá 1000 từ"),
+                percentDiscount: Yup.number().required("Phần trăm giảm giá không được để trống").min(0.01, "Phần trăm giảm giá không được nhỏ hơn hoặc bằng 0").max(100, "Phần trăm giảm giá không được lớn hơn 100")
             })}
             onSubmit={
-                async (values,{setSubmitting}) => {
+                async (values, {setSubmitting}) => {
 
                     const newValue = {
                         ...values,
@@ -129,7 +126,7 @@ export default function DiscountCreate() {
                                                 htmlFor="name"
                                                 style={{marginRight: 15}}
                                             >
-                                                Tiêu đề <span style={{color: "red", fontSize: 20, }}>*</span>
+                                                Tiêu đề <span style={{color: "red", fontSize: 20,}}>*</span>
                                             </label>
                                         </td>
                                         <td className="">
@@ -199,7 +196,8 @@ export default function DiscountCreate() {
                                                 style={{width: "100%"}}
                                                 type="number"
                                             />
-                                            <ErrorMessage name='percentDiscount' component='span' className='text-danger'/>
+                                            <ErrorMessage name='percentDiscount' component='span'
+                                                          className='text-danger'/>
                                         </td>
                                     </tr>
                                     <tr className="">
@@ -220,7 +218,8 @@ export default function DiscountCreate() {
                                                 className="form-control-plaintext d-none "
                                                 id="img"
                                             />
-                                            <ErrorMessage name='imageDiscount' component='span' className='text-danger'/>
+                                            <ErrorMessage name='imageDiscount' component='span'
+                                                          className='text-danger'/>
                                             <p>
                                                 <label htmlFor="img" style={{
                                                     display: "inline-block",
@@ -232,7 +231,7 @@ export default function DiscountCreate() {
                                                     Chọn hình ảnh
                                                 </label></p>
                                             {!selectedFile && (
-                                                <span className={"mt-2 text-danger"} >Chưa có hình ảnh được chọn</span>
+                                                <span className={"mt-2 text-danger"}>Chưa có hình ảnh được chọn</span>
                                             )}
 
                                             {selectedFile && (
@@ -265,7 +264,8 @@ export default function DiscountCreate() {
                                                 type="text"
                                                 name="describeDiscount"
                                             />
-                                            <ErrorMessage name='describeDiscount' component='span' className='text-danger'/>
+                                            <ErrorMessage name='describeDiscount' component='span'
+                                                          className='text-danger'/>
                                         </td>
                                     </tr>
                                     <tr style={{height: 120}}>
