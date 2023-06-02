@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useDispatch } from "react-redux";
+import { receiveAccount } from "../../redux/action";
 /**
  * @author ChinhLV
  * @returns Login
@@ -28,6 +30,7 @@ function Login() {
   const handleShow = () => setShow(true);
   const [accountFacebook, setAccountFacebook] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleCreateAccountByFacebook = () => {
     handleCallApiToCreateAccountFb(accountFacebook)
       .then((e) => {
@@ -46,7 +49,7 @@ function Login() {
       });
   };
   return (
-    <div className="login-container container d-flex justify-content-center align-items-center flex-column mt-5">
+    <div className="login-container container d-flex justify-content-center align-items-center flex-column">
       <Formik
         initialValues={{
           username: "",
@@ -79,6 +82,7 @@ function Login() {
               setFailedAccount(null);
               localStorage.setItem("token", e.token);
               localStorage.setItem("username", e.username);
+              dispatch(receiveAccount(e));
               navigate("/");
             })
             .catch((e) => {
@@ -155,9 +159,12 @@ function Login() {
                   >
                     Quên mật khẩu ?
                   </Link>
-                  <a href="" className="float-end text-decoration-none">
+                  <Link
+                    to="/register"
+                    className="float-end text-decoration-none"
+                  >
                     Đăng ký tài khoản
-                  </a>
+                  </Link>
                 </td>
               </tr>
               <tr>

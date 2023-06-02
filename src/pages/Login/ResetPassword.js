@@ -28,7 +28,7 @@ function ResetPassword() {
   const [failedConfirmPassword, setFailedConfirmPassword] = useState(null);
   const navigate = useNavigate();
   return (
-    <div className="login-container container d-flex justify-content-center align-items-center flex-column mt-5">
+    <div className="login-container container d-flex justify-content-center align-items-center flex-column">
       <Formik
         initialValues={{
           code: "",
@@ -183,9 +183,12 @@ function ResetPassword() {
                     >
                       Đăng nhập tài khoản khác
                     </Link>
-                    <a href="" className="float-end text-decoration-none">
+                    <Link
+                      to="/register"
+                      className="float-end text-decoration-none"
+                    >
                       Đăng ký tài khoản
-                    </a>
+                    </Link>
                   </td>
                 </tr>
                 <tr>

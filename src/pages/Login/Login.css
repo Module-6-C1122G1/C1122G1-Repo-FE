@@ -2,6 +2,9 @@
   font-family: Netflix Sans, Helvetica Neue, Segoe UI, Roboto, Ubuntu,
     sans-serif;
 }
+.login-container {
+  margin: 200px 0;
+}
 .login {
   background-color: #f26b38;
   color: #fff;
@@ -41,6 +44,8 @@ table {
   color: #a0a3a7;
 }
 .other-login {
+  display: flex;
+  justify-content: space-between;
   font-size: 14px;
   color: #a0a3a7;
 }
