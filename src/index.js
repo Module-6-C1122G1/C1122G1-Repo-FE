@@ -16,6 +16,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "react-toastify/dist/ReactToastify.css";
 import reportWebVitals from "./reportWebVitals";
+// import { BrowserRouter } from "react-router-dom";
+
 import "bootstrap/dist/css/bootstrap.css";
 import {Provider} from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";

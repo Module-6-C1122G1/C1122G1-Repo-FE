@@ -9,8 +9,10 @@ import UpdateDiscount from "./components/discount/UpdateDiscount";
 import Login from "./pages/Login/Login";
 import ConfirmEmail from "./pages/Login/ConfirmEmail";
 import ResetPassword from "./pages/Login/ResetPassword";
-import { DetailDiscount } from "./components/discount/DetailDiscount";
+import EmployeeList from "./components/employee/List";
+import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
+import { ListTicket } from "./components/ticket/ListTicket";
 import { ConfirmTicket } from "./components/confirm-ticket/ConfirmTicket";
 import BookingTicket from "./pages/Booking/BookingTicket";
 import DiscountList from "./components/discount/ListDiscount";
@@ -21,8 +23,10 @@ import {UpdateEmployee} from "./components/employee/Update";
 import {UpdateFilm} from "./components/film/UpdateFilm";
 
 function App() {
-  return (
-    <Routes>
+
+
+    return (
+        <Routes>
       <Route path="" element={<CommonLayout />}>
         <Route path="/" element={<Home />} />
         {/*<Route path="/film" element={<ListAllFilm />} />*/}
@@ -40,6 +44,7 @@ function App() {
         <Route path='/create-employee' element={<CreateEmployee/>}/>
         <Route path='/update-employee/:id' element={<UpdateEmployee/>}/>
         <Route path='/employee' element={<EmployeeList/>}/>
+        <Route path='/discount/list' element={<ListDiscount/>}/>
       </Route>
     </Routes>
   );

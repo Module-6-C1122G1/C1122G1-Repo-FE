@@ -37,22 +37,20 @@ function DiscountList() {
     };
 
     const findAll = async () => {
-        const rs = await discountService.findByName("", page)
-        setDiscountList(rs.data.content)
-        setPageCount(rs.data.totalPages)
-        setSize(rs.data.size)
+        const rs = await discountService.findByName("", page);
+        setDiscountList(rs.data.content);
+        setPageCount(rs.data.totalPages);
+        setSize(rs.data.size);
         setTotalRecords(rs.data.totalElements);
-
-        const first = page * size + 1;
-        const last = (page + 1) * size;
-        setFirstRecord(first);
-        setLastRecord(Math.min(last, rs.data.totalElements));
-
-    }
+    };
 
     useEffect(() => {
-        findAll()
-    }, [page])
+        findAll();
+        const first = page * size + 1;
+        const last = Math.min((page + 1) * size, totalRecords);
+        setFirstRecord(first);
+        setLastRecord(last);
+    }, [page, size, totalRecords]);
 
 
     return (
