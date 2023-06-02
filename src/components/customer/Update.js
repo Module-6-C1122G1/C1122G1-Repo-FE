@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router";
 import * as customerService from "../../service/CustomerService";
-import {storage} from "../../customerFirebase";
+import {storage} from "../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import * as Yup from "yup";
 import {ErrorMessage, Field, Form, Formik} from "formik";

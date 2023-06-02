@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import '../customer/customer.css'
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {storage} from "../../customerFirebase";
+import {storage} from "../../firebase";
 import * as customerService from "../../service/CustomerService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from 'yup';

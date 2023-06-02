@@ -5,21 +5,17 @@ import { Routes, Route } from "react-router-dom";
 import CommonLayout from "./layout/CommonLayout";
 import Login from "./pages/Login/Login";
 import ConfirmEmail from "./pages/Login/ConfirmEmail";
-// import ResetPassword from "./pages/Login/ResetPassword";
 
 import {ConfirmTicket} from "./components/confirm-ticket/ConfirmTicket";
 import Home from "./pages/Home";
 import { CreateFilm } from "./components/film/CreateFilm";
 import CreateDiscount from "./components/discount/CreateDiscount";
 import UpdateDiscount from "./components/discount/UpdateDiscount";
-// import Login from "./pages/Login/Login";
-// import ConfirmEmail from "./pages/Login/ConfirmEmail";
 import ResetPassword from "./pages/Login/ResetPassword";
 import EmployeeList from "./components/employee/List";
 import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
-import { ListTicket } from "./components/ticket/ListTicket";
-import { ConfirmTicket } from "./components/confirm-ticket/ConfirmTicket";
+import { ListTicket } from "./components/ticket/ListTicket"
 import BookingTicket from "./pages/Booking/BookingTicket";
 import DiscountList from "./components/discount/ListDiscount";
 import DiscountListPublic from "./components/discount/DiscountList";
@@ -27,6 +23,8 @@ import {ListFilm} from "./components/film/ListFilm";
 import {CreateEmployee} from "./components/employee/Create";
 import {UpdateEmployee} from "./components/employee/Update";
 import {UpdateFilm} from "./components/film/UpdateFilm";
+import {CreateCustomerAccount} from "./components/customer/Create";
+import {UpdateCustomer} from "./components/customer/Update";
 
 
 function App() {
@@ -50,6 +48,8 @@ function App() {
         <Route path='/update-employee/:id' element={<UpdateEmployee/>}/>
         <Route path='/employee' element={<EmployeeList/>}/>
         <Route path='/discount/list' element={<ListDiscount/>}/>
+        <Route path='/create-customer' element={<CreateCustomerAccount/>}/>
+        <Route path='/update-customer/:id' element={<UpdateCustomer/>}/>
       </Route>
     </Routes>
   );
