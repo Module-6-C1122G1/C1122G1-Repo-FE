@@ -59,4 +59,16 @@ export const getFilm = async (id) => {
         console.log(err)
     }
 }
-
+/**
+ * @Author QuynhHTN
+ * Date create: 02/06/2023
+ * @Param id
+ * @Returns {Promise<any>}
+ */
+export const detail = async(id)=>{
+    try {
+        return (await axios.get(`http://localhost:8080/api/public/movie/detail/${id}`)).data
+    } catch (error) {
+        console.log(error)
+    }
+}

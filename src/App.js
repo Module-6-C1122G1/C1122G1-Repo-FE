@@ -6,7 +6,6 @@ import CommonLayout from "./layout/CommonLayout";
 import Login from "./pages/Login/Login";
 import ConfirmEmail from "./pages/Login/ConfirmEmail";
 // import ResetPassword from "./pages/Login/ResetPassword";
-import {ConfirmTicket} from "./components/confirm-ticket/ConfirmTicket";
 import Home from "./pages/Home";
 import { CreateFilm } from "./components/film/CreateFilm";
 import CreateDiscount from "./components/discount/CreateDiscount";
@@ -26,6 +25,8 @@ import {ListFilm} from "./components/film/ListFilm";
 import {CreateEmployee} from "./components/employee/Create";
 import {UpdateEmployee} from "./components/employee/Update";
 import {UpdateFilm} from "./components/film/UpdateFilm";
+import TicketDetail from "./components/ticket/TicketDetail";
+import DetailFilm from "./components/film/DetailFilm";
 
 
 function App() {
@@ -49,6 +50,8 @@ function App() {
         <Route path='/update-employee/:id' element={<UpdateEmployee/>}/>
         <Route path='/employee' element={<EmployeeList/>}/>
         <Route path='/discount/list' element={<ListDiscount/>}/>
+        <Route path='/detail/:id' element={<DetailFilm />}/>
+        <Route path='/ticket/detail/:id' element={<TicketDetail />}/>
       </Route>
     </Routes>
   );
