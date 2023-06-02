@@ -12,6 +12,8 @@ import ResetPassword from "./pages/Login/ResetPassword";
 
 import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
+import {CreateEmployee} from "./components/employee/Create";
+import {UpdateEmployee} from "./components/employee/Update";
 
 
 function App() {
@@ -28,8 +30,11 @@ function App() {
                 <Route path='/discount-create' element={<CreateDiscount/>}/>
                 <Route path='/discount-update/:id' element={<UpdateDiscount/>}/>
                 <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>
+                <Route path='/create-employee' element={<CreateEmployee/>}/>
+                <Route path='/update-employee/:id' element={<UpdateEmployee/>}/>
             </Route>
         </Routes>
     );
 }
+
 export default App;
