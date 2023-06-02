@@ -12,6 +12,7 @@ import ResetPassword from "./pages/Login/ResetPassword";
 
 import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
+import { ListTicket } from "./components/ticket/ListTicket";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
                 <Route path='/discount/create' element={<CreateDiscount/>}/>
                 <Route path='/discount/update/:id' element={<UpdateDiscount/>}/>
                 <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>
+                <Route path='/listTicket' element={<ListTicket/>}/>
             </Route>
         </Routes>
     );
