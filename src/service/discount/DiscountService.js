@@ -1,5 +1,14 @@
 import axios from "axios"
 
+
+export const findAll = async () => {
+    try {
+        const result = await axios.get("http://localhost:8080/discount")
+        return result.data
+    } catch (error) {
+        console.log(error)
+    }
+}
 export const findByName = async (value, currentPage) => {
     const result = await (axios.get(`http://localhost:8080/api/discount/list?name=${value}&page=${currentPage}`))
     return result;
@@ -21,8 +30,8 @@ export const save = async (discount) => {
     } catch (e) {
         console.log(e)
     }
-}
 
+}
 
 export const remove = async (id) => {
     try {
@@ -31,7 +40,6 @@ export const remove = async (id) => {
         console.log(e)
     }
 }
-
 export const createDiscount = async (discount) => {
     return await axios.post('http://localhost:8080/discount/create', {...discount})
 }
@@ -49,4 +57,5 @@ export const findByIdDiscount = async (id) => {
         console.log(e)
     }
 }
+
 
