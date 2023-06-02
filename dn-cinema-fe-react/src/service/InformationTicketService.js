@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const detail = async(id)=>{
     try {
-        return (await axios.get(`http://localhost:8080/api/employee/ticket/detail/${id}`)).data
+        return (await axios.get(`http://localhost:8080/api/customer/detail/${id}`)).data
     } catch (error) {
         console.log(error)
     }

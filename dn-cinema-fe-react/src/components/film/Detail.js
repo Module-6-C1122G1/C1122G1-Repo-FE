@@ -128,7 +128,7 @@ export default function () {
                                         {/*</tr>*/}
                                         <tr style={{height: 45}}>
                                             <th className="">
-                    <Link to={'/booking-ticket'} type="button" className="btn button-movie">
+                    <Link to={`/booking-ticket`} type="button" className="btn button-movie">
                       Đặt vé
                     </Link>
                                             </th>

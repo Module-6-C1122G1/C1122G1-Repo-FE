@@ -14,8 +14,7 @@ export function TicketPrint(props) {
                             <p>Công ty cổ phần DN Cinenma</p>
                             <p>Địa chỉ: 280 Trần Hưng Đạo, An Hải Tây, Sơn Trà, Đà Nẵng</p>
                         </div>
-                        <div className="xxx"></div>
-                        {/*<hr className="text-movie xxx" />*/}
+                        <div className="ticket-print"></div>
                         <h3 className="text-center text-movie">DN Cinema</h3>
                         <div className="detail-rating p-3">
                             <div>
@@ -52,7 +51,7 @@ export function TicketPrint(props) {
                                 </tbody>
                             </table>
                         </div>
-                        <div className="xxx"></div>
+                        <div className="ticket-print"></div>
                         <div>
                             <p className="text-center" >Cảm ơn quý khách</p>
                             <p className="text-center" >Hẹn gặp lại!</p>

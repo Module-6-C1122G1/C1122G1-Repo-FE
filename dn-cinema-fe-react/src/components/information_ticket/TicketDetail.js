@@ -1,18 +1,18 @@
-import React, {useEffect, useRef, useState} from "react"
-import {useNavigate, useParams} from "react-router";
+import React, { useEffect, useRef, useState } from "react"
+import { useNavigate, useParams } from "react-router";
 import * as ticketService from '../../service/InformationTicketService'
 import '../film/detailStyle.css';
 import { Form, Formik } from "formik";
 import { useReactToPrint } from "react-to-print";
-import {TicketPrint} from "./TicketPrint";
+import { TicketPrint } from "./TicketPrint";
 import { format } from "date-fns";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function TicketDetail() {
     const param = useParams()
     const navigate = useNavigate();
-
+    const [destroyceTicket, setDestroyceTicket] = useState()
     const handlePrint = useReactToPrint({
         content: () => componentBRef.current,
         pageStyle: "@page { size: A4; margin: 0px; }",
@@ -21,10 +21,23 @@ export default function TicketDetail() {
             navigate("/listTicket");
         }
     });
-
     const componentBRef = useRef(null);
-
     const [ticketDetail, setTicketDetail] = useState()
+    const dateTicket = new Date(ticketDetail?.ticketSet[0].seat.showTime.showDate)
+    const currentDate = new Date();
+    const timeTicket = ticketDetail?.ticketSet[0].seat.showTime.showTime
+    const [valueTicket, setValueTicket] = useState({
+        idTicket: '',
+        idCustomer: '',
+        idSeat: '',
+        nameTypeSeat: ''
+    })
+    const [showButtonReturn, setShowButtonReturn] = useState(false)
+    const [selectedOption, setSelectedOption] = useState('');
+
+
+
+
     useEffect(() => {
         const detail = async () => {
             try {
@@ -34,12 +47,39 @@ export default function TicketDetail() {
                 console.log(err)
             }
         }
+
         detail()
     }, [param.id])
-
+    useEffect(() => {
+        if (currentDate.getDate() === dateTicket.getDate()) {
+            dateTicket.setHours(timeTicket.slice(0, 2), timeTicket.slice(3), 0, 0);
+            const timeDiff = dateTicket.getTime() - currentDate.getTime();
+            const minutesDiff = Math.floor(timeDiff / (1000 * 60));
+            setDestroyceTicket(minutesDiff);
+            console.log(minutesDiff);
+        }
+    })
     if (!ticketDetail) {
         return null
     }
+    const handleReturnTicket = (idTicket, idSeat, nameTypeSeat) => {
+        setValueTicket({
+            idTicket: idTicket,
+            idCustomer: ticketDetail?.idCustomer,
+            idSeat: idSeat,
+            nameTypeSeat: nameTypeSeat
+        })
+
+        if (selectedOption === idSeat) {
+            setShowButtonReturn(false)
+            setSelectedOption('');
+        } else {
+            setShowButtonReturn(true)
+            setSelectedOption(idSeat);
+        }
+    }
+    console.log(valueTicket);
+    console.log(selectedOption);
     return (
         <>
             <div className="container mt-5">
@@ -55,7 +95,7 @@ export default function TicketDetail() {
                         <div className="col-3 ">
                             <div className="detail-feat-img">
                                 <img
-                                    src={ticketDetail?.seat.showTime.film.imgFilm}
+                                    src={ticketDetail?.ticketSet[0].seat.showTime.film.imgFilm}
                                     className="loaded img-hover"
                                     data-was-processed="true"
                                 />
@@ -67,22 +107,21 @@ export default function TicketDetail() {
                                     XÁC NHẬN ĐẶT VÉ
                                 </h3>
                             </div>
-                            <hr className="text-movie"/>
+                            <hr className="text-movie" />
                             <div>
                                 <div className="detail-rating border border-2 p-3">
                                     <div className="mt-2">
                                         <Formik
                                             initialValues={{
-                                                "idTicket": ticketDetail?.idTicket,
-                                                "idCustomer": ticketDetail?.customer.idCustomer,
-                                                "idSeat": ticketDetail?.seat.idSeat,
-                                                "nameTypeSeat": ticketDetail?.seat.typeSeat.nameTypeSeat
+                                                idTicket: '',
+                                                idCustomer: '',
+                                                idSeat: '',
+                                                nameTypeSeat: ''
                                             }}
-                                            onSubmit={(value) => {
-                                                console.log(value)
+                                            onSubmit={() => {
                                                 const deleteTicket = async () => {
                                                     try {
-                                                        await ticketService.deleteTicket(value)
+                                                        await ticketService.deleteTicket(valueTicket)
                                                     } catch (e) {
                                                         console.log(e)
                                                     }
@@ -94,57 +133,114 @@ export default function TicketDetail() {
                                             <Form>
                                                 <table>
                                                     <thead>
-                                                    <tr style={{height: 39}}>
+                                                    <tr style={{ height: 39 }}>
                                                         <th className="text-secondary">Tên phim:</th>
-                                                        <td>{ticketDetail?.seat.showTime.film.nameFilm}</td>
+                                                        <td>{ticketDetail?.ticketSet[0].seat.showTime.film.nameFilm}</td>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr style={{height: 39}}>
+                                                    <tr style={{ height: 39 }}>
                                                         <th className="text-secondary">Rạp:</th>
-                                                        <td>{ticketDetail?.seat.showRoom.nameShowRoom}</td>
+                                                        <td>{ticketDetail?.ticketSet[0].seat.showRoom.nameShowRoom}</td>
                                                     </tr>
-                                                    <tr style={{height: 39}}>
+                                                    <tr style={{ height: 39 }}>
                                                         <th className="text-secondary">Ngày chiếu :</th>
-                                                        <td style={{fontFamily: "Roboto"}}> {format(new Date(ticketDetail?.seat.showTime.film.dateStartFilm), "dd/MM/yyyy")}</td>
+                                                        <td style={{ fontFamily: "Roboto" }}> {format(new Date(ticketDetail?.ticketSet[0].seat.showTime.showDate), "dd/MM/yyyy")}</td>
 
                                                     </tr>
-                                                    <tr style={{height: 39}}>
+                                                    <tr style={{ height: 39 }}>
                                                         <th className="text-secondary">Giờ chiếu:</th>
-                                                        <td>{ticketDetail?.seat.showTime.showTime}</td>
+                                                        <td>{ticketDetail?.ticketSet[0].seat.showTime.showTime}</td>
                                                     </tr>
-                                                    <tr style={{height: 39}}>
-                                                        <th className="text-secondary">Ghế:</th>
-                                                        <td>{ticketDetail?.seat.nameSeat}</td>
+                                                    <tr style={{ height: 39 }}>
+                                                        <th className="text-secondary">Số lượng vé:</th>
+                                                        <td >{ticketDetail?.ticketSet.length}</td>
                                                     </tr>
-                                                    <tr style={{height: 39}}>
-                                                        <th className="text-secondary">Loại ghế:</th>
-                                                        <td>{ticketDetail?.seat.typeSeat.nameTypeSeat === 'VIP' ? 'Ghế VIP': 'Ghế thường'}</td>
-                                                    </tr>
-                                                    <tr className="" style={{height: 39}}>
-                                                        <th className="text-secondary">Giá:</th>
-                                                        <td><span style={{color: "lightcoral" }}>{ticketDetail?.priceAfterDiscount}</span>  VND</td>
-                                                        <td></td>
-
-                                                    </tr>
-                                                    <tr style={{height: 39}}>
-
+                                                    <tr style={{ height: 39 }}>
+                                                        <th className="text-secondary align-top">Ghế:</th>
                                                         <td>
-                                                            <button
-                                                                type="submit"
-                                                                className="btn button-movie h-100 border border-0"
-                                                                style={{width: 100}}
-                                                            >
-                                                                Hủy vé
-                                                            </button>
+                                                            {
+                                                                ticketDetail?.ticketSet.map((element, index) => (
+                                                                    <>
+                                                                        <div className="mb-3" key={index}>
+                                                                            {
+                                                                                element.seat.seat.idStatusSeat === 1
+                                                                                &&
+                                                                                <>
+                                                                                    <input type="radio"
+                                                                                           checked={+selectedOption === element.seat.idSeat}
+                                                                                           value={element.seat.idSeat}
+                                                                                           onClick={() =>
+                                                                                               handleReturnTicket(
+                                                                                                   element.idTicket,
+                                                                                                   element.seat.idSeat,
+                                                                                                   element.seat.typeSeat.nameTypeSeat
+                                                                                               )}
+                                                                                        // onChange={handleRadioChange}
+                                                                                           class="form-check-input" name="inlineRadioOptions" id={element.seat.idSeat} />
+                                                                                    <label class="form-check-label ms-2" for={element.seat.idSeat}>
+                                                                                        {element.seat.nameSeat}
+                                                                                        {
+                                                                                            element.seat.seat.idStatusSeat === 1 &&
+                                                                                            <span className="ms-2"> {element.seat.typeSeat.nameTypeSeat === 'VIP' ? '(Ghế VIP)' : '(Ghế thường)'}</span>
+                                                                                        }
+                                                                                    </label>
+                                                                                </>
+                                                                            }
+
+                                                                        </div>
+                                                                    </>
+                                                                ))
+                                                            }
                                                         </td>
-
-
+                                                    </tr>
+                                                    <tr className="" style={{ height: 39 }}>
+                                                        <th className="text-secondary">Giá:</th>
+                                                        <td><span style={{ color: "lightcoral" }}>{ticketDetail?.ticketSet[0].priceAfterDiscount.toLocaleString()}</span>  VND</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr style={{ height: 39 }}>
+                                                        {
+                                                            showButtonReturn ?
+                                                                destroyceTicket < 60 || destroyceTicket === undefined ?
+                                                                    <td>
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => {
+                                                                                toast('Đã quá thời gian hủy vé')
+                                                                            }}
+                                                                            className="btn button-movie h-100 border border-0"
+                                                                            style={{ width: 100 }}
+                                                                        >
+                                                                            Hủy vé
+                                                                        </button>
+                                                                    </td>
+                                                                    :
+                                                                    <td>
+                                                                        <button
+                                                                            type="submit"
+                                                                            className="btn button-movie h-100 border border-0"
+                                                                            style={{ width: 100 }}
+                                                                        >
+                                                                            Hủy vé
+                                                                        </button>
+                                                                    </td>
+                                                                :
+                                                                <td>
+                                                                        <span
+                                                                            type="button"
+                                                                            className="btn btn-secondary h-100 border border-0"
+                                                                            style={{ width: 100 }}
+                                                                        >
+                                                                            Hủy vé
+                                                                        </span>
+                                                                </td>
+                                                        }
                                                         <td>
                                                             <button
                                                                 type="button"
                                                                 className="button-movie btn h-100 border border-0"
-                                                                style={{width: 120}}
+                                                                style={{ width: 120 }}
                                                                 data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                                             >
                                                                 Xác nhận
@@ -166,34 +262,34 @@ export default function TicketDetail() {
                                     THÔNG TIN THÀNH VIÊN
                                 </h3>
                             </div>
-                            <hr className="text-movie"/>
+                            <hr className="text-movie" />
                             <div className="detail-rating border border-2 p-3 ">
                                 <div className={'mt-2'}>
                                     <table>
                                         <thead>
-                                        <tr style={{height: 39}}>
+                                        <tr style={{ height: 39 }}>
                                             <th className="text-secondary">Mã thành viên:</th>
-                                            <td>{ticketDetail?.customer.idCustomer}</td>
+                                            <td>{ticketDetail?.idCustomer}</td>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr style={{height: 39}}>
+                                        <tr style={{ height: 39 }}>
                                             <th className="text-secondary">Họ và tên:</th>
-                                            <td>{ticketDetail?.customer.nameCustomer}</td>
+                                            <td>{ticketDetail?.nameCustomer}</td>
                                         </tr>
-                                        <tr style={{height: 39}}>
+                                        <tr style={{ height: 39 }}>
                                             <th className="text-secondary">CMND:</th>
-                                            <td>{ticketDetail?.customer.identityCard}</td>
+                                            <td>{ticketDetail?.identityCard}</td>
                                         </tr>
-                                        <tr style={{height: 39}}>
-                                            <th className="text-secondary" style={{width: 150}}>
+                                        <tr style={{ height: 39 }}>
+                                            <th className="text-secondary" style={{ width: 150 }}>
                                                 Điểm thành viên:{" "}
                                             </th>
-                                            <td>{ticketDetail?.customer.pointCustomer}</td>
+                                            <td>{ticketDetail?.pointCustomer}</td>
                                         </tr>
                                         <tr>
-                                            <th className="text-secondary" style={{height: 39}}>Số điện thoại:</th>
-                                            <td>{ticketDetail?.customer.phone}</td>
+                                            <th className="text-secondary" style={{ height: 39 }}>Số điện thoại:</th>
+                                            <td>{ticketDetail?.phone}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -222,7 +318,7 @@ export default function TicketDetail() {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                            <button type="button"  className="button-movie btn h-100 border border-0" onClick={() => {
+                            <button type="button" className="button-movie btn h-100 border border-0" onClick={() => {
                                 handlePrint();
                             }}
                                     data-bs-dismiss="modal">In vé
@@ -231,6 +327,7 @@ export default function TicketDetail() {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </>
     )
 }
