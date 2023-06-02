@@ -1,14 +1,18 @@
 import {useState} from "react";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {storage} from "../../firebase";
+import {storage} from "../../config/firebase";
 import * as employeeService from "../../service/employee/employeeService"
 import {ErrorMessage, Field, Form, Formik} from "formik";
+import "react-toastify/dist/ReactToastify.css"
+import {ToastContainer, toast} from "react-toastify"
 import * as Yup from 'yup';
+import {useNavigate} from "react-router";
 
 export function CreateEmployee() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [firebaseImg, setImg] = useState(null);
     const [progress, setProgress] = useState(0);
+    const navigate = useNavigate()
 
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
@@ -121,7 +125,7 @@ export function CreateEmployee() {
                             .matches(/^[^!@#$%^&*()+=\[\]{};':"\\|.<>?`~]+$/, "Địa chỉ không chứa kí tự đặc biệt trừ /")
                             .required('Vui lòng nhập địa chỉ'),
                     })}
-                    onSubmit={(values, {resetForm}) => {
+                    onSubmit={(values, {setSubmitting}) => {
                         const create = async () => {
                             debugger;
                             const newValue = {
@@ -130,8 +134,9 @@ export function CreateEmployee() {
                             };
                             newValue.imgEmployee = await handleSubmitAsync();
                             await employeeService.saveEmployee(newValue);
-                            console.log(newValue)
-                            resetForm();
+                            toast(`Thêm nhân viên thành công! `)
+                            // navigate('/employee');
+                            setSubmitting(false)
                         }
                         create();
                     }}

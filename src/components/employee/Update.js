@@ -3,8 +3,10 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {storage} from "../../firebase";
-import * as Yup from "yup";
+import {storage} from "../../config/firebase";
+import "react-toastify/dist/ReactToastify.css"
+import {ToastContainer, toast} from "react-toastify"
+import * as Yup from 'yup';
 
 export function UpdateEmployee() {
     const navigate = useNavigate();
@@ -159,7 +161,8 @@ export function UpdateEmployee() {
                                     await employeeService.editEmployee(values);
                                     console.log(values)
                                 }
-                                // toast(`Chỉnh sửa khuyến mãi thành công! `)
+                                toast(`Cập nhật nhân viên thành công! `)
+                                // navigate(`/employee`);
                                 setSubmitting(false)
                             } catch (error) {
                                 console.log(error);

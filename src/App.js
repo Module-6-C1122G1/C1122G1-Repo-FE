@@ -8,8 +8,9 @@ import ResetPassword from "./pages/Login/ResetPassword";
 import Home from "./pages/Home";
 import React from "react";
 import {CreateFilm} from "./components/film/CreateFilm";
-import List from "./components/film/List";
 import BookingTicket from "./pages/Booking/BookingTicket";
+import {CreateEmployee} from "./components/employee/Create";
+import {UpdateEmployee} from "./components/employee/Update";
 
 function App() {
     return (
@@ -21,6 +22,8 @@ function App() {
                 <Route path="/confirm-email" element={<ConfirmEmail/>}/>
                 <Route path="/reset-password" element={<ResetPassword/>}/>
                 <Route path='/booking-ticket' element={<BookingTicket/>}/>
+                <Route path='/create-employee' element={<CreateEmployee/>}/>
+                <Route path='/update-employee/:id' element={<UpdateEmployee/>}/>
             </Route>
         </Routes>
 
