@@ -1,13 +1,19 @@
+
 import "./App.css";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import CommonLayout from "./layout/CommonLayout";
+import Login from "./pages/Login/Login";
+import ConfirmEmail from "./pages/Login/ConfirmEmail";
+// import ResetPassword from "./pages/Login/ResetPassword";
+
+import {ConfirmTicket} from "./components/confirm-ticket/ConfirmTicket";
 import Home from "./pages/Home";
 import { CreateFilm } from "./components/film/CreateFilm";
 import CreateDiscount from "./components/discount/CreateDiscount";
 import UpdateDiscount from "./components/discount/UpdateDiscount";
-import Login from "./pages/Login/Login";
-import ConfirmEmail from "./pages/Login/ConfirmEmail";
+// import Login from "./pages/Login/Login";
+// import ConfirmEmail from "./pages/Login/ConfirmEmail";
 import ResetPassword from "./pages/Login/ResetPassword";
 import EmployeeList from "./components/employee/List";
 import {DetailDiscount} from "./components/discount/DetailDiscount";
@@ -22,9 +28,8 @@ import {CreateEmployee} from "./components/employee/Create";
 import {UpdateEmployee} from "./components/employee/Update";
 import {UpdateFilm} from "./components/film/UpdateFilm";
 
+
 function App() {
-
-
     return (
         <Routes>
       <Route path="" element={<CommonLayout />}>
@@ -50,5 +55,8 @@ function App() {
   );
 
 }
+
+
+
 export default App;
 

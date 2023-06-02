@@ -3,7 +3,6 @@ import {Field, Form, Formik} from "formik";
 import {customerService} from "../../service/CustomerService";
 import {customerTypeService} from "../../service/CustomerTypeService";
 import { useNavigate } from "react-router-dom"
-import Swal from "sweetalert2";
 
 function List() {
     const [customer, setCustomer] = useState([])
@@ -40,20 +39,14 @@ function List() {
                             <div className="col-md-6">
                             </div>
 
-
-                            <div className="col-md-6 justify-content-end">
+                            <div className="col-md-6">
                                 <Formik initialValues={{nameSearch: ''}}
                                         onSubmit={async (values) => {
                                             const result = await customerService.findAllAndSearch(
                                                 values.nameSearch
                                             )
                                             if (result.length === 0) {
-                                                Swal.fire({
-                                                    title: 'Thông báo!',
-                                                    text: 'Không tìm thấy kết quả',
-                                                    icon: 'error',
-                                                    confirmButtonText: 'OK'
-                                                });
+                                                alert("không tìm thấy")
                                             } else {
                                                 setCustomer(result)
                                             }
@@ -94,7 +87,6 @@ function List() {
                                     customer.map((customers,index) => (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
-                                            {/*<td>{customers.idCustomer}</td>*/}
                                             <td>{customers.nameCustomer}</td>
                                             <td>{customers.phone}</td>
                                             <td>{customers.gender}</td>

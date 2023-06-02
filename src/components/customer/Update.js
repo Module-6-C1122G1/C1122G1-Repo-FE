@@ -1,10 +1,9 @@
-
 import React, {useEffect, useState} from 'react';
-import {Form, Field, Formik} from 'formik';
+import {Form, Field, Formik, ErrorMessage} from 'formik';
 import {customerService} from "../../service/CustomerService";
 import {useNavigate, useParams} from "react-router";
-import Swal from "sweetalert2";
 import {NavLink} from "react-router-dom";
+import * as Yup from "yup";
 
 function Update() {
     let param = useParams()
@@ -36,6 +35,22 @@ function Update() {
                 identityCard: customers?.identityCard
 
             }}
+            validationSchema={Yup.object({
+                nameCustomer: Yup.string()
+                    .required("không để trống."),
+                phone: Yup.string()
+                    .required("không để trống."),
+                address: Yup.string()
+                    .required("không để trống."),
+
+                email: Yup.string()
+                    .required("Không để trống.")
+                    .matches(
+                        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                        "Email không hợp lệ."
+                    ),
+
+            })}
             onSubmit={(values) => {
                 const edit = async () => {
                     console.log(values);
@@ -46,8 +61,6 @@ function Update() {
             }
             }
         >
-
-
             <>
                 <div className="row">
                     <div className="col-1"></div>
@@ -79,6 +92,11 @@ function Update() {
                                                 id="name"
                                                 className="form-control"
                                             />
+                                            <ErrorMessage
+                                                name="nameCustomer"
+                                                component="div"
+                                                className="text-danger"
+                                            />
                                         </div>
                                         <div className="row">
                                             <div className="col-md-2">
@@ -108,6 +126,11 @@ function Update() {
                                                         className="form-control"
                                                         placeholder="Số điện thoại"
                                                     />
+                                                    <ErrorMessage
+                                                        name="phone"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -123,6 +146,11 @@ function Update() {
                                                         name="email"
                                                         className="form-control"
                                                         placeholder="Email"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="email"
+                                                        component="div"
+                                                        className="text-danger"
                                                     />
                                                 </div>
                                             </div>
@@ -152,20 +180,25 @@ function Update() {
                                                 className="form-control"
                                                 placeholder="Địa chỉ"
                                             />
+                                            <ErrorMessage
+                                                name="address"
+                                                component="div"
+                                                className="text-danger"
+                                            />
                                             <div className="mt-3">
 
                                                 <button type="submit" className="btn btn-outline-light"
                                                         style={{background: "orangered"}}>Lưu lại
                                                 </button>
 
-                                                <NavLink to={'/customer'}>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-dismiss="modal">
-                                                        Quay lại
-                                                    </button>
-                                                </NavLink>
+                                                {/*<NavLink to={'/customer'}>*/}
+                                                {/*    <button*/}
+                                                {/*        type="button"*/}
+                                                {/*        className="btn btn-outline-secondary"*/}
+                                                {/*        data-bs-dismiss="modal">*/}
+                                                {/*        Quay lại*/}
+                                                {/*    </button>*/}
+                                                {/*</NavLink>*/}
 
                                             </div>
                                         </div>
