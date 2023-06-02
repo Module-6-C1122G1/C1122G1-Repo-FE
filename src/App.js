@@ -19,7 +19,6 @@ import EmployeeList from "./components/employee/List";
 import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
 import { ListTicket } from "./components/ticket/ListTicket";
-import { ConfirmTicket } from "./components/confirm-ticket/ConfirmTicket";
 import BookingTicket from "./pages/Booking/BookingTicket";
 import DiscountList from "./components/discount/ListDiscount";
 import DiscountListPublic from "./components/discount/DiscountList";
