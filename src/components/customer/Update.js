@@ -191,14 +191,14 @@ function Update() {
                                                         style={{background: "orangered"}}>Lưu lại
                                                 </button>
 
-                                                <NavLink to={'/customer'}>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-dismiss="modal">
-                                                        Quay lại
-                                                    </button>
-                                                </NavLink>
+                                                {/*<NavLink to={'/customer'}>*/}
+                                                {/*    <button*/}
+                                                {/*        type="button"*/}
+                                                {/*        className="btn btn-outline-secondary"*/}
+                                                {/*        data-bs-dismiss="modal">*/}
+                                                {/*        Quay lại*/}
+                                                {/*    </button>*/}
+                                                {/*</NavLink>*/}
 
                                             </div>
                                         </div>

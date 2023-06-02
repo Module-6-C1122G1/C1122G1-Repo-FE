@@ -25,7 +25,7 @@ export const editCustomer = async (customer) => {
     try {
         await axios.patch(`http://localhost:8080/customer/update`, {...customer})
 
-        alert("thêm mới thành công !")
+        alert("Chỉnh sửa thành công !")
     } catch (error) {
         console.log(error)
 

@@ -87,7 +87,6 @@ function List() {
                                     customer.map((customers,index) => (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
-                                            {/*<td>{customers.idCustomer}</td>*/}
                                             <td>{customers.nameCustomer}</td>
                                             <td>{customers.phone}</td>
                                             <td>{customers.gender}</td>
