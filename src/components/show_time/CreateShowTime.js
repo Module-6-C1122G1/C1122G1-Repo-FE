@@ -1,4 +1,3 @@
-import './CreateFilm.css'
 import {useNavigate} from "react-router";
 import {useEffect, useState} from "react";
 import * as TypeFilmService from "../../service/TypeFilmService";
@@ -9,18 +8,29 @@ import {ColorRing} from "react-loader-spinner";
 import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
 import {toast} from "react-toastify";
 import {storage} from "../../firebase";
+import {getAll} from "../../service/ShowRoomService";
 
 
-export function CreateFilm() {
+
+export function CreateShowTime() {
     const navigate = useNavigate();
-    const [listTypeFilm, setListTypeFilm] = useState([]);
+    const [listFilm, setListFilm] = useState([]);
+    const [listShowRoom, setListShowRoom] = useState([]);
     useEffect(() => {
-        const listTypeFilm = async () => {
-            const result = await TypeFilmService.listTypeFilm();
-            setListTypeFilm(result)
+        const listFilm = async () => {
+            const result = await FilmService.apiGetAllFilms();
+            setListFilm(result)
             console.log(result)
         }
-        listTypeFilm();
+        listFilm();
+    }, [])
+    useEffect(() => {
+        const listShowRoom = async () => {
+            const result = await getAll();
+            setListShowRoom(result)
+            console.log(result)
+        }
+        listShowRoom();
     }, [])
 
 
@@ -439,13 +449,13 @@ export function CreateFilm() {
                                                         Thêm mới
                                                     </button>
                                             }
-                                            <button
-                                                type="reset"
-                                                className="btn btn-primary"
-                                                style={{background: "black", color: "white", marginLeft: "0%"}}
-                                            >
-                                                Quay lại
-                                            </button>
+                                            {/*<button*/}
+                                            {/*    type="reset"*/}
+                                            {/*    className="btn btn-primary"*/}
+                                            {/*    style={{background: "black", color: "white", marginLeft: "0%"}}*/}
+                                            {/*>*/}
+                                            {/*    Quay lại*/}
+                                            {/*</button>*/}
                                         </div>
                                     </div>
                                 </Form>

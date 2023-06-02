@@ -110,9 +110,17 @@ export function UpdateFilm() {
                 nation: Yup.string()
                     .required("Nhập quốc gia"),
                 dateStartFilm: Yup.date()
-                    .required("Nhập ngày khởi chiếu"),
+                    .required('Ngày bắt đầu không được để trống')
+                    .min(
+                        Yup.ref('dateEnd'),
+                        'Ngày bắt đầu phải nhỏ hơn ngày kết thúc'
+                    ),
                 dateEndFilm: Yup.date()
-                    .required("Nhập ngày kết thúc"),
+                    .required('Ngày kết thúc không được để trống')
+                    .min(
+                        Yup.ref('dateStart'),
+                        'Ngày kết thúc phải lớn hơn ngày bắt đầu'
+                    ),
                 actor: Yup.string()
                     .required("Nhập diễn viên"),
                 studioFilm: Yup.string()

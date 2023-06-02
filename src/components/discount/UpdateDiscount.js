@@ -12,13 +12,17 @@ export default function DiscountUpdate() {
     useEffect(() => {
         document.title = "Chỉnh sửa khuyến mãi"
     }, [])
-
+    const [flag,setFlag] = useState(false)
     const [discount, setDiscount] = useState(null)
     const [img, setImg] = useState("");
     const [selectedFile, setSelectedFile] = useState(null)
     const [progress, setProgress] = useState(0)
+    const [imgErr,setImgErr] = useState('')
+
     const handleSelectFile = (event) => {
         const file = event.target.files[0];
+        setFlag(true)
+        setImgErr("")
         if (file) {
             setSelectedFile(file)
         }
@@ -39,11 +43,12 @@ export default function DiscountUpdate() {
                         reject(error)
                     }, async () => {
                         try {
-                            const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                            const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref)
+                            console.log(downloadUrl)
                             setImg(downloadUrl);
                             resolve(downloadUrl);
                         } catch (e) {
-                            console.log(e)
+                            setImgErr(e.response.data[0].defaultMessage)
                         }
                     }
                 )
@@ -78,7 +83,8 @@ export default function DiscountUpdate() {
                     dateEnd: discount?.dateEnd,
                     describeDiscount: discount?.describeDiscount,
                     percentDiscount: discount?.percentDiscount,
-                    idDiscount: param.id
+                    idDiscount: param.id,
+                    imageDiscount: discount?.imageDiscount
                 }
             }
             validationSchema={Yup.object({
@@ -99,6 +105,7 @@ export default function DiscountUpdate() {
                         Yup.ref('dateStart'),
                         'Ngày kết thúc phải lớn hơn ngày bắt đầu'
                     ),
+
                 describeDiscount: Yup.string().trim().required("Chi tiết khuyến mãi không được để trống").max(255,"Chi tiết khuyến mãi không được quá 255 từ"),
                 percentDiscount: Yup.number().required("Phần trăm giảm giá không được để trống").
                 min(0.01,"Phần trăm giảm giá không được nhỏ hơn hoặc bằng 0").
@@ -110,15 +117,19 @@ export default function DiscountUpdate() {
                         ...values,
                         imageDiscount: img
                     }
-                    console.log(newValue)
                     try {
-                        newValue.imageDiscount = await handleSubmitImg();
-                        await DiscountService.updateDiscount(newValue);
-                        toast(`Thêm khuyến mãi thành công! `)
+                        if(flag){
+                            newValue.imageDiscount = await handleSubmitImg();
+                            await DiscountService.updateDiscount(newValue);
+                        }else {
+                            await DiscountService.updateDiscount(values);
+                            console.log(values)
+                        }
+                        toast(`Chỉnh sửa khuyến mãi thành công! `)
                         navigate(`/discount/update/${param.id}`);
                         setSubmitting(false)
                     } catch (e) {
-                        console.log(e)
+                        setImgErr(e.response.data[0].defaultMessage)
                     }
 
                 }
@@ -263,6 +274,7 @@ export default function DiscountUpdate() {
                                                     style={{width: "50%"}}
                                                 />
                                             )}
+                                            <span className={'text-danger'}>{imgErr}</span>
                                         </td>
                                     </tr>
                                     <tr className="">

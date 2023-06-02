@@ -16,6 +16,8 @@ import ResetPassword from "./pages/Login/ResetPassword";
 
 import {DetailDiscount} from "./components/discount/DetailDiscount";
 import ListDiscount from "./components/discount/ListDiscount";
+import {ListFilm} from "./components/film/ListFilm";
+import {UpdateFilm} from "./components/film/UpdateFilm";
 
 
 function App() {
@@ -25,10 +27,12 @@ function App() {
             <Route path="" element={<CommonLayout/>}>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/admin/film/create" element={<CreateFilm/>}/>
+                <Route path="/admin/film/list" element={<ListFilm/>}/>
+                <Route path="/admin/film/edit/:id" element={<UpdateFilm/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/confirm-email" element={<ConfirmEmail/>}/>
                 <Route path="/reset-password" element={<ResetPassword/>}/>
-                <Route path='/discount-list' element={<ListDiscount/>}/>
+                <Route path='/discount/list' element={<ListDiscount/>}/>
                 <Route path='/discount/create' element={<CreateDiscount/>}/>
                 <Route path='/discount/update/:id' element={<UpdateDiscount/>}/>
                 <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>

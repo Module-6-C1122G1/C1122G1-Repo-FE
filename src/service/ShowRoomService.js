@@ -44,5 +44,13 @@ export const findAllTypeSeat = async () => {
     }catch (e) {
         console.log(e)
     }
+}
 
+export const getAll = async () => {
+    try {
+        const result = await axios.get("http://localhost:8080/api/admin/showroom/getAll")
+        return result.data;
+    }catch (e){
+        console.log(e)
+    }
 }
