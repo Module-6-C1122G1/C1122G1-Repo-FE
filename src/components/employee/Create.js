@@ -15,6 +15,7 @@ export function CreateEmployee() {
     const navigate = useNavigate()
 
     const handleFileSelect = (event) => {
+        debugger;
         const file = event.target.files[0];
         console.log(file)
         if (file) {
@@ -22,6 +23,7 @@ export function CreateEmployee() {
         }
     };
     const handleSubmitAsync = async () => {
+        debugger;
         return new Promise((resolve, reject) => {
             const file = selectedFile;
             if (!file) return reject("No file selected");
@@ -184,8 +186,10 @@ export function CreateEmployee() {
                                             )}
 
                                         </div>
+                                        <div>
                                         <ErrorMessage name="imgEmployee" component='span'
                                                       className='form-err text-center' style={{color: "red"}}/>
+                                        </div>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -205,8 +209,10 @@ export function CreateEmployee() {
                                                 name='accountUser.nameAccount'
                                             />
                                         </div>
+                                        <div>
                                         <ErrorMessage name="accountUser.nameAccount" component='span'
                                                       className='form-err text-center' style={{color: "red"}}/>
+                                        </div>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
@@ -226,8 +232,10 @@ export function CreateEmployee() {
                                                 name='accountUser.passwordAccount'
                                             />
                                         </div>
+                                        <div>
                                         <ErrorMessage name="accountUser.passwordAccount" component='span'
                                                       className='form-err text-center' style={{color: "red"}}/>
+                                        </div>
                                     </div>
                                     <div className="row" style={{marginBottom: "2%"}}>
                                         <div className="col-3" style={{textAlign: "right"}}>
