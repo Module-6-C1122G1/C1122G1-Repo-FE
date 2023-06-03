@@ -1,9 +1,9 @@
-import {apiGetAllFilms} from '../../service/FilmService';
+import {apiGetAllFilms, findFilmById} from '../../service/FilmService';
 import './booking-ticket.css';
 import React, {useEffect, useState} from "react";
 import {apiGetShowTimesByDate, apiGetShowTimesByFilm} from '../../service/ShowTimeService';
-import {useNavigate} from "react-router";
-import {format} from "date-fns";
+import {useNavigate, useParams} from "react-router";
+
 const SelectShowTime = (props) => {
     const {onFinish} = props;
     const [allFilms, setAllFilms] = useState([]);
@@ -12,38 +12,39 @@ const SelectShowTime = (props) => {
     const [selectedFilm, setSelectedFilm] = useState();
     const [selectedDate, setSelectedDate] = useState(0);
     const [selectedTime, setSelectedTime] = useState();
-    const username=localStorage.getItem("username")
+    const username = localStorage.getItem("username");
     const navigate = useNavigate();
+    const param = useParams();
 
     const fetchListFilm = async () => {
         const data = await apiGetAllFilms();
-        console.log(data)
+        console.log(data);
         setAllFilms(data);
-        setAllDates([])
+        setAllDates([]);
     };
 
     const onSelectFilm = (film) => {
         setSelectedFilm(film);
-        fetchShowTimesByFilm(film.idFilm)
+        fetchShowTimesByFilm(film.idFilm);
     };
     const fetchShowTimesByFilm = async (id) => {
         const res = await apiGetShowTimesByFilm(id);
         // const datesByFilm =  [...new Set(res.map(item => format(new Date(item.showDate),"dd/MM/yyyy")))];
-        const datesByFilm =  [...new Set(res.map(item => item.showDate))];
-        console.log(datesByFilm)
-        setAllDates(datesByFilm)
-    }
+        const datesByFilm = [...new Set(res.map(item => item.showDate))];
+        console.log(datesByFilm);
+        setAllDates(datesByFilm);
+    };
     const onSelectDate = (date) => {
         // setSelectedDate(format(new Date(date),'yyyy-dd-MM'));
         setSelectedDate(date);
-        console.log(date)
+        console.log(date);
     };
 
     const fetchShowTimeByDate = async () => {
         const showTimeByDate = await apiGetShowTimesByDate(selectedFilm.idFilm, selectedDate);
-        console.log(showTimeByDate)
+        console.log(showTimeByDate);
         setShowTimesFilters(showTimeByDate);
-    }
+    };
     const onSelectTime = (showTime) => {
         setSelectedTime(showTime);
     };
@@ -52,20 +53,31 @@ const SelectShowTime = (props) => {
             navigate("/login");
         }
         onFinish(selectedFilm, selectedTime);
-    }
+    };
+    const fetchFilmById = async () => {
+        if (param.id) {
+            const filmById = await findFilmById(param.id);
+            console.log(filmById);
+            setSelectedFilm(filmById);
+        }
+    };
     useEffect(() => {
         fetchListFilm();
+        fetchFilmById();
+        if (param.id) {
+            fetchShowTimesByFilm(param.id);
+        }
     }, []);
 
     useEffect(() => {
-       setSelectedDate(0)
-        setSelectedTime(0)
+        setSelectedDate(0);
+        setSelectedTime(0);
     }, [selectedFilm]);
 
     useEffect(() => {
         if (selectedDate) {
-            fetchShowTimeByDate()
-            setSelectedTime(0)
+            fetchShowTimeByDate();
+            setSelectedTime(0);
         }
         // } else {
         //     setShowTimesFilters([])

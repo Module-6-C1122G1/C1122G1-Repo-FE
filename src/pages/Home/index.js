@@ -2,6 +2,7 @@ import React from "react";
 import "./index.css";
 import ListFilm from "../../components/film/List";
 import Slider from "react-slick";
+import {Link} from "react-router-dom";
 
 const Home = () => {
   const settings = {
@@ -33,6 +34,9 @@ const Home = () => {
       },
     ],
   };
+  const product ={
+    id: 2,
+  }
 
   return (
     <>
@@ -79,6 +83,7 @@ const Home = () => {
                   width={"100%"}
                   height={"800px"}
                 />
+                <Link to={`/booking-ticket/${product.id}`} className="btn btn-info">Update</Link>
               </div>
               <div>
                 <img

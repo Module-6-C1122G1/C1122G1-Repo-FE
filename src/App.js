@@ -28,6 +28,7 @@ function App() {
                 <Route path='/discount/create' element={<CreateDiscount/>}/>
                 <Route path='/discount/update/:id' element={<UpdateDiscount/>}/>
                 <Route path='/detail-discount/:id' element={<DetailDiscount/>}/>
+                <Route path='/booking-ticket/:id' element={<BookingTicket/>}/>
                 <Route path='/booking-ticket' element={<BookingTicket/>}/>
             </Route>
         </Routes>

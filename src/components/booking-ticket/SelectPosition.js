@@ -3,6 +3,7 @@ import {apiGetListSeat} from '../../service/SeatService';
 import './booking-ticket.css';
 import React, {useEffect, useState} from "react";
 import {format} from "date-fns";
+
 const positionStatus = {
     1: 'sell',
     2: 'available',
@@ -63,7 +64,7 @@ const SelectPosition = (props) => {
     const calTotalPrice = () => {
         const selectectSeat = allSeat.filter(seat => listSelecting.includes(seat.idSeat));
         const priceArray = selectectSeat.map(seat => seat.typeSeat.idTypeSeat === 1 ? filmData.film.normalSeatPrice : filmData.film.vipSeatPrice);
-        return priceArray.reduce((a, b) => a + b, 0);
+        return format1(priceArray.reduce((a, b) => a + b, 0));
     };
 
     useEffect(() => {
@@ -86,6 +87,11 @@ const SelectPosition = (props) => {
         if (enterValue <= maxValue) {
             setNumberOfSeat(enterValue);
         }
+    };
+    const format1 = (n) => {
+        return n.toFixed(2).replace(/./g, function (c, i, a) {
+            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+        });
     };
 
     return (
@@ -170,13 +176,17 @@ const SelectPosition = (props) => {
                         <h5 className='film-title text-center mt-2'>
                             {filmData?.film?.nameFilm}
                         </h5>
-                    <span className="age-rating">T16</span>
-                    <span className="notice d-inline-flex" style={{fontSize:15}}>
+                        <span className="age-rating">T16</span>
+                        <span className="notice d-inline-flex" style={{fontSize: 15}}>
                       (*) Phim chỉ dành cho khán giả từ 16 tuổi trở lên
                     </span>
-                        <div className="font-weight-normal mb-1" ><b style={{fontWeight: "bold"}}> Ngày chiếu: </b> {format(new Date(filmData?.showTime.showDate),"dd/MM/yyyy")}</div>
-                        <div className="font-weight-normal mb-1"><b style={{fontWeight: "bold"}}>Lịch chiếu phim:</b> {filmData.showTime.showTime}</div>
-                        <div className="font-weight-normal mb-1"><b style={{fontWeight: "bold"}}>Thời lượng:</b> {filmData.film.timeFilm} phút</div>
+                        <div className="font-weight-normal mb-1"><b style={{fontWeight: "bold"}}> Ngày
+                            chiếu: </b> {format(new Date(filmData?.showTime.showDate), "dd/MM/yyyy")}</div>
+                        <div className="font-weight-normal mb-1"><b style={{fontWeight: "bold"}}>Lịch chiếu
+                            phim:</b> {filmData.showTime.showTime}</div>
+                        <div className="font-weight-normal mb-1"><b style={{fontWeight: "bold"}}>Thời
+                            lượng:</b> {filmData.film.timeFilm} phút
+                        </div>
                         <div className="font-weight-normal mb-1 d-flex">
                             <b style={{fontWeight: "bold"}}>Ghế chọn :</b> &nbsp;
                             <div className='d-flex gap-2 flex-wrap'>
@@ -198,12 +208,15 @@ const SelectPosition = (props) => {
                 </div>
             </div>
             <div className="d-flex justify-content-center mt-4 mb-4 gap-2">
-                <button onClick={() => onBack()} className="d-flex btn btn-secondary" type="button" style={{borderRadius: 10, height: 40}}>Quay lại</button>
-                <button disabled={!listSelecting.length} onClick={handleContinue} className="btn btn-primary d-flex" style={{borderRadius: 10, height: 40}}
+                <button onClick={() => onBack()} className="d-flex btn btn-secondary" type="button"
+                        style={{borderRadius: 10, height: 40}}>Quay lại
+                </button>
+                <button disabled={!listSelecting.length} onClick={handleContinue} className="btn btn-primary d-flex"
+                        style={{borderRadius: 10, height: 40}}
                         type="button">Tiếp tục
                 </button>
             </div>
         </div>
-);
+    );
 };
 export default SelectPosition;
