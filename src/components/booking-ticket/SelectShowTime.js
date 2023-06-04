@@ -1,6 +1,7 @@
 import {
   apiGetAllFilmToBooking,
   apiGetAllFilms,
+  findFilmById,
 } from "../../service/FilmService";
 import "./booking-ticket.css";
 import React, { useEffect, useState } from "react";
@@ -8,8 +9,8 @@ import {
   apiGetShowTimesByDate,
   apiGetShowTimesByFilm,
 } from "../../service/ShowTimeService";
-import { useNavigate } from "react-router";
-import { format } from "date-fns";
+import { useNavigate, useParams } from "react-router";
+
 const SelectShowTime = (props) => {
   const { onFinish } = props;
   const [allFilms, setAllFilms] = useState([]);
@@ -20,6 +21,7 @@ const SelectShowTime = (props) => {
   const [selectedTime, setSelectedTime] = useState();
   const username = localStorage.getItem("username");
   const navigate = useNavigate();
+  const param = useParams();
 
   const fetchListFilm = async () => {
     const data = await apiGetAllFilmToBooking();
@@ -36,7 +38,6 @@ const SelectShowTime = (props) => {
     const res = await apiGetShowTimesByFilm(id);
     // const datesByFilm =  [...new Set(res.map(item => format(new Date(item.showDate),"dd/MM/yyyy")))];
     const datesByFilm = [...new Set(res.map((item) => item.showDate))];
-    console.log(datesByFilm);
     setAllDates(datesByFilm);
   };
   const onSelectDate = (date) => {
@@ -62,8 +63,18 @@ const SelectShowTime = (props) => {
     }
     onFinish(selectedFilm, selectedTime);
   };
+  const fetchFilmById = async () => {
+    if (param.id) {
+      const filmById = await findFilmById(param.id);
+      setSelectedFilm(filmById);
+    }
+  };
   useEffect(() => {
     fetchListFilm();
+    fetchFilmById();
+    if (param.id) {
+      fetchShowTimesByFilm(param.id);
+    }
   }, []);
 
   useEffect(() => {
@@ -85,7 +96,7 @@ const SelectShowTime = (props) => {
       <div className="select-film-wrapper">
         <h3 className="title">Đặt vé</h3>
         <div className="row">
-          <div className="col-4 col-md-4 select-card">
+          <div className="col-12 col-md-4 select-card">
             <div className="content">
               <div className="title">CHỌN PHIM</div>
               <div className="option-items" id="films-combox">
@@ -103,7 +114,7 @@ const SelectShowTime = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-4 col-md-4 select-card">
+          <div className="col-12 col-md-4 select-card">
             <div className="content">
               <div className="title">CHỌN NGÀY CHIẾU</div>
               <div className="option-items" id="dates-combox">
@@ -120,7 +131,7 @@ const SelectShowTime = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-4 col-md-4 select-card">
+          <div className="col-12 col-md-4 select-card">
             <div className="content">
               <div className="title">CHỌN SUẤT CHIẾU</div>
               <div className="option-items" id="times-combox">

@@ -335,8 +335,9 @@ body.active {
   width: 100%;
   padding-block: 25px;
   transition: var(--transition-2);
+  background-color: hsl(207, 19%, 11%) !important;
   z-index: 4;
-  padding: 0;
+  padding: 0 0 70px 0;
 }
 
 .header.active {

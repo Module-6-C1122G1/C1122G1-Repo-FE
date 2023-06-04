@@ -20,9 +20,17 @@ const DiscountListPublic = () => {
       <div style={{ margin: "150px 0" }}>
         <div class="row mx-0 ">
           <div class="event">
-            <div className="row mx-0 ">
-              <div style={{ backgroundColor: "#f26b38" }}>
-                <h3 style={{ color: "white" }}>Khuyến Mãi -Sự Kiện</h3>
+            <div className="row mx-0 ps-5">
+              <div>
+                <h3
+                  style={{
+                    color: "#f26b38",
+                    fontSize: "24px",
+                    fontWeight: 600,
+                  }}
+                >
+                  Khuyến mãi - sự kiện
+                </h3>
               </div>
             </div>
             <div class="row mx-0 ps-5">
@@ -41,9 +49,9 @@ const DiscountListPublic = () => {
                       <div className="readmore">
                         <p style={{ color: "white" }}>
                           <b>{discount.nameDiscount}</b>
-                          <p>"Ngày bắt đầu:"{discount.dateStart}</p>
-                          <p>Ngày kết thúc:"{discount.dateEnd}</p>
-                          <p>Giảm giá:{discount.percentDiscount}%</p>
+                          <p>Ngày bắt đầu: {discount.dateStart}</p>
+                          <p>Ngày kết thúc: {discount.dateEnd}</p>
+                          <p>Giảm giá: {discount.percentDiscount}%</p>
                         </p>
                         <div className="text" style={{ marginTop: 200 }}>
                           Chi tiết

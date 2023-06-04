@@ -67,6 +67,9 @@ li {
 a {
   text-decoration: none !important;
 }
+a:hover {
+  text-decoration: none !important;
+}
 
 a,
 img,
@@ -328,6 +331,8 @@ body.active {
   width: 100%;
   padding-block: 25px;
   transition: var(--transition-2);
+  background-color: hsl(207, 19%, 11%) !important;
+  padding: 0 !important;
   z-index: 4;
 }
 

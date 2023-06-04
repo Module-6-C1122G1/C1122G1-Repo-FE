@@ -1,16 +1,18 @@
 import "./ConfirmTicket.css";
-import Footer from "../common/footer/Footer";
-import Header from "../common/header/Header";
 import React, { useEffect, useRef, useState } from "react";
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import {
   cancelSeat,
   checkDiscount,
+  checkSeat,
   findByIdSeat,
   getCustomer,
   pay,
 } from "../../service/TicketService";
 import { useNavigate } from "react-router";
+import Header from "../common/header/Header";
+import Footer from "../common/footer/Footer";
+import { toast } from "react-toastify";
 
 const formatTime = (time) => {
   let minutes = Math.floor(time / 60);
@@ -32,7 +34,7 @@ export function ConfirmTicket(props) {
   const [price, setPrice] = useState(0);
   const [discounts, setDiscount] = useState({});
   const [customer, setCustomer] = useState({});
-  const [countDown, setCountDown] = useState(1000);
+  const [countDown, setCountDown] = useState(100);
   const timerId = useRef();
   const navigate = useNavigate();
 
@@ -47,9 +49,14 @@ export function ConfirmTicket(props) {
     if (countDown <= 0) {
       clearInterval(timerId.current);
       const cancels = async () => {
-        await cancelSeat(listSelectingData);
+        const result = await checkSeat(listSelectingData[0]);
+        console.log(result);
+        if (result === 3) {
+          await cancelSeat(listSelectingData);
+        }
       };
       cancels();
+      toast("Đã hết thời gian, xin vui lòng chọn lại vé");
       navigate("/");
     }
   }, [countDown]);
@@ -63,8 +70,6 @@ export function ConfirmTicket(props) {
       );
       const customers = await getCustomer(useName, token);
       setCustomer(customers);
-      console.log(result);
-      console.log(result.listSeats);
       setSeat(result.listSeats);
       setPrice(result.priceTicket);
     };
@@ -78,25 +83,30 @@ export function ConfirmTicket(props) {
       console.log(result);
       if (discounts.idDiscount == null) {
         if (result === undefined) {
-          document.getElementById("error").innerText =
-            "Mã giảm giá không tồn tại";
+          toast("Vé không tồn tại");
         } else {
           const prices = (-result.percentDiscount * price) / 100 + price;
           setPrice(prices);
           setDiscount(result);
+          toast("Áp dụng mã giảm giá thành công");
         }
       } else {
-        document.getElementById("error").innerText =
-          "Bạn chỉ được áp dụng 1 mã giảm giá";
+        toast("Bạn chỉ được áp dụng 1 mã giảm giá");
       }
     }
+  };
+  const format1 = (n) => {
+    const b = n;
+    return b.toFixed(2).replace(/./g, function (c, i, a) {
+      return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+    });
   };
   return (
     customer &&
     price &&
     seats && (
       <>
-        {/*<Header/>*/}
+        <Header />
         <Formik
           initialValues={{
             idCustomer: customer.idCustomer,
@@ -106,21 +116,20 @@ export function ConfirmTicket(props) {
             price: price,
           }}
           onSubmit={(values) => {
-            let price = +document.getElementById("ok").innerText;
+            let price = +document.getElementById("ok").value;
             let dis = +document.getElementById("dis").value;
             console.log(values);
-            console.log(price);
             const save = async () => {
-              window.open(
-                await pay({ ...values, price: price, idDiscount: dis }, token),
-                "_blank"
+              window.location.href = await pay(
+                { ...values, price: price, idDiscount: dis },
+                token
               );
             };
-            save().then((e) => navigate("/booking-ticket"));
+            save();
           }}
         >
           <Form>
-            <input type="hidden" value={discounts} id="dis" />
+            <input type="hidden" value={discounts.idDiscount} id="dis" />
             <div className="container">
               <div className="row">
                 <div
@@ -139,14 +148,7 @@ export function ConfirmTicket(props) {
                         <td style={{ width: "25%" }}>Hình thức thanh toán</td>
                         <td>
                           <select style={{ width: "40%" }}>
-                            <option>Chọn loại thẻ</option>
-                            <option>Vé điện tử MOMO</option>
-                            <option>ZaloPay: Bạn mới 9k/ vé</option>
-                            <option>VNPAY</option>
-                            <option>
-                              HSBC/Payoo - ATM/VISA/MASTER/JCB/QRCODE
-                            </option>
-                            <option>Ví ShopeePay</option>
+                            <option value="">Ngân Hàng NCB</option>
                           </select>
                         </td>
                       </tr>
@@ -203,9 +205,14 @@ export function ConfirmTicket(props) {
                         <td />
                         <td>
                           <button
+                            className="btn btn-danger"
                             type="button"
                             onClick={() => handleDiscount()}
-                            style={{ width: "40%" }}
+                            style={{
+                              width: "40%",
+                              margin: "0 auto",
+                              background: "rgb(242, 107, 56)",
+                            }}
                           >
                             Áp dụng
                           </button>
@@ -226,12 +233,24 @@ export function ConfirmTicket(props) {
                         <td />
                         <td>
                           <button
+                            className="btn btn-danger"
                             type="button"
-                            style={{ width: "18%", marginRight: "4%" }}
+                            style={{
+                              width: "18%",
+                              marginRight: "1%",
+                              background: "rgb(242, 107, 56)",
+                            }}
                           >
                             Quay lại
                           </button>
-                          <button style={{ width: "20%" }} type="submit">
+                          <button
+                            className="btn btn-danger"
+                            style={{
+                              width: "22%",
+                              background: "rgb(242, 107, 56)",
+                            }}
+                            type="submit"
+                          >
                             Thanh toán
                           </button>
                         </td>
@@ -334,11 +353,12 @@ export function ConfirmTicket(props) {
                                   className="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty"
                                 >
                                   <p>
-                                    <span className="ng-binding" id="ok">
-                                      {price}
-                                    </span>
+                                    <span className="ng-binding">
+                                      {format1(price)}
+                                    </span>{" "}
                                     VNĐ
                                   </p>
+                                  <input type="hidden" id="ok" value={price} />
                                 </galaxy-summary-ticket>
                               </p>
                             </div>
@@ -376,6 +396,7 @@ export function ConfirmTicket(props) {
             </div>
           </Form>
         </Formik>
+        <Footer />
       </>
     )
   );

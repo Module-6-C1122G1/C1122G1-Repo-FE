@@ -1,238 +1,433 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { storage } from "../../firebase";
+import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
+import * as Yup from "yup";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Link } from "react-router-dom";
+import { ColorRing } from "react-loader-spinner";
+import { toast } from "react-toastify";
+import {
+  editCustomerAccount,
+  findByIdAccount,
+} from "../../service/CustomerServiceTruongNN";
+import Header from "../common/header/Header";
+import Footer from "../common/footer/Footer";
 
-import React, {useEffect, useState} from 'react';
-import {Form, Field, Formik} from 'formik';
-import {customerService} from "../../service/CustomerService";
-import {useNavigate, useParams} from "react-router";
-import Swal from "sweetalert2";
-import {NavLink} from "react-router-dom";
+export function UpdateCustomerAccount() {
+  const [customer, setCustomer] = useState(null);
+  const param = useParams();
+  const token = localStorage.getItem("token");
 
-function Update() {
-    let param = useParams()
+  useEffect(() => {
+    const fetchApi = async () => {
+      const result = await findByIdAccount(param.id, token);
+      console.log(result);
+      setCustomer(result);
+    };
+    fetchApi();
+  }, []);
 
-    let navigate = useNavigate();
+  if (!customer) {
+    return null;
+  }
+  return (
+    <>
+      <Header />
+      <Formik
+        initialValues={{
+          idCustomer: customer?.idCustomer,
+          accountUser: {
+            id: customer?.accountUser?.id,
+            nameAccount: customer?.accountUser?.nameAccount,
+            passwordAccount: customer?.accountUser?.passwordAccount,
+          },
+          nameCustomer: customer?.nameCustomer,
+          dateOfBirth: customer?.dateOfBirth,
+          pointCustomer: customer?.pointCustomer,
+          gender: customer?.gender,
+          email: customer?.email,
+          identityCard: customer?.identityCard,
+          address: customer?.address,
+          phone: customer?.phone,
+          imgCustomer: customer?.imgCustomer,
+          typeCustomer: customer?.typeCustomer,
+        }}
+        validationSchema={Yup.object({
+          nameCustomer: Yup.string()
+            .trim()
+            .required("Vui lòng  nhập họ tên")
+            .min(4, "Tên tài khoản quá ngắn, phải từ 4 ký tự")
+            .max(100, "Tên tài khoản quá dài")
+            .matches(
+              /^(?=.*[a-zA-Z\s])[^!@#$%^&*(),.?":{}|<>]{4,100}$/,
+              "Tên phải có độ dài từ 4 ký tự, không chứa ký tự đặc biệt"
+            ),
+          dateOfBirth: Yup.date()
+            .required("Vui lòng nhập ngày sinh")
+            .test("is-over-16", "Bạn chưa đủ 16 tuổi", function (value) {
+              const currentDate = new Date();
+              const selectedDate = new Date(value);
+              const ageDiff =
+                currentDate.getFullYear() - selectedDate.getFullYear();
+              if (ageDiff < 16) {
+                return false;
+              }
+              return true;
+            }),
+          email: Yup.string()
+            .min(12, "Email ít nhất 12 ký tự")
+            .max(32, "Email tối đa 32 ký tự")
+            .matches(
+              /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+              "Email phải đúng định dạng xxx@gmail.com"
+            )
+            .required("Vui lòng nhập email"),
+          identityCard: Yup.string()
+            .required("Vui lòng nhập số CCCD")
+            .matches(/^[0-9]{12}$/, "CCCD phải là 12 ký tự số"),
+          address: Yup.string().required("Vui lòng nhập địa chỉ"),
+          phone: Yup.string()
+            .required("Vui lòng nhập số điện thoại")
+            .matches(
+              /^(\+?84|0)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])[0-9]{7}$/,
+              "Số điện thoại không hợp lệ"
+            ),
+        })}
+        onSubmit={(values, { resetForm }) => {
+          const updateCustomer = async () => {
+            const newValue = {
+              ...values,
+              customerType: parseInt(values.customerType),
+            };
+            editCustomerAccount(newValue, token);
+            toast("Chỉnh sửa thông tin tài khoản thành công");
+            resetForm(false);
+          };
+          updateCustomer();
+        }}
+      >
+        <div className="container-fluid" style={{ margin: "150px 0" }}>
+          <div className="row">
+            <div
+              className="col-md-5"
+              style={{ flex: "0 0 auto", width: "20%", marginTop: "1%" }}
+            >
+              <h2 style={{ textAlign: "center", fontSize: "30px" }}>
+                Quản lý tài khoản
+              </h2>
+              <p className="text-center">
+                <img
+                  src={customer?.imgCustomer}
+                  className="rounded-circle avatar"
+                  height="200px"
+                  style={{
+                    height: "60px",
+                    width: "60px",
+                    margin: "0 auto",
+                  }}
+                />
+              </p>
+              <p style={{ textAlign: "center" }}>
+                <b>{customer?.accountUser?.nameAccount}</b>
+              </p>
+              <div className="mt-3" style={{ textAlign: "center" }}>
+                <i className="bi bi-bookmark-star-fill" />
+                Điểm tích lũy : 120
+              </div>
+              <div className="mt-3" style={{ textAlign: "center" }}>
+                <Link to="/login" className="log-out btn btn-outline-danger">
+                  Đăng xuất
+                </Link>
+              </div>
+              <hr />
+              <div
+                className="mt-2"
+                style={{ fontSize: 14, textAlign: "center" }}
+              >
+                <Link to="/update/:id" />
 
-    const [customers, setCustomers] = useState();
+                <b>Thông tin tài khoản</b>
+              </div>
+              <hr />
+              <div
+                className="mt-2"
+                style={{ fontSize: 14, textAlign: "center" }}
+              >
+                <link href="" style={{ fontSize: 14 }} />
+                <b>Lịch sử</b>
+              </div>
+              <hr />
+              <Link
+                to={"/ticket-customer/history"}
+                className="mt-2"
+                style={{ fontSize: 14, textAlign: "center", color: "black" }}
+              >
+                <Link
+                  to={"/ticket-customer/history"}
+                  style={{ fontSize: 14 }}
+                />
 
-    useEffect(() => {
-        const fetchApi = async () => {
-            const res = await customerService.findById(param.id)
-            setCustomers(res)
-        }
-        fetchApi()
-    }, [])
+                <b>Vé đã đặt</b>
+              </Link>
+            </div>
+            <div className=" container mx-auto my-5 col-md-7">
+              <div
+                className="col-12 col-lg-9 col-xl-7"
+                style={{ width: "100%" }}
+              >
+                <div className="card shadow-2-strong card-registration">
+                  <Form>
+                    <div
+                      className="card-body p-4 p-md-6"
+                      style={{ marginTop: "-3%" }}
+                    >
+                      <h1
+                        className="mb-4 pb-2 pb-md-0 mb-md-5"
+                        style={{ textAlign: "center" }}
+                      >
+                        Chỉnh sửa thông tin tài khoản
+                      </h1>
+                      <div className="row">
+                        <div className="col-md-6 mb-4">
+                          <div className="inputBox">
+                            <Field
+                              type="text"
+                              className="input"
+                              style={{ width: "100%", height: "90%" }}
+                              name="nameCustomer"
+                            />
+                            <div>
+                              <ErrorMessage
+                                name="nameCustomer"
+                                component={"p"}
+                                style={{ color: "red" }}
+                              />
+                            </div>
 
-    if (!customers) {
-        return null;
-    }
-    return (
-        <Formik
-            initialValues={{
-                idCustomer: customers?.idCustomer,
-                nameCustomer: customers?.nameCustomer,
-                dateOfBirth: customers?.dateOfBirth,
-                phone: customers?.phone,
-                address: customers?.address,
-                email: customers?.email,
-                identityCard: customers?.identityCard
-
-            }}
-            onSubmit={(values) => {
-                const edit = async () => {
-                    console.log(values);
-                    await customerService.editCustomer(values)
-                    navigate('/customer');
-                };
-                edit();
-            }
-            }
-        >
-
-
-            <>
-                <div className="row">
-                    <div className="col-1"></div>
-                    <div className="col-10 fw-center">
-                        <div>
-                            <Form>
-                                <Field type="hidden" name="idCustomer"/>
-                                <div className="container mt-5">
-                                    <div>
-                                        <div style={{background: "orangered"}}>
-                                            <h2
-                                                className="d-flex justify-content-center"
-                                                style={{
-                                                    padding: 16,
-                                                    backgroundColor: "orangered",
-                                                    color: "#fff"
-                                                }}
-                                            >
-                                                THÔNG TIN THÀNH VIÊN
-                                            </h2>
-                                        </div>
-                                        <div className="mb-3 align-items-center">
-                                            <label htmlFor="name" className="col-form-label">
-                                                Họ &amp; Tên:
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                name="nameCustomer"
-                                                id="name"
-                                                className="form-control"
-                                            />
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-md-2">
-                                                <div className="mb-3 align-items-center">
-                                                    <label htmlFor="birthday" className="col-form-label">
-                                                        Ngày sinh:
-                                                    </label>
-                                                    <Field
-                                                        type="date"
-                                                        name="dateOfBirth"
-                                                        id="birthday"
-                                                        className="form-control"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-4">
-                                            </div>
-                                            <div className="col-md-6">
-                                                <div className="mb-3 align-items-center">
-                                                    <label htmlFor="phone" className="col-form-label">
-                                                        Số điện thoại:
-                                                    </label>
-                                                    <Field
-                                                        type="text"
-                                                        id="phone"
-                                                        name="phone"
-                                                        className="form-control"
-                                                        placeholder="Số điện thoại"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-md-6">
-                                                <div className="mb-3 align-items-center">
-                                                    <label htmlFor="email" className="col-form-label">
-                                                        Email:
-                                                    </label>
-                                                    <Field
-                                                        type="text"
-                                                        id="email"
-                                                        name="email"
-                                                        className="form-control"
-                                                        placeholder="Email"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <div className="mb-3 align-items-center">
-                                                    <label htmlFor="cmnd" className="col-form-label">
-                                                        Số CMND:
-                                                    </label>
-                                                    <Field
-                                                        type="text"
-                                                        id="cmnd"
-                                                        name="identityCard"
-                                                        className="form-control"
-                                                        placeholder="Chứng minh nhân dân"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="mb-3 align-items-center">
-                                            <label htmlFor="address" className="col-form-label">
-                                                Địa chỉ:
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                id="address"
-                                                name="address"
-                                                className="form-control"
-                                                placeholder="Địa chỉ"
-                                            />
-                                            <div className="mt-3">
-
-                                                <button type="submit" className="btn btn-outline-light"
-                                                        style={{background: "orangered"}}>Lưu lại
-                                                </button>
-
-                                                <NavLink to={'/customer'}>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-dismiss="modal">
-                                                        Quay lại
-                                                    </button>
-                                                </NavLink>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Form>
+                            <label
+                              className="labelInput"
+                              style={{
+                                marginLeft: "2%",
+                                marginTop: "-6%",
+                                backgroundColor: "white",
+                                color: "black",
+                              }}
+                            >
+                              Họ tên
+                            </label>
+                          </div>
                         </div>
-                        <div className="row container-fluid mt-5">
-                            <h2>Phim đang chiếu</h2>
-                            <div className="col-md-3">
-                                <div className="card" style={{width: "18rem"}}>
-                                    <img
-                                        src="https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/3/5/350x495_1.png"
-                                        className="card-img-top"
-                                        alt="..."
-                                    />
-                                    <div className="card-body">
-                                        <p className="card-text">GUARDIANS OF THE GALAXY VOL.3</p>
-                                    </div>
-                                </div>
+                        <div className="col-md-6 mb-4">
+                          <div className="inputBox">
+                            <Field
+                              type="date"
+                              className="input"
+                              style={{ width: "100%", height: "90%" }}
+                              name="dateOfBirth"
+                            />
+                            <div>
+                              <ErrorMessage
+                                name="dateOfBirth"
+                                component={"p"}
+                                style={{ color: "red" }}
+                              />
                             </div>
-                            <div className="col-md-3">
-                                <div className="card" style={{width: "18rem"}}>
-                                    <img
-                                        src="https://cdn.galaxycine.vn/media/2023/4/27/300x450_1682565518580.jpg"
-                                        className="card-img-top"
-                                        alt="..."
-                                    />
-                                    <div className="card-body">
-                                        <p className="card-text">CON NHÓT MÓT CHỒNG</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="card" style={{width: "18rem"}}>
-                                    <img
-                                        src="https://cdn.galaxycine.vn/media/2023/4/17/300wx450h_1681703428813.jpg"
-                                        className="card-img-top"
-                                        alt="..."
-                                    />
-                                    <div className="card-body">
-                                        <p className="card-text">LẬT MẶT 6: TẤM VÉ ĐỊNH MỆNH</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="card" style={{width: "18rem"}}>
-                                    <img
-                                        src="https://cdn.galaxycine.vn/media/2023/4/28/300_1682666851796.jpg"
-                                        className="card-img-top"
-                                        alt="..."
-                                    />
-                                    <div className="card-body">
-                                        <p className="card-text">SISU</p>
-                                    </div>
-
-                                </div>
-                            </div>
+                            <label
+                              className="labelInput"
+                              style={{
+                                marginLeft: "2%",
+                                marginTop: "-6%",
+                                backgroundColor: "white",
+                                color: "black",
+                              }}
+                            >
+                              Ngày sinh
+                            </label>
+                          </div>
                         </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="col-md-6 mb-4">
+                          <div className="inputBox">
+                            <Field
+                              type="text"
+                              className="input"
+                              style={{ width: "100%", height: "90%" }}
+                              name="identityCard"
+                            />
+                            <div>
+                              <ErrorMessage
+                                name="identityCard"
+                                component={"p"}
+                                style={{ color: "red" }}
+                              />
+                            </div>
+                            <label
+                              className="labelInput"
+                              style={{
+                                marginLeft: "2%",
+                                marginTop: "-6%",
+                                backgroundColor: "white",
+                                color: "black",
+                              }}
+                            >
+                              CCCD
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-md-6 mb-4">
+                          <div className="inputBox">
+                            <Field
+                              type="text"
+                              className="input"
+                              style={{ width: "100%", height: "90%" }}
+                              name="email"
+                            />
+                            <div>
+                              <ErrorMessage
+                                name="email"
+                                component={"p"}
+                                style={{ color: "red" }}
+                              />
+                            </div>
+                            <label
+                              className="labelInput"
+                              style={{
+                                marginLeft: "2%",
+                                marginTop: "-6%",
+                                backgroundColor: "white",
+                                color: "black",
+                              }}
+                            >
+                              Email
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="col-md-6 mb-4">
+                          <div className="inputBox">
+                            <Field
+                              type="text"
+                              className="input"
+                              style={{ width: "100%", height: "90%" }}
+                              name="phone"
+                            />
+                            <div>
+                              <ErrorMessage
+                                name="phone"
+                                component={"p"}
+                                style={{ color: "red" }}
+                              />
+                            </div>
+                            <label
+                              className="labelInput"
+                              style={{
+                                marginLeft: "2%",
+                                marginTop: "-6%",
+                                backgroundColor: "white",
+                                color: "black",
+                              }}
+                            >
+                              Số điện thoại
+                            </label>
+                          </div>
+                        </div>
+                        <div
+                          className="col-md-6 mb-4"
+                          style={{ display: "flex", marginLeft: "-12%" }}
+                        >
+                          <Field
+                            type="radio"
+                            value="Nam"
+                            name="gender"
+                            style={{
+                              height: "35%",
+                              marginTop: "4%",
+                              marginRight: "-17%",
+                              marginLeft: "2%",
+                            }}
+                          />{" "}
+                          <span
+                            style={{ marginTop: "1%", marginRight: "-10%" }}
+                          >
+                            Nam
+                          </span>
+                          <Field
+                            type="radio"
+                            value="N?"
+                            name="gender"
+                            style={{
+                              height: "35%",
+                              marginTop: "4%",
+                              marginRight: "-17%",
+                              marginLeft: "-10%",
+                            }}
+                          />{" "}
+                          <span style={{ marginTop: "1%" }}>Nữ</span>
+                          <ErrorMessage
+                            name="gender"
+                            component={"p"}
+                            style={{ color: "red" }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="inputBox">
+                          <Field
+                            type="text"
+                            className="input"
+                            style={{ width: "100%", height: "39px" }}
+                            name="address"
+                          />
+                          <div>
+                            <ErrorMessage
+                              name="address"
+                              component={"p"}
+                              style={{ color: "red" }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="row" style={{ marginBottom: "2%" }}>
+                        <div
+                          className="col-12"
+                          style={{ marginTop: "4%", textAlign: "center" }}
+                        >
+                          <button
+                            type="submit"
+                            className="btn btn-primary"
+                            style={{ background: "#f26b38", marginLeft: "7%" }}
+                          >
+                            Lưu
+                          </button>
+                          <button
+                            type="reset"
+                            className="btn btn-primary"
+                            style={{
+                              background: "black",
+                              color: "white",
+                              marginLeft: "10px",
+                            }}
+                          >
+                            Hủy
+                          </button>
+                        </div>
+                      </div>
                     </div>
+                  </Form>
                 </div>
-
-            </>
-        </Formik>
-    );
+              </div>
+            </div>
+          </div>
+        </div>
+      </Formik>
+      <Footer />
+    </>
+  );
 }
-
-
-export default Update;
-

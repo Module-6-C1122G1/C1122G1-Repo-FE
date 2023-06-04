@@ -52,16 +52,17 @@ function ConfirmEmail() {
                         code: e.data.code,
                       })
                     );
-                    navigate("/reset-password", {
-                      state: { email: values.email },
-                    });
                   })
                   .catch((e) => {
                     console.log(e);
                     setFailedEmail(
                       "Email này chưa được đăng ký, vui lòng thử lại."
                     );
+                    return;
                   });
+                navigate("/reset-password", {
+                  state: { email: values.email },
+                });
               }, 5000);
             }}
           >
@@ -130,7 +131,7 @@ function ConfirmEmail() {
                       <th></th>
                       <td className="other-login">
                         {isSubmitting ? (
-                          <div className="d-flex justify-content-center align-items-center">
+                          <div className="d-flex justify-content-center align-items-center w-100">
                             <Circles
                               height="50"
                               width="50"

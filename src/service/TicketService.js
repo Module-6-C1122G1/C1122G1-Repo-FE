@@ -62,3 +62,75 @@ export const cancelSeat = async (listId) => {
     console.log(e);
   }
 };
+/**
+ * @Param page
+ * @Param search
+ * Phương thức sử dụng để tìm kiếm kết hợp danh sách vé đặt
+ * @author DatLVP
+ */
+export const findAllTicket = async ({ page, search }, auth) => {
+  const headers = {
+    Authorization: "Bearer " + auth,
+  };
+  try {
+    const result = await axios.get(
+      `http://localhost:8080/api/employee/ticket/list?page=${
+        page ? page : 0
+      }&search=${search}`,
+      { headers }
+    );
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+/**
+ * @Param id
+ * Phương thức sử dụng để tìm huỷ vé đã đặt
+ * @author DatLVP
+ */
+
+export const cancelTicket = async (id, auth) => {
+  const headers = {
+    Authorization: "Bearer " + auth,
+  };
+
+  try {
+    await axios.put(
+      `http://localhost:8080/api/employee/ticket/cancelTicket/${id}`,
+      null,
+      { headers: headers }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const checkSeat = async (idSeat) => {
+  try {
+    const result = await axios.get(
+      `http://localhost:8080/api/public/seat/check-seat/` + idSeat
+    );
+    return result.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+export const saveTicket = async (
+  idCus,
+  idFilm,
+  idDiscount,
+  seat,
+  price,
+  vnp_ResponseCode,
+  auth
+) => {
+  const headers = { Authorization: "Bearer " + auth };
+  try {
+    await axios.get(
+      `http://localhost:8080/api/user/ticket/create?idCus=${idCus}&idFilm=${idFilm}&idDiscount=${idDiscount}&seat=${seat}&price=${price}&vnp_ResponseCode=${vnp_ResponseCode}`,
+      headers
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};

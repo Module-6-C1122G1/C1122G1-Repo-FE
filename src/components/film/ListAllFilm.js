@@ -78,7 +78,7 @@ function ListAllFilm() {
                       </figure>
                     </Link>
                     <div className="title-wrapper">
-                      <Link to={"detail/" + film.idFilm}>
+                      <Link to={"/film/detail/" + film.idFilm}>
                         <h3 className="card-title">{film.nameFilm}</h3>
                       </Link>
                     </div>

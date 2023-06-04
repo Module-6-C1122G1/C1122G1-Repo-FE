@@ -4,22 +4,24 @@ import {
   findAllDiscount,
   findByIdDiscount,
 } from "../../service/discount/DiscountService";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Footer from "../common/footer/Footer";
 import Header from "../common/header/Header";
+import { border } from "@mui/system";
 
 export function DetailDiscount() {
   const [discount, setDiscount] = useState({});
   const [listDiscount, setListDiscount] = useState(null);
   const param = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchApi = async () => {
       const result = await findAllDiscount();
       const result1 = await findByIdDiscount(param.id);
       setDiscount(result1);
-      console.log(result);
-      setListDiscount(result.content);
+      console.log(result1);
+      setListDiscount(result);
     };
     fetchApi();
   }, []);
@@ -49,8 +51,8 @@ export function DetailDiscount() {
                       <strong>Ngày kết thúc:</strong> {discount.dateEnd}
                     </p>
                     <p>
-                      <strong>Giảm giá vé :</strong>
-                      {discount.percentDiscount}%;
+                      <strong>Giảm giá vé: </strong>
+                      {discount.percentDiscount}%
                     </p>
                   </div>
                   <div
@@ -190,43 +192,52 @@ export function DetailDiscount() {
               </div>
             </div>
             <div className="event">
-              <div className="row mx-0 ">
+              <div className="row mx-0" style={{ marginTop: 100 }}>
                 <div style={{ backgroundColor: "#f26b38" }}>
                   <h3 style={{ color: "white" }}>Các khuyến mãi khác </h3>
                 </div>
               </div>
-              <div className="row mx-0 ps-5">
+              <div className="row mx-0">
                 {listDiscount &&
-                  listDiscount.map((isDiscount) => (
-                    <div
-                      className="col-md-4 container"
-                      style={{ paddingTop: 20 }}
-                    >
-                      <div
-                        className="card"
-                        style={{ width: 400, backgroundColor: "rgb(0 0 0)" }}
-                      >
-                        <Link to={"/detail-discount/" + isDiscount.idDiscount}>
-                          <img
-                            style={{ height: 500 }}
-                            src={isDiscount.imageDiscount}
-                            className="image"
-                          />
-                          <div className="readmore">
-                            <p style={{ color: "white" }}>
-                              <b>{isDiscount.nameDiscount}</b>
-                              <p>"Ngày bắt đầu:"{isDiscount.dateStart}</p>
-                              <p>Ngày kết thúc:"{isDiscount.dateEnd}</p>
-                              <p>Giảm giá:{isDiscount.percentDiscount}</p>
-                            </p>
-                            <div className="text" style={{ marginTop: 200 }}>
-                              Chi tiết
-                            </div>
+                  listDiscount.map((isDiscount, index) => {
+                    if (index < 3) {
+                      return (
+                        <div className="col-md-4" style={{ paddingTop: 20 }}>
+                          <div
+                            className="card"
+                            style={{
+                              width: 400,
+                              backgroundColor: "rgb(0 0 0)",
+                            }}
+                          >
+                            <Link
+                              to={"/detail-discount/" + isDiscount.idDiscount}
+                            >
+                              <img
+                                style={{ height: 500 }}
+                                src={isDiscount.imageDiscount}
+                                className="image"
+                              />
+                              <div className="readmore">
+                                <p style={{ color: "white" }}>
+                                  <b>{isDiscount.nameDiscount}</b>
+                                  <p>"Ngày bắt đầu:"{isDiscount.dateStart}</p>
+                                  <p>Ngày kết thúc:"{isDiscount.dateEnd}</p>
+                                  <p>Giảm giá:{isDiscount.percentDiscount}</p>
+                                </p>
+                                <div
+                                  className="text"
+                                  style={{ marginTop: 200 }}
+                                >
+                                  Chi tiết
+                                </div>
+                              </div>
+                            </Link>
                           </div>
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
+                        </div>
+                      );
+                    }
+                  })}
               </div>
             </div>
           </div>

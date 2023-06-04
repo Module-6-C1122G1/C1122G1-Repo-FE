@@ -87,6 +87,7 @@ function Login() {
                   setFailedAccount(null);
                   localStorage.setItem("token", e.token);
                   localStorage.setItem("username", e.username);
+                  localStorage.setItem("account", JSON.stringify(e));
                   dispatch(receiveAccount(e));
                   window.location.href = "/";
                 })

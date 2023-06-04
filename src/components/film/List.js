@@ -47,13 +47,13 @@ export function ListFilm() {
             <Slider {...settings}>
               {moviePlaying.map((movie) => (
                 <div className="movie-card p-3">
-                  <Link to={"detail/" + movie.idFilm}>
+                  <Link to={"/film/detail/" + movie.idFilm}>
                     <figure className="card-banner">
                       <img src={movie.imgFilm} alt={movie.nameFilm} />
                     </figure>
                   </Link>
                   <div className="title-wrapper">
-                    <Link to={"detail/" + movie.idFilm}>
+                    <Link to={"/film/detail/" + movie.idFilm}>
                       <h3 className="card-title">{movie.nameFilm}</h3>
                     </Link>
                   </div>
@@ -96,13 +96,13 @@ export function ListFilm() {
             <Slider {...settings}>
               {movieUpcoming.map((movie) => (
                 <div className="movie-card p-3">
-                  <Link to={"detail/" + movie.idFilm}>
+                  <Link to={"/film/detail/" + movie.idFilm}>
                     <figure className="card-banner">
                       <img src={movie.imgFilm} alt={movie.nameFilm} />
                     </figure>
                   </Link>
                   <div className="title-wrapper">
-                    <Link to={"detail/" + movie.idFilm}>
+                    <Link to={"/film/detail/" + movie.idFilm}>
                       <h3 className="card-title">{movie.nameFilm}</h3>
                     </Link>
                   </div>

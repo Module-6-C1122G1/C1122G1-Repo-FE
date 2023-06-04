@@ -42,6 +42,16 @@ export const apiGetAllFilms = async (pageAndSearch) => {
         "&type_film=" +
         pageAndSearch.type_film
     );
+    console.log(
+      "http://localhost:8080/api/public/movie?page=" +
+        pageAndSearch.page +
+        "&search=" +
+        pageAndSearch.search +
+        "&sort=" +
+        pageAndSearch.sort +
+        "&type_film=" +
+        pageAndSearch.type_film
+    );
     return result.data;
   } catch (e) {
     console.log(e);
@@ -51,8 +61,9 @@ export const apiGetAllFilms = async (pageAndSearch) => {
 export const findFilmById = async (idFilm) => {
   try {
     const result = await axios.get(
-      `http://localhost:8080/api/public/movie/${idFilm}}`
+      "http://localhost:8080/api/public/movie/detail/" + idFilm
     );
+    console.log(result);
     return result.data;
   } catch (e) {
     console.log(e);
@@ -121,18 +132,17 @@ export const deleteFilm = async (idFilm) => {
 export const getFilm = async (id) => {
   try {
     const result = await axios.get(
-      "http://localhost:8080/api/public/movie/" + id
+      "http://localhost:8080/api/public/movie/detail/" + id
     );
     return result.data;
   } catch (err) {
     console.log(err);
   }
 };
-
 export const detail = async (id) => {
   try {
     return (
-      await axios.get(`http://localhost:8080/api/public/movie/detail/${id}`)
+      await axios.get("http://localhost:8080/api/public/movie/detail/" + id)
     ).data;
   } catch (error) {
     console.log(error);

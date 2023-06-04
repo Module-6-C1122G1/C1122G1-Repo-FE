@@ -205,7 +205,7 @@ function ResetPassword() {
                       <th></th>
                       <td className="other-login">
                         {isSubmitting ? (
-                          <div className="d-flex justify-content-center align-items-center">
+                          <div className="d-flex justify-content-center w-100 align-items-center">
                             <Circles
                               height="50"
                               width="50"
@@ -246,8 +246,8 @@ function ResetPassword() {
             )}
           </Formik>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 }
