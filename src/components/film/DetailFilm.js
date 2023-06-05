@@ -15,7 +15,7 @@ export default function DetailFilm() {
     const detail = async () => {
       try {
         const res = await filmService.detail(param.id);
-        console.log(res);
+        document.title = res.nameFilm;
         setMovieDetail(res);
       } catch (err) {
         console.log(err);

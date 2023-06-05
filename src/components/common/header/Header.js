@@ -7,10 +7,12 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import React from "react";
+import { findCustomerByNameAccount } from "../../../service/CustomerServiceTruongNN";
 
 const Header = () => {
   const username = localStorage.getItem("username");
   const account = JSON.parse(localStorage.getItem("account"));
+  const [user, setUser] = useState(null);
   const roles = [];
   if (account != null) {
     for (let i = 0; i < account.roles.length; i++) {
@@ -21,6 +23,16 @@ const Header = () => {
     localStorage.clear();
     window.location.href = "/";
   };
+  useEffect(() => {
+    document.title = "Lịch sử cộng điểm";
+    console.log(username);
+    const findCustomerByUsername = async () => {
+      const result = await findCustomerByNameAccount(username);
+      setUser(result);
+      console.log(result);
+    };
+    findCustomerByUsername();
+  }, []);
   return (
     <>
       <header className="header" data-header="">
@@ -167,14 +179,16 @@ const Header = () => {
                       Lịch sử đặt vé
                     </Link>
                   </Dropdown.Item>
-                  <Dropdown.Item className="text-decoration-none">
-                    <Link
-                      to={"/customer/change-information/"}
-                      className="text-dark text-decoration-none"
-                    >
-                      Quản lý tài khoản
-                    </Link>
-                  </Dropdown.Item>
+                  {user && (
+                    <Dropdown.Item className="text-decoration-none">
+                      <Link
+                        to={"/customer/change-information/" + user.idCustomer}
+                        className="text-dark text-decoration-none"
+                      >
+                        Quản lý tài khoản
+                      </Link>
+                    </Dropdown.Item>
+                  )}
                   <Dropdown.Item
                     onClick={handleLogout}
                     className="text-decoration-none"

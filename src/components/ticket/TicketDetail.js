@@ -47,11 +47,11 @@ export default function TicketDetail() {
       confirmPrintTicket();
     },
   });
-
   useEffect(() => {
     const detail = async () => {
       try {
         const res = await ticketService.detail(param.id, auth);
+        console.log(res);
         setTicketDetail(res);
       } catch (err) {
         console.log(err);

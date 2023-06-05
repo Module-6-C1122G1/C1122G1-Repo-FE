@@ -7,12 +7,15 @@ import { ConfirmTicket } from "../../components/confirm-ticket/ConfirmTicket";
 import Payment from "../../components/booking-ticket/Payment";
 import Header from "../../components/common/header/Header";
 import Footer from "../../components/common/footer/Footer";
+import { useEffect } from "react";
 
 const BookingTicket = () => {
   const [data, setData] = useState();
   const [step, setStep] = useState(1);
   const [listSelecting, setListSelecting] = useState([]);
-
+  useEffect(() => {
+    document.title = "Đặt vé phim";
+  }, []);
   const handleDataShowTimeData = (film, showTime) => {
     setData({ film, showTime });
     setStep(2);

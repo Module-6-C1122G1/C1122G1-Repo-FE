@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { receiveAccount } from "../../redux/action";
 import Header from "../../components/common/header/Header";
 import Footer from "../../components/common/footer/Footer";
+import { useEffect } from "react";
 /**
  * @author ChinhLV
  * @returns Login
@@ -50,6 +51,9 @@ function Login() {
         console.log(e);
       });
   };
+  useEffect(() => {
+    document.title = "Đăng nhập";
+  }, []);
   return (
     <>
       <Header />

@@ -19,7 +19,9 @@ export function ListTicket() {
     search: "",
   });
   const auth = localStorage.getItem("token");
-
+  useEffect(() => {
+    document.title = "Quản lý vé";
+  }, []);
   useEffect(() => {
     const list = async () => {
       const result = await findAllTicket(searchAndPage, auth);

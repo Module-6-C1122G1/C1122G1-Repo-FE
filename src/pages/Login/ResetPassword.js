@@ -29,6 +29,9 @@ function ResetPassword() {
   const [failedCode, setFailedCode] = useState(null);
   const [failedConfirmPassword, setFailedConfirmPassword] = useState(null);
   const navigate = useNavigate();
+  useEffect(() => {
+    document.title = "Đổi mật khẩu";
+  }, []);
   return (
     <>
       <Header />

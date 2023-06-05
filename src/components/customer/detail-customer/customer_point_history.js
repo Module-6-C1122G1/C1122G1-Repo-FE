@@ -7,6 +7,7 @@ import { findAllPlusPoint } from "../../../service/TicketManagementService";
 import { useNavigate } from "react-router";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer/Footer";
+import { findCustomerByNameAccount } from "../../../service/CustomerServiceTruongNN";
 
 export function CustomerPointHistory() {
   const navigate = useNavigate();
@@ -14,8 +15,10 @@ export function CustomerPointHistory() {
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(0);
-  let stt = page * size + 1;
+  const [user, setUser] = useState(null);
+  const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
+  let stt = page * size + 1;
 
   const handlePageClick = (event) => {
     setPage(+event.selected);
@@ -24,6 +27,14 @@ export function CustomerPointHistory() {
     localStorage.clear();
     navigate("/");
   };
+  useEffect(() => {
+    document.title = "Lịch sử cộng điểm";
+    const findCustomerByUsername = async () => {
+      const result = await findCustomerByNameAccount(username);
+      setUser(result);
+    };
+    findCustomerByUsername();
+  }, []);
   useEffect(() => {
     const fetchApi = async () => {
       try {
@@ -56,7 +67,7 @@ export function CustomerPointHistory() {
   return (
     <>
       <Header />
-      <div className="container" style={{ margin: "150px 0" }}>
+      <div className="container" style={{ margin: "150px auto" }}>
         <div className="row">
           <i className="bi bi-list menu d-none" onClick="openNav()" />
           <div className="col-3 side-bar">
@@ -65,9 +76,11 @@ export function CustomerPointHistory() {
             </h2>
             <p className="text-center flex-column">
               <img
-                src={pointHistory[0]?.imgCustomer}
+                src={
+                  "https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg"
+                }
                 className="rounded-circle"
-                style={{ width: 100, margin: `0 auto` }}
+                style={{ width: 100, margin: `0 auto`, border: "1px solid" }}
                 height="100px"
               />
             </p>
@@ -90,14 +103,24 @@ export function CustomerPointHistory() {
               </button>
             </div>
             <hr />
-            <Link className="mt-2" style={{ color: "black" }}>
-              <link href="" style={{ fontSize: 14 }} />
-              <i className="bi bi-person-bounding-box" />
-              Thông tin tài khoản
-            </Link>
+            {user && (
+              <Link
+                to={"/customer/change-information/" + user.idCustomer}
+                className="mt-2"
+                style={{ color: "black" }}
+              >
+                <link href="" style={{ fontSize: 14 }} />
+                <i className="bi bi-person-bounding-box" />
+                Thông tin tài khoản
+              </Link>
+            )}
             <hr />
-            <Link className="mt-2" style={{ color: "black" }}>
-              <link href="" style={{ fontSize: 14 }} />
+            <Link
+              to={"/ticket-customer/history"}
+              className="mt-2"
+              style={{ color: "black" }}
+            >
+              <link style={{ fontSize: 14 }} />
               <i className="bi bi-calculator" />
               Lịch sử
             </Link>

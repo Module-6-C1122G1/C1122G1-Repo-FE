@@ -27,6 +27,7 @@ function ListAllFilm() {
     setSearchAndPage((prev) => ({ ...prev, type_film: +event.target.value }));
   };
   useEffect(() => {
+    document.title = "Danh sách phim";
     const fetchApiToCallTypeFilm = async () => {
       const result = await listTypeFilm();
       console.log(result);

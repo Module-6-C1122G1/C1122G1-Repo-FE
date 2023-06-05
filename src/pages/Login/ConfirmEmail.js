@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { receiveData } from "../../redux/action";
 import Header from "../../components/common/header/Header";
 import Footer from "../../components/common/footer/Footer";
+import { useEffect } from "react";
 /**
  * @author ChinhLV
  * @returns ComfirmEmail
@@ -23,6 +24,9 @@ function ConfirmEmail() {
   const [failedEmail, setFailedEmail] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  useEffect(() => {
+    document.title = "Xác minh email";
+  }, []);
   return (
     <>
       <Header />

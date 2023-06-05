@@ -37,7 +37,9 @@ function DiscountList() {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
+  useEffect(() => {
+    document.title = "Khuyến mãi";
+  }, []);
   const findAll = async () => {
     const rs = await discountService.findByName("", page, auth);
     console.log(rs);

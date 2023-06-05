@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import {
   editCustomerAccount,
   findByIdAccount,
+  findCustomerByNameAccount,
 } from "../../service/CustomerServiceTruongNN";
 import Header from "../common/header/Header";
 import Footer from "../common/footer/Footer";
@@ -17,15 +18,22 @@ import Footer from "../common/footer/Footer";
 export function UpdateCustomerAccount() {
   const [customer, setCustomer] = useState(null);
   const param = useParams();
+  const [user, setUser] = useState(null);
+  const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
-
   useEffect(() => {
+    document.title = "Quản lý tài khoản";
     const fetchApi = async () => {
       const result = await findByIdAccount(param.id, token);
       console.log(result);
       setCustomer(result);
     };
     fetchApi();
+    const findCustomerByUsername = async () => {
+      const result = await findCustomerByNameAccount(username);
+      setUser(result);
+    };
+    findCustomerByUsername();
   }, []);
 
   if (!customer) {
@@ -109,27 +117,27 @@ export function UpdateCustomerAccount() {
       >
         <div className="container-fluid" style={{ margin: "150px 0" }}>
           <div className="row">
-            <div
-              className="col-md-5"
-              style={{ flex: "0 0 auto", width: "20%", marginTop: "1%" }}
-            >
+            <div className="col-3 side-bar">
               <h2 style={{ textAlign: "center", fontSize: "30px" }}>
                 Quản lý tài khoản
               </h2>
               <p className="text-center">
                 <img
-                  src={customer?.imgCustomer}
+                  src={
+                    "https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg"
+                  }
                   className="rounded-circle avatar"
                   height="200px"
                   style={{
-                    height: "60px",
-                    width: "60px",
+                    height: "100px",
+                    width: "100px",
                     margin: "0 auto",
+                    border: "1px solid",
                   }}
                 />
               </p>
-              <p style={{ textAlign: "center" }}>
-                <b>{customer?.accountUser?.nameAccount}</b>
+              <p style={{ textAlign: "center", fontSize: 25 }}>
+                {customer?.accountUser?.nameAccount}
               </p>
               <div className="mt-3" style={{ textAlign: "center" }}>
                 <i className="bi bi-bookmark-star-fill" />
@@ -141,34 +149,36 @@ export function UpdateCustomerAccount() {
                 </Link>
               </div>
               <hr />
-              <div
-                className="mt-2"
-                style={{ fontSize: 14, textAlign: "center" }}
-              >
-                <Link to="/update/:id" />
-
-                <b>Thông tin tài khoản</b>
-              </div>
-              <hr />
-              <div
-                className="mt-2"
-                style={{ fontSize: 14, textAlign: "center" }}
-              >
-                <link href="" style={{ fontSize: 14 }} />
-                <b>Lịch sử</b>
-              </div>
+              {user && (
+                <Link
+                  to={"/customer/change-information/" + user.idCustomer}
+                  className="mt-2"
+                  style={{ color: "black" }}
+                >
+                  <link href="" style={{ fontSize: 14 }} />
+                  <i className="bi bi-person-bounding-box" />
+                  Thông tin tài khoản
+                </Link>
+              )}
               <hr />
               <Link
                 to={"/ticket-customer/history"}
                 className="mt-2"
-                style={{ fontSize: 14, textAlign: "center", color: "black" }}
+                style={{ color: "black" }}
               >
-                <Link
-                  to={"/ticket-customer/history"}
-                  style={{ fontSize: 14 }}
-                />
-
-                <b>Vé đã đặt</b>
+                <link style={{ fontSize: 14 }} />
+                <i className="bi bi-calculator" />
+                Lịch sử
+              </Link>
+              <hr />
+              <Link
+                to={"/ticket-customer"}
+                className="mt-2"
+                style={{ color: "black" }}
+              >
+                <link href="" style={{ fontSize: 14 }} />
+                <i className="bi bi-ticket-detailed" />
+                Vé đã đặt
               </Link>
             </div>
             <div className=" container mx-auto my-5 col-md-7">

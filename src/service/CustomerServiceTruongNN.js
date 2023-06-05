@@ -155,3 +155,13 @@ export const customerService = {
   findById,
   findAllAndSearch,
 };
+export const findCustomerByNameAccount = async (name) => {
+  try {
+    const result = await axios.get(
+      "http://localhost:8080/api/public/find-customer?name=" + name
+    );
+    return result.data;
+  } catch (error) {
+    console.error(error);
+  }
+};

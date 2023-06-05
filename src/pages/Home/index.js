@@ -4,6 +4,7 @@ import ListFilm from "../../components/film/List";
 import Slider from "react-slick";
 import Header from "../../components/common/header/Header";
 import Footer from "../../components/common/footer/Footer";
+import { useEffect } from "react";
 
 const Home = () => {
   const settings = {
@@ -35,7 +36,9 @@ const Home = () => {
       },
     ],
   };
-
+  useEffect(() => {
+    document.title = "Trang chủ";
+  }, []);
   return (
     <>
       <Header />

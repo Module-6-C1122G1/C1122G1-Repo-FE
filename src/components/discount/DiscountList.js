@@ -12,6 +12,7 @@ const DiscountListPublic = () => {
   };
   useEffect(() => {
     discountList();
+    document.title = "Khuyến mãi";
   }, []);
 
   return (

@@ -4,6 +4,9 @@ import "../detail-customer/style.css";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import Header from "../../common/header/Header";
+import Footer from "../../common/footer/Footer";
+import { findCustomerByNameAccount } from "../../../service/CustomerServiceTruongNN";
 
 export function TickBookingList(effect, deps) {
   const [ticketBooking, setTicketBooking] = useState(null);
@@ -11,7 +14,9 @@ export function TickBookingList(effect, deps) {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(0);
   const [deleteTicket, setDeleteTicket] = useState();
+  const [user, setUser] = useState(null);
   const token = localStorage.getItem("token");
+  const username = localStorage.getItem("username");
 
   let stt = page * size + 1;
   const handleLogout = () => {
@@ -32,7 +37,14 @@ export function TickBookingList(effect, deps) {
     setTicketBooking(ticketBooking.filter((e) => e.idTicket != deleteTicket));
     toast("Xóa thành công !");
   };
-
+  useEffect(() => {
+    document.title = "Vé đã đặt";
+    const findCustomerByUsername = async () => {
+      const result = await findCustomerByNameAccount(username);
+      setUser(result);
+    };
+    findCustomerByUsername();
+  }, []);
   useEffect(() => {
     const fetchApi = async () => {
       try {
@@ -50,7 +62,8 @@ export function TickBookingList(effect, deps) {
 
   return (
     <>
-      <div id="mySidebar" className="sidebar">
+      <Header />
+      <div id="mySidebar" className="sidebar" style={{ margin: "150px 0" }}>
         <a href="javascript:void(0)" className="closebtn" onClick="closeNav()">
           ×
         </a>
@@ -59,7 +72,7 @@ export function TickBookingList(effect, deps) {
         <a href="#">Clients</a>
         <a href="#">Contact</a>
       </div>
-      <div className="container">
+      <div className="container" style={{ marginTop: 150 }}>
         <div className="row">
           <i className="bi bi-list menu d-none" onClick="openNav()" />
           <div className="col-3 side-bar">
@@ -68,9 +81,12 @@ export function TickBookingList(effect, deps) {
             </h2>
             <p className="text-center flex-column">
               <img
-                src={ticketBooking?.imgCustomer}
+                src={
+                  ticketBooking?.imgCustomer ||
+                  "https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg"
+                }
                 className="rounded-circle"
-                style={{ width: 100, margin: `0 auto` }}
+                style={{ width: 100, margin: `0 auto`, border: "1px solid" }}
                 height="100px"
               />
             </p>
@@ -93,11 +109,17 @@ export function TickBookingList(effect, deps) {
               </button>
             </div>
             <hr />
-            <Link className="mt-2" style={{ color: "black" }}>
-              <link href="" style={{ fontSize: 14 }} />
-              <i className="bi bi-person-bounding-box" />
-              Thông tin tài khoản
-            </Link>
+            {user && (
+              <Link
+                to={"/customer/change-information/" + user.idCustomer}
+                className="mt-2"
+                style={{ color: "black" }}
+              >
+                <link href="" style={{ fontSize: 14 }} />
+                <i className="bi bi-person-bounding-box" />
+                Thông tin tài khoản
+              </Link>
+            )}
             <hr />
             <Link
               to={"/ticket-customer/history"}
@@ -109,7 +131,11 @@ export function TickBookingList(effect, deps) {
               Lịch sử
             </Link>
             <hr />
-            <Link className="mt-2" style={{ color: "black" }}>
+            <Link
+              to={"/ticket-customer"}
+              className="mt-2"
+              style={{ color: "black" }}
+            >
               <link href="" style={{ fontSize: 14 }} />
               <i className="bi bi-ticket-detailed" />
               Vé đã đặt
@@ -253,6 +279,7 @@ export function TickBookingList(effect, deps) {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

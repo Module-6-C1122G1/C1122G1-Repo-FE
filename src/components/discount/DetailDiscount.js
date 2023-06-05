@@ -21,6 +21,7 @@ export function DetailDiscount() {
       const result1 = await findByIdDiscount(param.id);
       setDiscount(result1);
       console.log(result1);
+      document.title = result1.nameDiscount;
       setListDiscount(result);
     };
     fetchApi();

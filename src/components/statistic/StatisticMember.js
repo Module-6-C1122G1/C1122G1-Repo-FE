@@ -61,6 +61,7 @@ export function StatisticalMember() {
     Authorization: "Bearer " + auth,
   };
   useEffect(() => {
+    document.title = "Thống kê khách hàng";
     const fetchData = async () => {
       await axios
         .get("http://localhost:8080/api/admin/statistics/member", { headers })

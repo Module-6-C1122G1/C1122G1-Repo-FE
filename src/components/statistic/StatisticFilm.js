@@ -63,6 +63,7 @@ export function StatisticalFilm() {
     Authorization: "Bearer " + auth,
   };
   useEffect(() => {
+    document.title = "Thống kê phim";
     const fetchData = async () => {
       await axios
         .get("http://localhost:8080/api/admin/statistics/film", { headers })
