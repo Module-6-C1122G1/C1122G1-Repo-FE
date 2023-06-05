@@ -408,7 +408,7 @@ export function CreateFilm() {
                                                 </div>
                                             </div>
 
-                                            <div className="mt-4 pt-2">
+                                            <div className="mt-4 pt-2" style={{display:"flex"}}>
                                                 {
                                                     isSubmitting ?
                                                         <ColorRing
@@ -423,16 +423,14 @@ export function CreateFilm() {
                                                         :
                                                         <button
                                                             type="submit"
-                                                            className="btn btn-primary"
-                                                            style={{background: "#f26b38"}}
+                                                            style={{background: "#f26b38", borderRadius:"10%"}}
                                                         >
                                                             Thêm mới
                                                         </button>
                                                 }
                                                 <button
                                                     type="reset"
-                                                    className="btn btn-primary"
-                                                    style={{background: "black", color: "white", marginLeft: "0%"}}
+                                                    style={{background: "black", color: "white", marginLeft: "2%", borderRadius:"10%"}}
                                                 >
                                                     Quay lại
                                                 </button>

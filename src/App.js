@@ -27,6 +27,7 @@ import {UpdateEmployee} from "./components/employee/Update";
 import {UpdateFilm} from "./components/film/UpdateFilm";
 import {TickBookingList} from "./components/customer/detail-customer/customer_ticket";
 import {CustomerPointHistory} from "./components/customer/detail-customer/customer_point_history";
+import {ListShowTime} from "./components/show_time/ListShowTime";
 
 
 
@@ -39,6 +40,7 @@ function App() {
         <Route path="/admin/film/create" element={<CreateFilm />} />
         <Route path="/admin/film/edit/:id" element={<UpdateFilm />} />
         <Route path="/admin/film/list" element={<ListFilm />} />
+        <Route path="/admin/showtime/list" element={<ListShowTime />} />
         <Route path="/booking-ticket" element={<BookingTicket />} />
         <Route path="/login" element={<Login />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />

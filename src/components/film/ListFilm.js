@@ -95,14 +95,14 @@ export function ListFilm() {
                                     />
                                     <button
                                         type="submit"
-                                        className="btn btn-outline-primary"
+                                        className="btn"
                                         title="Tìm kiếm"
-                                        style={{height: "70%",color:"red", marginLeft: "1%"}}
+                                        style={{height: "70%",color:"red", marginBottom:"2%"}}
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
-                                            width={16}
-                                            height={16}
+                                            width={20}
+                                            height={20}
                                             fill="currentColor"
                                             className="bi bi-search"
                                             viewBox="0 0 16 16"
@@ -115,7 +115,7 @@ export function ListFilm() {
                             </Formik>
                             <div>
                                 <Link to={`/admin/film/create`} style={{display: "inline-block", float: "right", marginRight: "2%"}}>
-                                <button className="btn btn-outline-primary" style={{height: "70%",color: "red"}}>
+                                <button className="btn"  style={{height: "70%",color: "black" , backgroundColor:"blue"}}>
                                     <i className="bi bi-plus-circle"></i> Thêm Mới
                                 </button>
                                 </Link>
@@ -130,7 +130,7 @@ export function ListFilm() {
                                         ) : (
                                             <div className="table-responsive" style={{margin: "auto"}}>
                                                 <table
-                                                    className="table"
+                                                    className="table-responsive"
                                                     style={{width: "100%"}}
                                                 >
                                                     <thead>
@@ -155,7 +155,7 @@ export function ListFilm() {
                                                             <td>{film.typeFilm.nameTypeFilm}</td>
                                                             <td className="d-flex justify-content-center">
                                                                 <Link to={`/admin/film/edit/${film.idFilm}`}>
-                                                                    <button type="button" className="btn btn-outline-warning me-3" style={{height: "70%",color: "red"}}>
+                                                                    <button type="button" className="btn btn-warning me-3">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                              width="16" height="16" fill="currentColor"
                                                                              className="bi bi-pencil"
@@ -213,7 +213,7 @@ export function ListFilm() {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Delete</h5>
+                            <h5 className="modal-title" id="exampleModalLabel">Xoá khỏi danh sách phim</h5>
                         </div>
                         <div className="modal-body">
                             <span>Bạn có muốn xóa:</span> <span style={{color: 'red'}} className="font-monospace">{films?.nameFilm} ?</span>
