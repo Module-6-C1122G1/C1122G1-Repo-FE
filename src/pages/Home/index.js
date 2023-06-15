@@ -2,6 +2,9 @@ import React from "react";
 import "./index.css";
 import ListFilm from "../../components/film/List";
 import Slider from "react-slick";
+import Header from "../../components/common/header/Header";
+import Footer from "../../components/common/footer/Footer";
+import { useEffect } from "react";
 
 const Home = () => {
   const settings = {
@@ -12,7 +15,7 @@ const Home = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
-    arrows:false,
+    arrows: false,
     responsive: [
       {
         breakpoint: 1024,
@@ -33,48 +36,19 @@ const Home = () => {
       },
     ],
   };
-
+  useEffect(() => {
+    document.title = "Trang chủ";
+  }, []);
   return (
     <>
+      <Header />
       <main>
         <article>
           <section>
-            {/* <div className="container">
-              <div className="hero-content">
-                <p className="hero-subtitle">ĐN Cinema</p>
-                <h1 className="h1 hero-title">
-                  Không giới hạn <strong>Phim </strong> Chương trình TV
-                </h1>
-                <div className="meta-wrapper">
-                  <div className="badge-wrapper">
-                    <div className="badge badge-fill">PG 18</div>
-                    <div className="badge badge-outline">3D</div>
-                  </div>
-                  <div className="ganre-wrapper">
-                    <a href="#">Fast X,</a>
-                    <a href="#">Furious 10</a>
-                  </div>
-                  <div className="date-time">
-                    <div>
-                      <ion-icon name="calendar-outline" />
-                      <time dateTime={2023}>2023</time>
-                    </div>
-                    <div>
-                      <ion-icon name="time-outline" />
-                      <time dateTime="PT128M">141 phút</time>
-                    </div>
-                  </div>
-                </div>
-                <button className="btn btn-primary">
-                  <ion-icon name="play" />
-                  <span>Xem ngay</span>
-                </button>
-              </div>
-            </div> */}
             <Slider {...settings}>
               <div>
                 <img
-                  src="https://i.imgur.com//gr9KBOV.jpg"
+                  src="https://static.vieon.vn/vieplay-image/carousel_web_v4/2020/12/25/jf6thy2g_1920x1080-robinhood.jpg"
                   alt="slide1"
                   width={"100%"}
                   height={"800px"}
@@ -82,7 +56,7 @@ const Home = () => {
               </div>
               <div>
                 <img
-                  src="https://kenh14cdn.com/203336854389633024/2023/4/21/photo-18-16820856866501445796753.png"
+                  src="https://static2.vieon.vn/vieplay-image/carousel_web_v4/2022/03/24/rb6jtzt3_1920x1080-fast9.jpg"
                   alt="slide2"
                   width={"100%"}
                   height={"800px"}
@@ -90,7 +64,7 @@ const Home = () => {
               </div>
               <div>
                 <img
-                  src="https://i.ytimg.com/vi/iauQFDZhHBc/maxresdefault.jpg"
+                  src="http://designercomvn.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2017/07/26020157/poster-phim-kinh-di.jpg"
                   alt="slide3"
                   height={"800px"}
                   width={"100%"}
@@ -101,6 +75,7 @@ const Home = () => {
           <ListFilm />
         </article>
       </main>
+      <Footer />
     </>
   );
 };
