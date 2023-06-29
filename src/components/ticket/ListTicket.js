@@ -6,6 +6,8 @@ import { cancelTicket, findAllTicket } from "../../service/TicketService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
+import Header from "../common/header/Header";
+import Footer from "../common/footer/Footer";
 
 export function ListTicket() {
   const [listTicket, setListTicket] = useState([]);
@@ -17,7 +19,9 @@ export function ListTicket() {
     search: "",
   });
   const auth = localStorage.getItem("token");
-
+  useEffect(() => {
+    document.title = "Quản lý vé";
+  }, []);
   useEffect(() => {
     const list = async () => {
       const result = await findAllTicket(searchAndPage, auth);
@@ -48,7 +52,8 @@ export function ListTicket() {
 
   return (
     <>
-      <div className="row mx-0">
+      <Header />
+      <div className="row mx-0" style={{ margin: "150px 0" }}>
         <div
           className="container-fluid mx-auto my-5 col-8"
           style={{ width: "80%" }}
@@ -59,7 +64,8 @@ export function ListTicket() {
                 className="d-flex justify-content-center"
                 style={{
                   padding: 16,
-                  backgroundColor: "orangered",
+                  backgroundColor: "rgb(242, 107, 56)",
+                  fontSize: "24px",
                   color: "#fff",
                 }}
               >
@@ -68,7 +74,7 @@ export function ListTicket() {
             </div>
             <div className="row ">
               <div className="col-2 col-md-6" />
-              <div className="col-8 col-md-4 p-0 d-flex justify-content-center gap-2">
+              <div className="col-10 col-md-6 p-0 d-flex justify-content-center gap-2">
                 <Formik
                   initialValues={{ search: "" }}
                   onSubmit={(values) => {
@@ -77,15 +83,24 @@ export function ListTicket() {
                     });
                   }}
                 >
-                  <Form className="form d-flex align-items-center">
+                  <Form
+                    className="form d-flex align-items-center"
+                    style={{ width: "90%" }}
+                  >
                     <Field
+                      style={{ width: "90%", height: "40px" }}
                       name="search"
-                      style={{ height: "37.6px", width: "300px" }}
                       className="form-control mx-2"
                       type="text"
                       placeholder="Tìm kiếm theo mã vé, tên phim..."
                     />
                     <button
+                      style={{
+                        background: "rgb(242, 107, 56)",
+                        color: "white",
+                        border: "none",
+                        height: "40px",
+                      }}
                       type="submit"
                       className="btn btn-outline-primary"
                       title="Tìm kiếm"
@@ -104,13 +119,12 @@ export function ListTicket() {
                   </Form>
                 </Formik>
               </div>
-              <div className="col-2 p-0" />
             </div>
             <div style={{ marginTop: 20 }}>
               <div className="row">
                 <div className="col-md-12">
                   <div className="d-flex justify-content-center">
-                    {listTicket.length === 0 ? (
+                    {listTicket.length === 0 && searchAndPage.search !== "" ? (
                       <h1 className={"text-danger text-center my-3"}>
                         Không tìm thấy kết quả
                       </h1>
@@ -118,7 +132,7 @@ export function ListTicket() {
                       <div className="table-responsive">
                         <table className="table table-striped table-hover align-middle">
                           <thead>
-                            <tr>
+                            <tr style={{ textAlign: "center" }}>
                               <th>STT</th>
                               <th>Mã vé đặt</th>
                               <th>Mã thành viên</th>
@@ -128,13 +142,13 @@ export function ListTicket() {
                               <th>Phim</th>
                               <th>Ngày chiếu</th>
                               <th>Giờ chiếu</th>
-                              <th>Tình trạng</th> <th />
-                              <th />
+                              <th>Tình trạng</th>
+                              <th>Tác vụ</th>
                             </tr>
                           </thead>
                           <tbody>
                             {listTicket.map((ticket, index) => (
-                              <tr key={index}>
+                              <tr key={index} style={{ textAlign: "center" }}>
                                 <td>{index + 1}</td>
                                 <td>{ticket.idTicket}</td>
                                 <td>{ticket.idCustomer}</td>
@@ -152,7 +166,7 @@ export function ListTicket() {
                                 </td>
                                 <td>
                                   <Link
-                                    to={`/ticket/detail/${ticket.idTicket}`}
+                                    to={`/employee/ticket/detail/${ticket.idTicket}`}
                                     className="btn btn-outline-success"
                                     title="Nhận vé"
                                   >
@@ -166,11 +180,10 @@ export function ListTicket() {
                                     >
                                       <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z" />
                                       <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z" />
-                                      </svg>
+                                    </svg>
                                   </Link>
-                                </td>
-                                <td>
                                   <button
+                                    style={{ marginLeft: "5px" }}
                                     key={ticket.idTicket}
                                     type="button"
                                     title="Huỷ vé"
@@ -326,6 +339,7 @@ export function ListTicket() {
           </div>
         )}
       </div>
+      <Footer />
     </>
   );
 }
